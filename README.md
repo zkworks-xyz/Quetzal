@@ -1,6 +1,5 @@
-# Quetzal wallet
-
-This is a [Aztec](https://aztec.network/) Wallet.
+# Quetzal
+This is an [Aztec](https://aztec.network/) wallet.
 
 ## Setup
 

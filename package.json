@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "main": "./dest/index.js",
+  "engines" : {
+    "node" : ">=20.0.0"
+  },
   "scripts": {
     "build": "yarn clean && tsc -b && webpack",
     "install:noir": "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.16.0-aztec.1",
