@@ -22,13 +22,10 @@
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
-    "globals": {
-      "ts-jest": {
-        "useESM": true
-      }
-    },
     "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": ["ts-jest", {
+        "useESM": true
+      }]
     },
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"
@@ -42,6 +39,7 @@
     "@aztec/circuits.js": "^0.8.14",
     "@aztec/foundation": "^0.8.14",
     "@aztec/types": "^0.8.14",
+    "@types/jest": "^29.5.5",
     "classnames": "^2.3.2",
     "formik": "^2.4.3",
     "node-sass": "^9.0.0",
