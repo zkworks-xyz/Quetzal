@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "main": "./dest/index.js",
-  "engines" : {
-    "node" : ">=20.0.0"
+  "engines": {
+    "node": ">=20.0.0"
   },
   "scripts": {
     "build": "yarn clean && tsc -b && webpack",
@@ -22,13 +22,13 @@
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
-    "globals": {
-      "ts-jest": {
-        "useESM": true
-      }
-    },
     "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": [
+        "ts-jest",
+        {
+          "useESM": true
+        }
+      ]
     },
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"
@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.6.4",
+    "@types/jest": "^29.5.5",
     "@types/node": "^20.5.9",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
