@@ -24,7 +24,7 @@ export function Home() {
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.logo}>Quetzal</h1>
+      <h1 className="text-3xl font-bold underline">Quetzal</h1>
       <>
         {isLoadingWallet && <Loader />}
         {!isLoadingWallet && (
