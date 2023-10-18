@@ -1,9 +1,21 @@
+import { CompleteAddress, Fr } from '@aztec/aztec.js';
 import { useState } from 'react';
+import { TokenContractArtifact } from '../../artifacts/Token.js';
+import { pxe } from '../../config.js';
+import { deployContract, deployContractTypedArgs } from '../../scripts/deploy_contract.js';
 import SelectWallet from '../components/select_wallet.js';
-import { CompleteAddress } from '@aztec/aztec.js';
+import { convertArgs } from '../../scripts/util.js';
 
 export function DeveloperMode() {
-  const [wallet, setWallet] = useState<CompleteAddress | null>(null);
+  const [address, setAddress] = useState<CompleteAddress | null>(null);
+
+  async function deployExampleTokens() {
+    const args = { admin: { address: address?.address.toString() } };
+    const result = await deployContract(address!, TokenContractArtifact, args, pxe);
+    console.log(result);
+    return result;
+  }
+
   return (
     <>
       <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
@@ -19,25 +31,26 @@ export function DeveloperMode() {
           </div>
 
           <div className="w-full max-w-md mx-auto mt-6">
-            <form>
-              <p className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">
-                Aztec is a privacy focused Layer 2 for Ethereum, currently under development. Hence, for now, Quetzal is
-                available in the developer mode only.
-              </p>
-              <ul className="list-disc px-8 pb-8 mt-6 text-gray-500 dark:text-gray-400 text-base text-left">
-                <li>Before you proceed, make sure you have Aztec Sandbox installed and running.</li>
-                <li>To deploy example tokens and start the wallet, click the Continue button below.</li>
-              </ul>
+            <p className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">
+              Aztec is a privacy focused Layer 2 for Ethereum, currently under development. Hence, for now, Quetzal is
+              available in the developer mode only.
+            </p>
+            <ul className="list-disc px-8 pb-8 mt-6 text-gray-500 dark:text-gray-400 text-base text-left">
+              <li>Before you proceed, make sure you have Aztec Sandbox installed and running.</li>
+              <li>To deploy example tokens and start the wallet, click the Continue button below.</li>
+            </ul>
 
-              <p className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 text-left">
-                Pick a admin wallet:
-              </p>
-              <SelectWallet onWalletChange={setWallet}/>
+            <p className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 text-left">
+              Pick a admin wallet:
+            </p>
+            <SelectWallet onWalletChange={setAddress} />
 
-              <button className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-                Continue
-              </button>
-            </form>
+            <button
+              onClick={() => deployExampleTokens()}
+              className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+            >
+              Continue
+            </button>
           </div>
         </div>
       </section>

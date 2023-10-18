@@ -4,7 +4,7 @@ import { ContractArtifact, FunctionArtifact } from '@aztec/foundation/abi';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { CONTRACT_ADDRESS_PARAM_NAMES, pxe } from '../../config.js';
-import { callContractFunction, deployContract, viewContractFunction } from '../../scripts/index.js';
+import { callContractFunction, deployContractTypedArgs, viewContractFunction } from '../../scripts/index.js';
 import { convertArgs } from '../../scripts/util.js';
 import styles from './contract_function_form.module.scss';
 
@@ -114,7 +114,7 @@ async function handleFunctionCall(
     // for now, dont let user change the salt.  requires some change to the form generation if we want to let user choose one
     // since everything is currently based on parsing the contractABI, and the salt parameter is not present there
     const salt = Fr.random();
-    return await deployContract(wallet, artifact, typedArgs, salt, pxe);
+    return await deployContractTypedArgs(wallet, artifact, typedArgs, salt, pxe);
   }
 
   if (functionAbi.functionType === 'unconstrained') {
