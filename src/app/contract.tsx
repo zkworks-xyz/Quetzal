@@ -6,6 +6,7 @@ import { Button, ButtonSize, ButtonTheme, Card, CardTheme, ImageButton, ImageBut
 import { AztecAddress, CompleteAddress } from '@aztec/aztec.js';
 import { FunctionArtifact } from '@aztec/foundation/abi';
 import { ReactNode, useState } from 'react';
+import { DeveloperMode } from './modals/developer_mode.js';
 
 const functionTypeSortOrder = {
   secret: 0,
@@ -110,26 +111,13 @@ export function Contract({ wallet }: Props) {
       };
     }
 
-    return {
-      header: `Deploy Contract (${contractArtifact.name})`,
-      content: (
-        <ContractFunctionForm
-          wallet={wallet}
-          artifact={contractArtifact}
-          functionAbi={constructorAbi}
-          defaultAddress={wallet.address.toString()}
-          buttonText="Deploy"
-          isLoading={!!processingFunction && !hasResult}
-          disabled={!!processingFunction && hasResult}
-          onSubmit={() => handleSubmitForm('constructor')}
-          onSuccess={handleContractDeployed}
-          onError={setError}
-        />
-      ),
-    };
+    return {header: "", content: <></>};
   }
-
   const { header, content } = renderCardContent(contractAddress);
+
+  if (!contractAddress) {
+    return <DeveloperMode onContractDeployed={setContractAddress}/>;
+  }
 
   return (
     <>
