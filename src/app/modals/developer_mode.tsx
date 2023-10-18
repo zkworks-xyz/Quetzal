@@ -1,9 +1,6 @@
-import { useWallets, walletsToItems } from '../hooks/use_wallets.js';
-import SelectWithSecondary from './select.js';
+import SelectWallet from '../components/select_wallet.js';
 
 export function DeveloperMode() {
-  const { data } = useWallets();
-
   return (
     <>
       <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
@@ -29,7 +26,10 @@ export function DeveloperMode() {
                 <li>To deploy example tokens and start the wallet, click the Continue button below.</li>
               </ul>
 
-              <SelectWithSecondary items={walletsToItems(data || [])} label="Pick a admin wallet:" />
+              <p className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 text-left">
+                Pick a admin wallet:
+              </p>
+              <SelectWallet />
 
               <button className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                 Continue
