@@ -1,33 +1,8 @@
+import { useWallets, walletsToItems } from '../hooks/use_wallets.js';
 import SelectWithSecondary from './select.js';
-import { useEffect, useState } from 'react';
-import { pxe } from '../../config.js';
-import { CompleteAddress } from '@aztec/aztec.js';
-
-
-
-function walletsToItems(wallets: CompleteAddress[]) {
-  const developerWalletNames = ['Alice', 'Bob', 'Charlie', 'Dave', 'Eve', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy'];
-  return wallets.map(({ address }: CompleteAddress, index) => {
-    return { label: developerWalletNames[index], secondary: address.toShortString() };
-  });
-}
 
 export function DeveloperMode() {
-  const [wallets, setWallets] = useState<CompleteAddress[]>([]);
-
-  useEffect(() => {
-    const loadOptions = async () => {
-      const fetchedOptions = await pxe.getRegisteredAccounts();
-      setWallets(fetchedOptions);
-      console.log(fetchedOptions)
-
-    };
-    loadOptions().catch(e => {
-      setWallets([]);
-      console.log(e.message);
-    });
-  }, []);
-
+  const { data } = useWallets();
 
   return (
     <>
@@ -54,7 +29,7 @@ export function DeveloperMode() {
                 <li>To deploy example tokens and start the wallet, click the Continue button below.</li>
               </ul>
 
-              <SelectWithSecondary items={walletsToItems(wallets)} label="Pick a admin wallet:" />
+              <SelectWithSecondary items={walletsToItems(data || [])} label="Pick a admin wallet:" />
 
               <button className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                 Continue

@@ -6,12 +6,15 @@ import styles from './home.module.scss';
 import { Loader } from '@aztec/aztec-ui';
 import { CompleteAddress } from '@aztec/aztec.js';
 import { useEffect, useRef, useState } from 'react';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+
+const queryClient = new QueryClient()
+
 
 export function Home() {
   const [isLoadingWallet, setIsLoadingWallet] = useState(true);
   const [selectedWallet, setSelectedWallet] = useState<CompleteAddress>();
   const [selectWalletError, setSelectedWalletError] = useState('');
-
 
   const handleSelectWallet = (address: CompleteAddress | undefined) => {
     setSelectedWallet(address);
@@ -46,7 +49,9 @@ export function Home() {
           onSelectChange={handleSelectWallet}
           onError={handleSelectWalletError}
         />
-        <DeveloperMode />
+        <QueryClientProvider client={queryClient}>
+          <DeveloperMode />
+        </QueryClientProvider>
       </>
     </main>
   );
