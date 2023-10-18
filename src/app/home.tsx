@@ -1,6 +1,7 @@
 import { PXE_URL } from '../config.js';
 import { WalletDropdown } from './components/wallet_dropdown.js';
 import { Contract } from './contract.js';
+import { DeveloperMode } from './modals/developer_mode.js';
 import styles from './home.module.scss';
 import { Loader } from '@aztec/aztec-ui';
 import { CompleteAddress } from '@aztec/aztec.js';
@@ -45,6 +46,7 @@ export function Home() {
           onSelectChange={handleSelectWallet}
           onError={handleSelectWalletError}
         />
+        <DeveloperMode />
       </>
     </main>
   );
