@@ -1,4 +1,4 @@
-import { CompleteAddress, Fr } from '@aztec/aztec.js';
+import { AztecAddress, CompleteAddress, Fr } from '@aztec/aztec.js';
 import { useState } from 'react';
 import { TokenContractArtifact } from '../../artifacts/Token.js';
 import { pxe } from '../../config.js';
@@ -6,14 +6,17 @@ import { deployContract, deployContractTypedArgs } from '../../scripts/deploy_co
 import SelectWallet from '../components/select_wallet.js';
 import { convertArgs } from '../../scripts/util.js';
 
-export function DeveloperMode() {
+interface DeveloperModeProps {
+  onContractDeployed: (address: AztecAddress) => void;
+}
+
+export function DeveloperMode({onContractDeployed} : DeveloperModeProps) {
   const [address, setAddress] = useState<CompleteAddress | null>(null);
 
   async function deployExampleTokens() {
     const args = { admin: { address: address?.address.toString() } };
     const result = await deployContract(address!, TokenContractArtifact, args, pxe);
-    console.log(result);
-    return result;
+    onContractDeployed(result);
   }
 
   return (

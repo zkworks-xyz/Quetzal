@@ -8,8 +8,7 @@ import { CompleteAddress } from '@aztec/aztec.js';
 import { useEffect, useRef, useState } from 'react';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
-const queryClient = new QueryClient()
-
+const queryClient = new QueryClient();
 
 export function Home() {
   const [isLoadingWallet, setIsLoadingWallet] = useState(true);
@@ -27,32 +26,31 @@ export function Home() {
   };
 
   return (
-    <main className={styles.main}>
-      <h1 className="text-3xl font-bold underline">Quetzal</h1>
-      <>
-        {isLoadingWallet && <Loader />}
-        {!isLoadingWallet && (
-          <>
-            {!!selectWalletError && (
-              <>
-                {`Failed to load accounts. Error: ${selectWalletError}`}
-                <br />
-                {`Make sure PXE from Aztec Sandbox is running at: ${PXE_URL}`}
-              </>
-            )}
-            {!selectWalletError && !selectedWallet && `No accounts.`}
-            {!selectWalletError && !!selectedWallet && <Contract wallet={selectedWallet} />}
-          </>
-        )}
-        <WalletDropdown
-          selected={selectedWallet}
-          onSelectChange={handleSelectWallet}
-          onError={handleSelectWalletError}
-        />
-        <QueryClientProvider client={queryClient}>
-          <DeveloperMode />
-        </QueryClientProvider>
-      </>
-    </main>
+    <QueryClientProvider client={queryClient}>
+      <main className={styles.main}>
+        <h1 className="text-3xl font-bold underline">Quetzal</h1>
+        <>
+          {isLoadingWallet && <Loader />}
+          {!isLoadingWallet && (
+            <>
+              {!!selectWalletError && (
+                <>
+                  {`Failed to load accounts. Error: ${selectWalletError}`}
+                  <br />
+                  {`Make sure PXE from Aztec Sandbox is running at: ${PXE_URL}`}
+                </>
+              )}
+              {!selectWalletError && !selectedWallet && `No accounts.`}
+              {!selectWalletError && !!selectedWallet && <Contract wallet={selectedWallet} />}
+            </>
+          )}
+          <WalletDropdown
+            selected={selectedWallet}
+            onSelectChange={handleSelectWallet}
+            onError={handleSelectWalletError}
+          />
+        </>
+      </main>
+    </QueryClientProvider>
   );
 }
