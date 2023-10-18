@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import SelectWallet from '../components/select_wallet.js';
+import { CompleteAddress } from '@aztec/aztec.js';
 
 export function DeveloperMode() {
+  const [wallet, setWallet] = useState<CompleteAddress | null>(null);
   return (
     <>
       <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
@@ -29,7 +32,7 @@ export function DeveloperMode() {
               <p className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 text-left">
                 Pick a admin wallet:
               </p>
-              <SelectWallet />
+              <SelectWallet onWalletChange={setWallet}/>
 
               <button className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                 Continue
