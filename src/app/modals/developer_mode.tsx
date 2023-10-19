@@ -1,23 +1,30 @@
-import { AztecAddress, CompleteAddress, Fr } from '@aztec/aztec.js';
+import { AztecAddress, CompleteAddress } from '@aztec/aztec.js';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { TokenContractArtifact } from '../../artifacts/Token.js';
 import { pxe } from '../../config.js';
-import { deployContract, deployContractTypedArgs } from '../../scripts/deploy_contract.js';
+import { deployContract } from '../../scripts/deploy_contract.js';
 import SelectWallet from '../components/select_wallet.js';
-import { convertArgs } from '../../scripts/util.js';
+import Spinner from '../components/spinner.js';
 
 interface DeveloperModeProps {
   onContractDeployed: (address: AztecAddress) => void;
 }
 
-export function DeveloperMode({onContractDeployed} : DeveloperModeProps) {
+export function DeveloperMode({ onContractDeployed }: DeveloperModeProps) {
   const [address, setAddress] = useState<CompleteAddress | null>(null);
 
-  async function deployExampleTokens() {
+  const deployExampleTokens = async () => {
     const args = { admin: { address: address?.address.toString() } };
-    const result = await deployContract(address!, TokenContractArtifact, args, pxe);
-    onContractDeployed(result);
-  }
+    return deployContract(address!, TokenContractArtifact, args, pxe);
+  };
+
+  const mutation = useMutation({
+    mutationFn: deployExampleTokens,
+    onSuccess: (result: AztecAddress) => {
+      onContractDeployed(result);
+    },
+  });
 
   return (
     <>
@@ -48,12 +55,18 @@ export function DeveloperMode({onContractDeployed} : DeveloperModeProps) {
             </p>
             <SelectWallet onWalletChange={setAddress} />
 
-            <button
-              onClick={() => deployExampleTokens()}
-              className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
-            >
-              Continue
-            </button>
+            {mutation.isPending ? (
+              <div className="py-3">
+                <Spinner />
+              </div>
+            ) : (
+              <button
+                onClick={() => mutation.mutate()}
+                className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+              >
+                Continue
+              </button>
+            )}
           </div>
         </div>
       </section>
