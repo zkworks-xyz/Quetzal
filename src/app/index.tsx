@@ -62,6 +62,7 @@ const login = async () => {
     console.log(`signature: ${enc.encode(assertation.response.signature)}`)
 
     // TODO: check verifySignature(publicKey, signedData, signature)
+    // https://noir-lang.org/standard_library/cryptographic_primitives/ecdsa_sig_verification#ecdsa_secp256r1verify_signature
 };
 
 function arrayBufferToString(buffer: ArrayBuffer) {
