@@ -105,6 +105,7 @@ export default (_, argv) => ({
       events: false,
       buffer: false,
       util: false,
+      "postcss-loader": false,
       stream: false,
       string_decoder: false,
       tty: false,
