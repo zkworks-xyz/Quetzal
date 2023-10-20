@@ -22,8 +22,6 @@ jobs:
         run: |
           corepack enable
           yarn set version stable
-          yarn install
-          yarn build
       - name: Build webpack
         run: |
           yarn build
