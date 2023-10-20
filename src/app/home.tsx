@@ -5,6 +5,7 @@ import { PXE_URL } from '../config.js';
 import { WalletDropdown } from './components/wallet_dropdown.js';
 import { Contract } from './contract.js';
 import styles from './home.module.scss';
+import { Wallet } from './modals/wallet.js';
 
 export function Home() {
   const [isLoadingWallet, setIsLoadingWallet] = useState(true);
@@ -36,7 +37,12 @@ export function Home() {
               </>
             )}
             {!selectWalletError && !selectedWallet && `No accounts.`}
-            {!selectWalletError && !!selectedWallet && <Contract wallet={selectedWallet} />}
+            {!selectWalletError && !!selectedWallet &&
+              <>
+              <Wallet />
+              <Contract wallet={selectedWallet} />
+              </>
+              }
           </>
         )}
         <WalletDropdown

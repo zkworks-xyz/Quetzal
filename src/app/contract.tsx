@@ -27,10 +27,7 @@ export function Contract({ wallet }: Props) {
   const [result, setResult] = useState('');
 
   const handleSubmitForm = (functionName: string) => setProcessingFunction(functionName);
-  const handleContractDeployed = (address: AztecAddress) => {
-    setContractAddress(address);
-    setResult(`Contract deployed at: ${address}`);
-  };
+
   const handleResult = (returnValues: any) => {
     // TODO: serialize returnValues to string according to the returnTypes defined in the function abi.
     setResult(`Return values: ${returnValues}`);
@@ -47,8 +44,9 @@ export function Contract({ wallet }: Props) {
   function renderCardContent(contractAddress?: AztecAddress): { content: ReactNode; header: string } {
     if (contractAddress) {
       const functions = contractArtifact.functions
-        .filter(f => f.name !== 'constructor' && !f.isInternal && !FILTERED_FUNCTION_NAMES.includes(f.name))
-        .sort((a, b) => functionTypeSortOrder[a.functionType] - functionTypeSortOrder[b.functionType]);
+      .filter(f => f.name !== 'constructor' && !f.isInternal && !FILTERED_FUNCTION_NAMES.includes(f.name))
+      .sort((a, b) => functionTypeSortOrder[a.functionType] - functionTypeSortOrder[b.functionType]);
+      console.log(functions)
 
       if (selectedFunctionIndex === -1) {
         return {
