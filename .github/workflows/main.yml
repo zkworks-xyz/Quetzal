@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3    
+      - name: Install nargo 
+        run: |
+          curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+          export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
+          noirup -v 0.16.0-aztec.1
+
+      - name: Run check
+        run: |
+          export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
+          cd src/contracts
+          nargo check
