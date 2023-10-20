@@ -18,7 +18,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 20
-          yarn-version: 3.6.3
+      - name: Install yarn 3
+        run: |
+          corepack enable
+          yarn set version stable
+          yarn install
+          yarn build
       - name: Build webpack
         run: |
           yarn build
