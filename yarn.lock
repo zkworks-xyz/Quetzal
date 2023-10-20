@@ -12520,6 +12520,7 @@ __metadata:
     jest: ^29.6.4
     node-sass: ^9.0.0
     postcss: ^8.4.29
+    postcss-import: ^15.1.0
     postcss-loader: ^7.3.3
     prettier: ^3.0.3
     react: ^18.2.0
