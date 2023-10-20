@@ -102,12 +102,6 @@ export default (_, argv) => ({
       path: false,
       url: false,
       worker_threads: false,
-
-      buffer: require.resolve('buffer/'),
-      util: require.resolve('util/'),
-      stream: require.resolve('stream-browserify'),
-      string_decoder: require.resolve('string_decoder/'),
-      tty: require.resolve('tty-browserify'),
     },
   },
   devServer: {

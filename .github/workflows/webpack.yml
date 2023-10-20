@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  build:
+  webpack:
     runs-on: ubuntu-latest
 
     steps:
