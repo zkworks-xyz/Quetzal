@@ -102,6 +102,12 @@ export default (_, argv) => ({
       path: false,
       url: false,
       worker_threads: false,
+      events: false,
+      buffer: false,
+      util: false,
+      stream: false,
+      string_decoder: false,
+      tty: false,
     },
   },
   devServer: {
