@@ -42,11 +42,30 @@ const login = async () => {
         }
     };
 
-    const assertation = await navigator.credentials.get(
+    const assertation: any = await navigator.credentials.get(
         credentialRequestOptions
     );
 
+    const enc = new TextEncoder()
     console.log(assertation);
+    console.log(`authenticatorData: ${enc.encode(assertation.response.authenticatorData)}`);
+    console.log(`clientDataJSON: ${enc.encode(assertation.response.clientDataJSON)}`);
+    const utf8Decoder = new TextDecoder('utf-8');
+    const decodedClientData = utf8Decoder.decode(assertation.response.clientDataJSON)
+    console.log(`clientDataJSON: ${decodedClientData}`);
+
+    const hash = await crypto.subtle.digest('SHA-256', assertation.response.clientDataJSON);
+    console.log(`hash: ${arrayBufferToString(hash)}`);
+
+    const signedData = assertation.response.authenticatorData + hash;
+    console.log(`signedData: ${enc.encode(signedData)}`)
+    console.log(`signature: ${enc.encode(assertation.response.signature)}`)
+
+    // TODO: check verifySignature(publicKey, signedData, signature)
+};
+
+function arrayBufferToString(buffer: ArrayBuffer) {
+    return new Uint8Array(buffer).toString();
 }
 
 root.render(
