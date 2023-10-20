@@ -102,7 +102,7 @@ export default (_, argv) => ({
       path: false,
       url: false,
       worker_threads: false,
-      events: require.resolve('events/'),
+
       buffer: require.resolve('buffer/'),
       util: require.resolve('util/'),
       stream: require.resolve('stream-browserify'),
