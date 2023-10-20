@@ -34,7 +34,19 @@ const register = async () => {
 }
 
 const login = async () => {
+    const credentialRequestOptions = {
+        publicKey: {
+            timeout: 60000,
+            allowCredentials: [],	 // see below
+            challenge: new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).buffer,
+        }
+    };
 
+    const assertation = await navigator.credentials.get(
+        credentialRequestOptions
+    );
+
+    console.log(assertation);
 }
 
 root.render(
