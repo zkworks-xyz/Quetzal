@@ -1,7 +1,7 @@
 use dep::aztec::context::{PrivateContext, PublicContext, Context};
 use dep::aztec::types::address::AztecAddress;
 use dep::std::option::Option;
-use crate::types::balance_set::BalanceSet;
+use crate::token::types::balance_set::BalanceSet;
 
 struct BalancesMap {
     context: Context,

@@ -1,7 +1,4 @@
-// docs:start:token_all
-// docs:start:imports
-mod types;
-
+mod token;
 // Minimal token implementation that supports `AuthWit` accounts.
 // The auth message follows a similar pattern to the cross-chain message and includes a designated caller.
 // The designated caller is ALWAYS used here, and not based on a flag as cross-chain.
@@ -36,19 +33,18 @@ contract Token {
     // docs:start:import_authwit
     use dep::authwit::{
         auth::{
-            assert_current_call_valid_authwit, 
-            assert_current_call_valid_authwit_public, 
+            assert_current_call_valid_authwit,
+            assert_current_call_valid_authwit_public,
         },
     };
     // docs:end:import_authwit
 
-    use crate::types::{
-        transparent_note::{TransparentNote, TransparentNoteMethods, TRANSPARENT_NOTE_LEN},
-        token_note::{TokenNote, TokenNoteMethods, TOKEN_NOTE_LEN},
-        balances_map::{BalancesMap},
-        safe_u120_serialization::{SafeU120SerializationMethods, SAFE_U120_SERIALIZED_LEN}
+    use crate::token::{
+        types::transparent_note::{TransparentNote, TransparentNoteMethods, TRANSPARENT_NOTE_LEN},
+        types::token_note::{TokenNote, TokenNoteMethods, TOKEN_NOTE_LEN},
+        types::balances_map::{BalancesMap},
+        types::safe_u120_serialization::{SafeU120SerializationMethods, SAFE_U120_SERIALIZED_LEN}
     };
-    // docs:end::imports
 
     // docs:start:storage_struct
     struct Storage {
@@ -443,4 +439,4 @@ contract Token {
     }
     // docs:end:compute_note_hash_and_nullifier
 }
-// docs:end:token_all
+

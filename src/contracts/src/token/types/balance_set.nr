@@ -23,7 +23,7 @@ use dep::aztec::oracle::{
     get_public_key::get_public_key,
 };
 
-use crate::types::token_note::{TokenNote, TOKEN_NOTE_LEN, TokenNoteMethods};
+use crate::token::types::token_note::{TokenNote, TOKEN_NOTE_LEN, TokenNoteMethods};
 
 // A set implementing standard manipulation of balances.
 // Does not require spending key, but only knowledge.
@@ -54,7 +54,7 @@ impl BalanceSet {
   }
 
   unconstrained pub fn balance_of_with_offset(self: Self, offset: u32) -> SafeU120 {
-      // Same as SafeU120::new(0), but fewer constraints because no check. 
+      // Same as SafeU120::new(0), but fewer constraints because no check.
       let mut balance = SafeU120::min();
       // docs:start:view_notes
       let options = NoteViewerOptions::new().set_offset(offset);
