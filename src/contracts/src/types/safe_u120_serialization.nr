@@ -19,9 +19,12 @@ global SafeU120SerializationMethods = TypeSerializationInterface {
 
 #[test]
 fn test_serialize_roundtrip() {
-    let serialized = serializeU120(SafeU120::new(7));
-    let deserialized = deserializeU120(serialized);
-    assert(deserialized.value == 7 as u120);
+    let cases = [0, 1, 2, 7, 2.pow_32(120) - 1];
+    for i in 1..cases.len() {
+        let serialized = serializeU120(SafeU120::new(cases[i]));
+        let deserialized = deserializeU120(serialized);
+        assert(deserialized.value == cases[i] as u120);
+    }
 }
 
 #[test]
