@@ -103,7 +103,7 @@ export default (_, argv) => ({
       url: false,
       worker_threads: false,
       events: false,
-      buffer: false,
+      buffer: require.resolve('buffer/'),
       util: false,
       stream: false,
       string_decoder: false,
