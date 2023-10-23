@@ -21,9 +21,16 @@ jobs:
           export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
           noirup -v 0.16.0-aztec.1
 
-      - name: Run nargo check
+      - name: Run nargo check token
         run: |
           export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
-          cd src/contracts
+          cd src/contracts/token
+          nargo check
+          nargo test
+
+      - name: Run nargo check webauthn
+        run: |
+          export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
+          cd src/contracts/webauthn
           nargo check
           nargo test
