@@ -545,6 +545,48 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cbor-extract/cbor-extract-darwin-arm64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-darwin-arm64@npm:2.1.1"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-darwin-x64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-darwin-x64@npm:2.1.1"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-linux-arm64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-linux-arm64@npm:2.1.1"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-linux-arm@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-linux-arm@npm:2.1.1"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-linux-x64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-linux-x64@npm:2.1.1"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@cbor-extract/cbor-extract-win32-x64@npm:2.1.1":
+  version: 2.1.1
+  resolution: "@cbor-extract/cbor-extract-win32-x64@npm:2.1.1"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@coinbase/wallet-sdk@npm:^3.5.4":
   version: 3.7.2
   resolution: "@coinbase/wallet-sdk@npm:3.7.2"
@@ -4720,6 +4762,49 @@ __metadata:
   version: 2.1.1
   resolution: "catering@npm:2.1.1"
   checksum: 4669c9fa5f3a73273535fb458a964d8aba12dc5102d8487049cf03623bef3cdff4b5d9f92ff04c00f1001057a7cc7df6e700752ac622c2a7baf7bcff34166683
+  languageName: node
+  linkType: hard
+
+"cbor-extract@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "cbor-extract@npm:2.1.1"
+  dependencies:
+    "@cbor-extract/cbor-extract-darwin-arm64": "npm:2.1.1"
+    "@cbor-extract/cbor-extract-darwin-x64": "npm:2.1.1"
+    "@cbor-extract/cbor-extract-linux-arm": "npm:2.1.1"
+    "@cbor-extract/cbor-extract-linux-arm64": "npm:2.1.1"
+    "@cbor-extract/cbor-extract-linux-x64": "npm:2.1.1"
+    "@cbor-extract/cbor-extract-win32-x64": "npm:2.1.1"
+    node-gyp: "npm:latest"
+    node-gyp-build-optional-packages: "npm:5.0.3"
+  dependenciesMeta:
+    "@cbor-extract/cbor-extract-darwin-arm64":
+      optional: true
+    "@cbor-extract/cbor-extract-darwin-x64":
+      optional: true
+    "@cbor-extract/cbor-extract-linux-arm":
+      optional: true
+    "@cbor-extract/cbor-extract-linux-arm64":
+      optional: true
+    "@cbor-extract/cbor-extract-linux-x64":
+      optional: true
+    "@cbor-extract/cbor-extract-win32-x64":
+      optional: true
+  bin:
+    download-cbor-prebuilds: bin/download-prebuilds.js
+  checksum: c316d0449c1760d2e0a9ec4168e379804f84525615f4a7d6f21b7ffbeabde41cf09ac75ed4b4d84b73bc876c5c1a325a4fbbf6db87433ef2eea87f862eb5bcb5
+  languageName: node
+  linkType: hard
+
+"cbor-x@npm:^1.5.4":
+  version: 1.5.4
+  resolution: "cbor-x@npm:1.5.4"
+  dependencies:
+    cbor-extract: "npm:^2.1.1"
+  dependenciesMeta:
+    cbor-extract:
+      optional: true
+  checksum: 7c31800a53bfb0c86112c2945cca13306d01c5dc31d225b63fefd90d613c52c5acd1e205d94a51d74a5fade09f791997b0009e7b6f26a5b2c7d92f12ee9eedc4
   languageName: node
   linkType: hard
 
@@ -9795,6 +9880,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-gyp-build-optional-packages@npm:5.0.3":
+  version: 5.0.3
+  resolution: "node-gyp-build-optional-packages@npm:5.0.3"
+  bin:
+    node-gyp-build-optional-packages: bin.js
+    node-gyp-build-optional-packages-optional: optional.js
+    node-gyp-build-optional-packages-test: build-test.js
+  checksum: b407da0d3de637869a3c6920826e4033b78daba3db4c28459469f3a3f09b41d99d745c4318d09c7fdc1d147d875b440642dc043697bc932bed6beaa6bb1729ec
+  languageName: node
+  linkType: hard
+
 "node-gyp-build@npm:^4.2.0, node-gyp-build@npm:^4.3.0":
   version: 4.6.1
   resolution: "node-gyp-build@npm:4.6.1"
@@ -12508,6 +12604,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^6.0.0"
     "@typescript-eslint/parser": "npm:^6.0.0"
     autoprefixer: "npm:^10.4.15"
+    cbor-x: "npm:^1.5.4"
     classnames: "npm:^2.3.2"
     copy-webpack-plugin: "npm:^11.0.0"
     css-loader: "npm:^6.8.1"
