@@ -28,10 +28,10 @@ jobs:
           export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
           cd src/contracts
           nargo test
-      - name: Install yarn 3
+      - name: Install yarn 4
         run: |
           corepack enable
-          yarn set version 3.6.3
+          yarn set version latest
       - name: Install depdendencies
         run: |
           yarn --version
