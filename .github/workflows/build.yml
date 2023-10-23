@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install nargo
+        run: |
+          curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
+          export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
+          noirup -v 0.16.0-aztec.1
+      - name: Run nargo tests
+        run: |
+          export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
+          cd src/contracts
+          nargo test
+      - name: Install yarn 4
+        run: |
+          corepack enable
+          yarn set version latest
+      - name: Install depdendencies
+        run: |
+          yarn --version
+          yarn install
+      - name: Build webpack
+        run: yarn build
