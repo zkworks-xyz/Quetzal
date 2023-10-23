@@ -55,27 +55,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aztec/aztec.js@npm:^0.8.14":
-  version: 0.8.14
-  resolution: "@aztec/aztec.js@npm:0.8.14"
+"@aztec/aztec.js@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "@aztec/aztec.js@npm:0.9.0"
   dependencies:
-    "@aztec/circuits.js": 0.8.14
-    "@aztec/ethereum": 0.8.14
-    "@aztec/foundation": 0.8.14
-    "@aztec/types": 0.8.14
+    "@aztec/circuits.js": 0.9.0
+    "@aztec/ethereum": 0.9.0
+    "@aztec/foundation": 0.9.0
+    "@aztec/types": 0.9.0
     lodash.every: ^4.6.0
     lodash.partition: ^4.6.0
     lodash.zip: ^4.2.0
     tslib: ^2.4.0
-  checksum: 058b726e99aba86cff15b9f0c1988a75676da0f3536ca8247cffacef86995d90b2d50c6a459ffdb033b6fafca674a609c02804f8f77e3c387149f56b9d0c2142
+  checksum: 6dce502ddfc11f33335050e94233d7370eb7d2ce916c103ed9d6aea247ee211c5ac8c3f920425faa66e21329621357f03046c7d2eb8ba96c0700923e065853f9
   languageName: node
   linkType: hard
 
-"@aztec/circuits.js@npm:0.8.14, @aztec/circuits.js@npm:^0.8.14":
-  version: 0.8.14
-  resolution: "@aztec/circuits.js@npm:0.8.14"
+"@aztec/circuits.js@npm:0.9.0, @aztec/circuits.js@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "@aztec/circuits.js@npm:0.9.0"
   dependencies:
-    "@aztec/foundation": 0.8.14
+    "@aztec/foundation": 0.9.0
     "@msgpack/msgpack": ^3.0.0-beta2
     "@noble/curves": ^1.0.0
     "@types/lodash.camelcase": ^4.3.7
@@ -89,25 +89,25 @@ __metadata:
     lodash.snakecase: ^4.1.1
     lodash.times: ^4.3.2
     tslib: ^2.4.0
-  checksum: c3d047c19d29289d1159ebe6b26f010bb45e6ce6f9c501e2ea993c620894bf55cc83573cf49a3e86a899d645596ecc6626abc89c84032307813fc49b1a44e0c3
+  checksum: 857338e9d74e7a4f22bad5f22e9550f2be3266db7a383ee386d42c1d6ec417bab4315f946738decd373532fdd97f3af3d8f2e4c8c2662ffebfd67ebfb959f3c3
   languageName: node
   linkType: hard
 
-"@aztec/ethereum@npm:0.8.14":
-  version: 0.8.14
-  resolution: "@aztec/ethereum@npm:0.8.14"
+"@aztec/ethereum@npm:0.9.0":
+  version: 0.9.0
+  resolution: "@aztec/ethereum@npm:0.9.0"
   dependencies:
-    "@aztec/foundation": 0.8.14
+    "@aztec/foundation": 0.9.0
     dotenv: ^16.0.3
     tslib: ^2.4.0
     viem: ^1.2.5
-  checksum: dcf008ec72775c4b4b4faa764a6850bdc0de805c8837d5b02c547aecd8d21880c697f736eb50ea421a89526f395b81c3dc6828125203e8243e64236591cb7a43
+  checksum: 80d4bed91668464369ba131324923f29b1a8a3c5ccbf2641feb133414c9c5efa6fd7dbab17a18324c6d21a0f982f93f0df6b2b514d6be349e0c8916bab2fdeec
   languageName: node
   linkType: hard
 
-"@aztec/foundation@npm:0.8.14, @aztec/foundation@npm:^0.8.14":
-  version: 0.8.14
-  resolution: "@aztec/foundation@npm:0.8.14"
+"@aztec/foundation@npm:0.9.0, @aztec/foundation@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "@aztec/foundation@npm:0.9.0"
   dependencies:
     "@koa/cors": ^4.0.0
     debug: ^4.3.4
@@ -123,23 +123,23 @@ __metadata:
     memdown: ^6.1.1
     pako: ^2.1.0
     sha3: ^2.1.4
-  checksum: 559e177b2376da2c59a292d7f6e548c4fe9bd46f445e2961a527f43e83a24a7b0d7403d2af60d2a8ee91e378e1161d67b7e48e94a9ba7c224619febea0bd599f
+  checksum: ce87cb2d2e0bdcab9edd79abb363761bca600d60ac5e427ef4612d70baa320dc67f7826ac77dd43d9948aa5088f1d77939d0b2966f5c56c2ceb05d6f4661ef6c
   languageName: node
   linkType: hard
 
-"@aztec/types@npm:0.8.14, @aztec/types@npm:^0.8.14":
-  version: 0.8.14
-  resolution: "@aztec/types@npm:0.8.14"
+"@aztec/types@npm:0.9.0, @aztec/types@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "@aztec/types@npm:0.9.0"
   dependencies:
-    "@aztec/circuits.js": 0.8.14
-    "@aztec/ethereum": 0.8.14
-    "@aztec/foundation": 0.8.14
+    "@aztec/circuits.js": 0.9.0
+    "@aztec/ethereum": 0.9.0
+    "@aztec/foundation": 0.9.0
     browserify-cipher: ^1.0.1
     lodash.clonedeep: ^4.5.0
     lodash.isequal: ^4.5.0
     lodash.times: ^4.3.2
     tslib: ^2.5.0
-  checksum: 700df45efea3085db7844410dbb69c2ec14d03407059bce894597aadb1ac4a7fde2d98e773a50504647d11c98b7b7857c8618a059d58b4532e58fd75f00627f2
+  checksum: c58a841435b153effe80ac23ed0734848ff17f1e37adc2a86f95d8b7fd331c62a3bcb47a31e02df7b6b4aa39d8f0e91f8fdcfe335f6f571c83c6d54882c93142
   languageName: node
   linkType: hard
 
@@ -12492,10 +12492,10 @@ __metadata:
   resolution: "token@workspace:."
   dependencies:
     "@aztec/aztec-ui": ^0.1.14
-    "@aztec/aztec.js": ^0.8.14
-    "@aztec/circuits.js": ^0.8.14
-    "@aztec/foundation": ^0.8.14
-    "@aztec/types": ^0.8.14
+    "@aztec/aztec.js": ^0.9.0
+    "@aztec/circuits.js": ^0.9.0
+    "@aztec/foundation": ^0.9.0
+    "@aztec/types": ^0.9.0
     "@headlessui/react": ^1.7.17
     "@heroicons/react": ^2.0.18
     "@jest/globals": ^29.6.4
