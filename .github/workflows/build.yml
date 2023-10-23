@@ -34,8 +34,8 @@ jobs:
           cd src/contracts/webauthn
           nargo check
           nargo test
-          narvo prove
-          narvo verify
+          nargo prove
+          nargo verify
       - name: Install yarn 4
         run: |
           corepack enable
