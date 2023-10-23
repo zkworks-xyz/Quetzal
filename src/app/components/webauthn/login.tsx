@@ -1,8 +1,7 @@
 import {Button} from "@aztec/aztec-ui";
 import * as React from "react";
 
-const login = async () => {
-    let challenge = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]).buffer;
+async function webAuthnLogin(challenge: Uint8Array) {
     const credentialRequestOptions = {
         publicKey: {
             timeout: 60000,
@@ -16,10 +15,20 @@ const login = async () => {
         credentialRequestOptions
     );
     // @ts-ignore
-    const challenge_str = `challenge = [${toBase64url(challenge).replaceAll('=', '').split('').map((c) => c.charCodeAt(0))}}]`;
-    const authenticator_data_str = `authenticator_data = [${new Uint8Array((assertation.response.authenticatorData))}]`;
-    const client_data_json_str = `client_data_json = [${new Uint8Array((assertation.response.clientDataJSON))}]`;
+    const challenge1 = toBase64url(challenge).replaceAll('=', '').split('').map((c) => c.charCodeAt(0));
+    const authenticator_data = new Uint8Array((assertation.response.authenticatorData));
+    const client_data_json = new Uint8Array((assertation.response.clientDataJSON));
     let signatureRaw = convertASN1toRaw(assertation.response.signature);
+    return {challenge: challenge1, authenticator_data, client_data_json, signatureRaw};
+}
+
+const login = async () => {
+    let {challenge, authenticator_data, client_data_json, signatureRaw} =
+        await webAuthnLogin(new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]));
+
+    const challenge_str = `challenge = [${challenge}}]`;
+    const client_data_json_str = `client_data_json = [${client_data_json}]`;
+    const authenticator_data_str = `authenticator_data = [${authenticator_data}]`;
     const signature_str = `signature = [${new Uint8Array(signatureRaw)}]`;
 
     console.log([challenge_str, authenticator_data_str, client_data_json_str, signature_str].join('\n'));
