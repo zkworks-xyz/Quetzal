@@ -6,7 +6,7 @@
   "main": "./dest/index.js",
   "engines": {
     "node": ">=20.0.0",
-    "yarn": "=3.6.3"
+    "yarn": ">=yarn@4.0.0"
   },
   "scripts": {
     "build": "yarn clean && tsc -b && webpack",
@@ -109,5 +109,6 @@
     "src",
     "!*.test.*"
   ],
-  "types": "./dest/index.d.ts"
+  "types": "./dest/index.d.ts",
+  "packageManager": "yarn@4.0.0"
 }
