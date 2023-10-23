@@ -26,7 +26,7 @@ jobs:
       - name: Run token contract tests
         run: |
           export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
-          cd src/contracts
+          cd src/contracts/token
           nargo test
       - name: Run webauthn prove test
         run: |
