@@ -6,7 +6,7 @@
   "main": "./dest/index.js",
   "engines": {
     "node": ">=20.0.0",
-    "yarn": ">=3.6.3"
+    "yarn": "=3.6.3"
   },
   "scripts": {
     "build": "yarn clean && tsc -b && webpack",
