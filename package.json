@@ -109,5 +109,6 @@
     "src",
     "!*.test.*"
   ],
-  "types": "./dest/index.d.ts"
+  "types": "./dest/index.d.ts",
+  "packageManager": "yarn@4.0.0"
 }
