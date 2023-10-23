@@ -33,6 +33,8 @@ jobs:
           corepack enable
           yarn set version 3.6.3
       - name: Install depdendencies
-        run: yarn install
+        run: |
+          yarn --version
+          yarn install
       - name: Build webpack
         run: yarn build
