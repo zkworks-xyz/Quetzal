@@ -1,5 +1,5 @@
 # Quetzal
-Quetzal is an [Aztec](https://aztec.network/) wallet, supporting public and private transactions. 
+Quetzal is an [Aztec](https://aztec.network/) wallet, supporting public and private transactions.
 
 It is in early stage of development, with more features to come.
 
@@ -7,7 +7,7 @@ It is in early stage of development, with more features to come.
 
 ### Install dependencies
 
-Make sure you install the prerequisites: 
+Make sure you install the prerequisites:
 1. [Node.js](https://nodejs.org/en) version 20 or later
 2. [Yarn](https://yarnpkg.com/) version 3 or later
 3. [Docker](https://www.docker.com/)
@@ -24,8 +24,8 @@ To install them, use following command:
 yarn install:noir
 ```
 
-To run the project, you will need Aztec sandbox, which runs as docker containers. 
-Make sure you have [Docker](https://www.docker.com/) installed and _and running_ locally. 
+To run the project, you will need Aztec sandbox, which runs as docker containers.
+Make sure you have [Docker](https://www.docker.com/) installed and _and running_ locally.
 To install or update docker images, run:
 
 ```bash
@@ -33,6 +33,15 @@ yarn install:sandbox
 ```
 
 ## Getting started
+
+To compile smart contracts, use following command:
+
+```bash
+yarn compile
+```
+
+Compiled smart contracts are required to run local environment.
+
 
 To start the local environment, launch Aztec sandbox in one terminal:
 
