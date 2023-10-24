@@ -28,7 +28,7 @@ jobs:
           yarn install
       - name: Install aztec-cli
         run: |
-          yarn dlx @aztec/cli
+          npm install -g @aztec/cli
       - name: Install nargo
         run: |
           curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
