@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 src/artifacts/*.json
+src/artifacts/*.ts
 node_modules
 .tsbuildinfo
 dest
