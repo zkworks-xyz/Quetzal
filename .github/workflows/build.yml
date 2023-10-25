@@ -43,4 +43,6 @@ jobs:
           yarn --version
           yarn install
       - name: Build webpack
-        run: yarn build
+        run: |
+          yarn compile
+          yarn build
