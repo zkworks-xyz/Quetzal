@@ -65,4 +65,5 @@ Updating environment checklist
 - in `package.json` update `install:sandbox` script to look like something like this: `docker pull aztecprotocol/aztec-sandbox:X.X.X`
 - update @aztec/cli to list with following command `npm install -g @aztec/cli`
 - in `package.json` update following packages: `@aztec/aztec-ui`, `@aztec/aztec.js`, `@aztec/circuits.js` and `@aztec/foundation`
+- compile contracts with `yarn compile`
 
