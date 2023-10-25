@@ -2,29 +2,21 @@ import { TokenContract } from '../artifacts/Token.js';
 import { TokenSimulator } from './token_simulator.js';
 import {
   AccountWallet,
+  computeAuthWitMessageHash,
+  computeMessageSecretHash,
   Fr,
+  getSandboxAccountsWallets,
   NotePreimage,
   PXE,
   TxHash,
   TxStatus,
-  computeAuthWitMessageHash,
-  computeMessageSecretHash,
-  createPXEClient,
-  getSandboxAccountsWallets,
-  waitForSandbox,
 } from '@aztec/aztec.js';
 import { CompleteAddress } from '@aztec/circuits.js';
-import { DebugLogger, createDebugLogger } from '@aztec/foundation/log';
+import { createDebugLogger, DebugLogger } from '@aztec/foundation/log';
+
 import { afterEach, beforeAll, expect, jest } from '@jest/globals';
 
-// assumes sandbox is running locally, which this script does not trigger
-// as well as anvil.  anvil can be started with yarn test:integration
-const setupSandbox = async () => {
-  const { PXE_URL = 'http://localhost:8080' } = process.env;
-  const pxe = createPXEClient(PXE_URL);
-  await waitForSandbox(pxe);
-  return pxe;
-};
+import { setupSandbox } from './utils.js';
 
 const TIMEOUT = 60_000;
 
