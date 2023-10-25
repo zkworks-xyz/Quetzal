@@ -2,7 +2,7 @@ mod public_key_note;
 
 // Account contract that uses Schnorr signatures for authentication.
 // The signing key is stored in an immutable private note and should be different from the encryption/nullifying key.
-contract SchnorrAccount {
+contract WebAuthnAccount {
     use dep::std;
     use dep::std::option::Option;
 
