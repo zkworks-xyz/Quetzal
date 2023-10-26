@@ -9,7 +9,7 @@ import {
   PXE
 } from "@aztec/aztec.js";
 import { GrumpkinScalar } from "@aztec/circuits.js";
-import { WebAuthnAccountContract } from "../app/account/webauthn_account_contract.js";
+import { getWebAuthnAccount } from "../app/account/webauthn_account_contract.js";
 
 describe("Quetzal wallet", () => {
 
@@ -32,8 +32,7 @@ describe("Quetzal wallet", () => {
 
   it("should deploy WebAuthnAccount contract and check deployment status", async () => {
     const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
-    const salt: Fr = Fr.ZERO;
-    const webAuthnAccount: AccountManager = new AccountManager(pxe, encryptionPrivateKey, new WebAuthnAccountContract(), salt);
+    const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey, 0n, 0n)
     let accountWallet: AccountWalletWithPrivateKey = await webAuthnAccount.waitDeploy();
 
     const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress())

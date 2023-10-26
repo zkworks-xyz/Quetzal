@@ -1,18 +1,38 @@
 import { WebAuthnAccountContractArtifact } from "../../artifacts/WebAuthnAccount.js";
-import { AuthWitnessProvider, BaseAccountContract, CompleteAddress, Fr, Point } from "@aztec/aztec.js";
-import { AuthWitness } from "@aztec/types";
+import {
+  AuthWitnessProvider,
+  BaseAccountContract,
+  CompleteAddress,
+  Fr,
+  Point,
+  PXE,
+  GrumpkinPrivateKey,
+  Salt,
+  AccountManager,
+} from "@aztec/aztec.js";
+
+import { AuthWitness } from '@aztec/types';
+
+export function getWebAuthnAccount(
+  pxe: PXE,
+  encryptionPrivateKey: GrumpkinPrivateKey,
+  publicKeyX: bigint,
+  publicKeyY: bigint,
+  saltOrAddress: Salt | CompleteAddress = Fr.ZERO,
+): AccountManager {
+  return new AccountManager(pxe, encryptionPrivateKey, new WebAuthnAccountContract(publicKeyX, publicKeyY), saltOrAddress);
+}
 
 /**
  * Account contract that authenticates transactions using WebAuthn signatures
  */
 export class WebAuthnAccountContract extends BaseAccountContract {
-  constructor() {
+  constructor(readonly publicKeyX: bigint, readonly publicKeyY: bigint) {
     super(WebAuthnAccountContractArtifact);
   }
 
   getDeploymentArgs(): Promise<any[]> {
-    const publicKey = Point.ZERO;
-    return Promise.resolve([publicKey.x, publicKey.y]);
+    return Promise.resolve([this.publicKeyX, this.publicKeyY]);
   }
 
   getAuthWitnessProvider(_address: CompleteAddress): AuthWitnessProvider {
