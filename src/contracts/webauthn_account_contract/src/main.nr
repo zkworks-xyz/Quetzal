@@ -17,6 +17,10 @@ contract WebAuthnAccount {
         account::AccountActions,
         auth_witness::get_auth_witness,
     };
+    use dep::aztec::log::{
+        emit_unencrypted_log_from_private,
+        emit_unencrypted_log,
+    };
 
     use crate::public_key_note::{PublicKeyNote, PublicKeyNoteMethods, PUBLIC_KEY_NOTE_LEN};
 
@@ -44,6 +48,7 @@ contract WebAuthnAccount {
         signing_pub_key_x: pub Field,
         signing_pub_key_y: pub Field,
     ) {
+        emit_unencrypted_log_from_private(&mut context, "constructor");
         let this = context.this_address();
         // docs:start:initialize
         let mut pub_key_note = PublicKeyNote::new(signing_pub_key_x, signing_pub_key_y, this);
@@ -53,30 +58,35 @@ contract WebAuthnAccount {
 
     #[aztec(private)]
     fn entrypoint(payload: pub EntrypointPayload) {
+        emit_unencrypted_log_from_private(&mut context, "entrypoint");
         let actions = AccountActions::private(&mut context, ACCOUNT_ACTIONS_STORAGE_SLOT, is_valid_impl);
         actions.entrypoint(payload);
     }
 
     #[aztec(private)]
     fn is_valid(message_hash: Field) -> Field {
+        emit_unencrypted_log_from_private(&mut context, "is_valid");
         let actions = AccountActions::private(&mut context, ACCOUNT_ACTIONS_STORAGE_SLOT, is_valid_impl);
         actions.is_valid(message_hash)
     }
 
     #[aztec(public)]
     fn is_valid_public(message_hash: Field) -> Field {
+        emit_unencrypted_log(&mut context, "is_valid_public");
         let actions = AccountActions::public(&mut context, ACCOUNT_ACTIONS_STORAGE_SLOT, is_valid_impl);
         actions.is_valid_public(message_hash)
     }
 
     #[aztec(public)]
     internal fn set_is_valid_storage(message_hash: Field, value: bool) {
+        emit_unencrypted_log(&mut context, "set_is_valid_storage");
         let actions = AccountActions::public(&mut context, ACCOUNT_ACTIONS_STORAGE_SLOT, is_valid_impl);
         actions.internal_set_is_valid_storage(message_hash, value)
     }
 
     #[contract_library_method]
     fn is_valid_impl(context: &mut PrivateContext, message_hash: Field) -> pub bool {
+        emit_unencrypted_log_from_private(context, "is_valid_impl");
         // docs:start:entrypoint
         // Load public key from storage
         let storage = Storage::init(Context::private(context));
