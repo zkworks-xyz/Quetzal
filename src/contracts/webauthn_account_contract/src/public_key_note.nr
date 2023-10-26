@@ -13,19 +13,19 @@ use dep::aztec::{
     context::PrivateContext,
 };
 
-global PUBLIC_KEY_NOTE_LEN: Field = 6;
+global PUBLIC_KEY_NOTE_LEN: Field = 5;
 
 // Stores a public key composed of two fields
 // TODO: Do we need to include a nonce, in case we want to read/nullify/recreate with the same pubkey value?
 struct PublicKeyNote {
-    x: [Field; 4],
-    y: Field,
+    x: [u8; 32],
+    y: [u8; 32],
     owner: Field, // We store the owner address only to get the secret key to compute the nullifier and to broadcast
     header: NoteHeader,
 }
 
 impl PublicKeyNote {
-    pub fn new(x: [Field; 4], y: Field, owner: Field) -> Self {
+    pub fn new(x: [u8; 32], y: [u8; 32], owner: Field) -> Self {
         PublicKeyNote {
             x,
             y,
@@ -34,14 +34,30 @@ impl PublicKeyNote {
         }
     }
 
-    // serialize the note as 3 fields
+    // serialize the note as 5 fields where:
+    // [0] = x[0..31] (upper bound excluded)
+    // [1] = x[31]
+    // [2] = y[0..31]
+    // [3] = y[31]
+    // [4] = owner
     pub fn serialize(self) -> [Field; PUBLIC_KEY_NOTE_LEN] {
-        let x = self.x;
-        [
-            x[0], x[1], x[2], x[3],
-            self.y, self.owner
-        ]
+        let mut x: Field = 0;
+        let mut y: Field = 0;
+        let mut mul: Field = 1;
 
+        for i in 1..32 {
+          let byte_x: Field = self.x[31 - i] as Field;
+          x = x + (byte_x * mul);
+          let byte_y: Field = self.y[31 - i] as Field;
+          y = y + (byte_y * mul);
+          mul *= 256;
+        }
+
+        let last_x = self.x[31] as Field;
+        let last_y = self.y[31] as Field;
+        
+        let res: [Field; PUBLIC_KEY_NOTE_LEN] = [x, last_x, y, last_y, self.owner];
+        res
     }
 
     pub fn compute_nullifier(self) -> Field {
@@ -73,11 +89,21 @@ impl PublicKeyNote {
 }
 
 fn deserialize(preimage: [Field; PUBLIC_KEY_NOTE_LEN]) -> PublicKeyNote {
-    let x = [preimage[0], preimage[1], preimage[2], preimage[3]];
+    let mut x: [u8; 32] = [0;32];
+    let mut y: [u8; 32] = [0;32];
+
+    let part_x = preimage[0].to_be_bytes(32);
+    for i in 0..31 { x[i] = part_x[i + 1]; }
+    x[31] = preimage[1].to_be_bytes(32)[31];
+
+    let part_y = preimage[2].to_be_bytes(32);
+    for i in 0..31 { y[i] = part_y[i + 1]; }
+    y[31] = preimage[3].to_be_bytes(32)[31];
+
     PublicKeyNote {
-        x: x,
-        y: preimage[4],
-        owner: preimage[5],
+        x,
+        y,
+        owner: preimage[4],
         header: NoteHeader::empty(),
     }
 }
