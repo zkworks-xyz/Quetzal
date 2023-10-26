@@ -24,7 +24,7 @@ async function webAuthnLogin(challenge: Uint8Array) {
 
 const login = async () => {
     let {challenge, authenticator_data, client_data_json, signatureRaw} =
-        await webAuthnLogin(new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]));
+        await webAuthnLogin(new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]));
 
     const challenge_str = `challenge = [${challenge}}]`;
     const client_data_json_str = `client_data_json = [${client_data_json}]`;
