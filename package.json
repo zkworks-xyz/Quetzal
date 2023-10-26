@@ -18,8 +18,8 @@
     "start:sandbox": "SANDBOX_VERSION=0.11.1 /bin/bash -c \"$(curl -fsSL 'https://sandbox.aztec.network')\" ",
     "formatting": "prettier --check ./src && eslint ./src",
     "formatting:fix": "prettier -w ./src",
-    "compile:token": "mkdir -p src/contracts/artifacts/token && aztec-cli compile src/contracts/token --outdir ../artifacts/token --typescript ../artifacts/token",
-    "compile:webauthn": "mkdir -p src/contracts/webauthn_account_contract/ && aztec-cli compile src/contracts/webauthn_account_contract --outdir ../artifacts/webauthn --typescript ../artifacts/webauthn",
+    "compile:token": "mkdir -p src/artifacts/token && aztec-cli compile src/contracts/token --outdir ../../artifacts/token --typescript ../../artifacts/token",
+    "compile:webauthn": "mkdir -p src/artifacts/webauthn && aztec-cli compile src/contracts/webauthn_account_contract --outdir ../../artifacts/webauthn --typescript ../../artifacts/webauthn",
     "compile": "npm run compile:token && npm run compile:webauthn",
     "update:sandbox": "/bin/bash -c \"$(curl -fsSL 'https://sandbox.aztec.network')\"",
     "test:integration": "NODE_NO_WARNINGS=1 node --experimental-vm-modules $(yarn bin jest) --runInBand"
