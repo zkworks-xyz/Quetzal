@@ -43,7 +43,7 @@ export class WebAuthnAccountContract extends BaseAccountContract {
 /** Creates auth witnesses using WebAuthn signatures. */
 class WebAuthnWitnessProvider implements AuthWitnessProvider {
   async createAuthWitness(message: Fr): Promise<AuthWitness> {
-    const signature: any[] = [] // TODO generate webauthn signature
-    return new AuthWitness(message, [...signature]);
+    // TODO generate webauthn signature
+    return new AuthWitness(message, [13]);
   }
 }
