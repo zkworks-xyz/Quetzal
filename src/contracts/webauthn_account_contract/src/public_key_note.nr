@@ -13,19 +13,19 @@ use dep::aztec::{
     context::PrivateContext,
 };
 
-global PUBLIC_KEY_NOTE_LEN: Field = 4;
+global PUBLIC_KEY_NOTE_LEN: Field = 6;
 
 // Stores a public key composed of two fields
 // TODO: Do we need to include a nonce, in case we want to read/nullify/recreate with the same pubkey value?
 struct PublicKeyNote {
-    x: [Field; 2],
+    x: [Field; 4],
     y: Field,
     owner: Field, // We store the owner address only to get the secret key to compute the nullifier and to broadcast
     header: NoteHeader,
 }
 
 impl PublicKeyNote {
-    pub fn new(x: [Field; 2], y: Field, owner: Field) -> Self {
+    pub fn new(x: [Field; 4], y: Field, owner: Field) -> Self {
         PublicKeyNote {
             x,
             y,
@@ -38,7 +38,7 @@ impl PublicKeyNote {
     pub fn serialize(self) -> [Field; PUBLIC_KEY_NOTE_LEN] {
         let x = self.x;
         [
-            x[0], x[1],
+            x[0], x[1], x[2], x[3],
             self.y, self.owner
         ]
 
@@ -73,11 +73,11 @@ impl PublicKeyNote {
 }
 
 fn deserialize(preimage: [Field; PUBLIC_KEY_NOTE_LEN]) -> PublicKeyNote {
-    let x = [preimage[0], preimage[1]];
+    let x = [preimage[0], preimage[1], preimage[2], preimage[3]];
     PublicKeyNote {
         x: x,
-        y: preimage[2],
-        owner: preimage[3],
+        y: preimage[4],
+        owner: preimage[5],
         header: NoteHeader::empty(),
     }
 }
