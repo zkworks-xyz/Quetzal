@@ -53,10 +53,13 @@ export class WebAuthnAccountContract extends BaseAccountContract {
     super(WebAuthnAccountContractArtifact);
   }
 
-  async getDeploymentArgs(): Promise<[number, number]> {
+  async getDeploymentArgs(): Promise<any[]> {
     const publicKey = await this.webAuntnInterface.getPublicKey();
     // return Promise.resolve([publicKey.x, publicKey.y]);
-    return Promise.resolve([0, 0]);
+    return Promise.resolve([
+      [0],
+      0
+    ]);
   }
 
   getAuthWitnessProvider(_address: CompleteAddress): AuthWitnessProvider {

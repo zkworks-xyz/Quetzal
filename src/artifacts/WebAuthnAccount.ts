@@ -55,14 +55,14 @@ export class WebAuthnAccountContract extends ContractBase {
   /**
    * Creates a tx to deploy a new instance of this contract.
    */
-  public static deploy(wallet: Wallet, signing_pub_key_x: FieldLike, signing_pub_key_y: FieldLike) {
+  public static deploy(wallet: Wallet, signing_pub_key_x: FieldLike[], signing_pub_key_y: FieldLike) {
     return new DeployMethod<WebAuthnAccountContract>(Point.ZERO, wallet, WebAuthnAccountContractArtifact, Array.from(arguments).slice(1));
   }
 
   /**
    * Creates a tx to deploy a new instance of this contract using the specified public key to derive the address.
    */
-  public static deployWithPublicKey(publicKey: PublicKey, wallet: Wallet, signing_pub_key_x: FieldLike, signing_pub_key_y: FieldLike) {
+  public static deployWithPublicKey(publicKey: PublicKey, wallet: Wallet, signing_pub_key_x: FieldLike[], signing_pub_key_y: FieldLike) {
     return new DeployMethod<WebAuthnAccountContract>(publicKey, wallet, WebAuthnAccountContractArtifact, Array.from(arguments).slice(2));
   }
   
@@ -82,8 +82,8 @@ export class WebAuthnAccountContract extends ContractBase {
     /** compute_note_hash_and_nullifier(contract_address: field, nonce: field, storage_slot: field, preimage: array) */
     compute_note_hash_and_nullifier: ((contract_address: FieldLike, nonce: FieldLike, storage_slot: FieldLike, preimage: FieldLike[]) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
-    /** deserialize_and_validate_webauthn_witness(challenge: field, public_key_x: field, public_key_y: field) */
-    deserialize_and_validate_webauthn_witness: ((challenge: FieldLike, public_key_x: FieldLike, public_key_y: FieldLike) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
+    /** deserialize_and_validate_webauthn_witness(challenge: field, public_key_x_f: array, public_key_y: field) */
+    deserialize_and_validate_webauthn_witness: ((challenge: FieldLike, public_key_x_f: FieldLike[], public_key_y: FieldLike) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
     /** entrypoint(payload: struct) */
     entrypoint: ((payload: { function_calls: { args_hash: FieldLike, function_selector: FieldLike, target_address: FieldLike, is_public: boolean }[], nonce: FieldLike }) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;

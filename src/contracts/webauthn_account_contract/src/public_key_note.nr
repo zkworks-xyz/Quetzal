@@ -18,14 +18,14 @@ global PUBLIC_KEY_NOTE_LEN: Field = 3;
 // Stores a public key composed of two fields
 // TODO: Do we need to include a nonce, in case we want to read/nullify/recreate with the same pubkey value?
 struct PublicKeyNote {
-    x: Field,
+    x: [Field; 1],
     y: Field,
     owner: Field, // We store the owner address only to get the secret key to compute the nullifier and to broadcast
     header: NoteHeader,
 }
 
 impl PublicKeyNote {
-    pub fn new(x: Field, y: Field, owner: Field) -> Self {
+    pub fn new(x: [Field; 1], y: Field, owner: Field) -> Self {
         PublicKeyNote {
             x,
             y,
@@ -36,7 +36,12 @@ impl PublicKeyNote {
 
     // serialize the note as 3 fields
     pub fn serialize(self) -> [Field; PUBLIC_KEY_NOTE_LEN] {
-        [self.x, self.y, self.owner]
+        let x = self.x;
+        [
+            x[0],
+            self.y, self.owner
+        ]
+
     }
 
     pub fn compute_nullifier(self) -> Field {
@@ -68,8 +73,9 @@ impl PublicKeyNote {
 }
 
 fn deserialize(preimage: [Field; PUBLIC_KEY_NOTE_LEN]) -> PublicKeyNote {
+    let x = [preimage[0]];
     PublicKeyNote {
-        x: preimage[0],
+        x: x,
         y: preimage[1],
         owner: preimage[2],
         header: NoteHeader::empty(),
