@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "yarn clean && tsc -b && webpack",
-    "install:noir": "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.16.0-aztec.1",
+    "install:noir": "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.17.0-aztec.2",
     "install:sandbox": "docker pull aztecprotocol/aztec-sandbox:0.11.1",
     "clean": "rm -rf ./dest .tsbuildinfo",
     "start": "serve -p 3000 ./dest",

@@ -7,6 +7,7 @@ import { AztecAddress, CompleteAddress } from '@aztec/aztec.js';
 import { FunctionArtifact } from '@aztec/foundation/abi';
 import { ReactNode, useState } from 'react';
 import { DeveloperMode } from './modals/developer_mode.js';
+import { TokenContract } from '../artifacts/Token.js';
 
 const functionTypeSortOrder = {
   secret: 0,
@@ -20,16 +21,16 @@ interface Props {
 
 export function Contract({ wallet }: Props) {
   const [isTermsOpen, setTermsOpen] = useState<boolean>(false);
-  const [contractAddress, setContractAddress] = useState<AztecAddress | undefined>();
+  const [tokenContract, setTokenContract] = useState<TokenContract | undefined>();
   const [processingFunction, setProcessingFunction] = useState('');
   const [errorMsg, setError] = useState('');
   const [selectedFunctionIndex, setSelectedFunctionIndex] = useState<number>(-1);
   const [result, setResult] = useState('');
 
   const handleSubmitForm = (functionName: string) => setProcessingFunction(functionName);
-  const handleContractDeployed = (address: AztecAddress) => {
-    setContractAddress(address);
-    setResult(`Contract deployed at: ${address}`);
+  const handleContractDeployed = (token: TokenContract) => {
+    setTokenContract(token);
+    setResult(`Contract deployed at: ${token.address.toString()}`);
   };
   const handleResult = (returnValues: any) => {
     // TODO: serialize returnValues to string according to the returnTypes defined in the function abi.
@@ -113,10 +114,10 @@ export function Contract({ wallet }: Props) {
 
     return {header: "", content: <></>};
   }
-  const { header, content } = renderCardContent(contractAddress);
+  const { header, content } = renderCardContent(tokenContract?.address);
 
-  if (!contractAddress) {
-    return <DeveloperMode onContractDeployed={setContractAddress}/>;
+  if (!tokenContract) {
+    return <DeveloperMode onContractDeployed={setTokenContract}/>;
   }
 
   return (
