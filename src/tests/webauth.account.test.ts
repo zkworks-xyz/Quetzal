@@ -1,39 +1,15 @@
 import { beforeAll, describe, expect, it } from "@jest/globals";
 import { setupSandbox } from "./utils.js";
 import {
-  AccountManager, AccountWalletWithPrivateKey,
-  AuthWitnessProvider,
-  BaseAccountContract,
-  CompleteAddress,
+  AccountManager,
+  AccountWalletWithPrivateKey,
   Fr,
   getSchnorrAccount,
   isContractDeployed,
-  Point,
   PXE
 } from "@aztec/aztec.js";
 import { GrumpkinScalar } from "@aztec/circuits.js";
-import { WebAuthnAccountContractArtifact } from "../artifacts/WebAuthnAccount.js";
-import { AuthWitness } from "@aztec/types";
-
-class WebAuthnAccountContract extends BaseAccountContract {
-  constructor() {
-    super(WebAuthnAccountContractArtifact);
-  }
-
-  getDeploymentArgs(): Promise<any[]> {
-    const publicKey = Point.ZERO;
-    return Promise.resolve([publicKey.x, publicKey.y]);
-  }
-
-  getAuthWitnessProvider(_address: CompleteAddress): AuthWitnessProvider {
-    return {
-      async createAuthWitness(message: Fr): Promise<AuthWitness> {
-        const signature: any[] = [] // TODO generate webauthn signature
-        return new AuthWitness(message, [...signature]);
-      },
-    };
-  }
-}
+import { WebAuthnAccountContract } from "../app/account/webauthn_account_contract.js";
 
 describe("Quetzal wallet", () => {
 
