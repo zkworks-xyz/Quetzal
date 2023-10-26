@@ -12,6 +12,7 @@ import {
 import { GrumpkinScalar } from "@aztec/circuits.js";
 import { getWebAuthnAccount } from "../app/account/webauthn_account_contract.js";
 import { TokenContract } from "@aztec/noir-contracts/types";
+import { WebAuntnInterfaceStub } from "./webauthn_stub.js";
 
 describe("Quetzal wallet", () => {
   jest.setTimeout(60_000);
@@ -35,7 +36,7 @@ describe("Quetzal wallet", () => {
 
   xit("should deploy WebAuthnAccount contract and check deployment status", async () => {
     const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
-    const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey, 0n, 0n)
+    const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey, new WebAuntnInterfaceStub())
     let accountWallet = await webAuthnAccount.waitDeploy();
 
     const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress())
@@ -49,11 +50,11 @@ describe("Quetzal wallet", () => {
 
     beforeAll(async () => {
       const encryptionPrivateKey0: GrumpkinScalar = GrumpkinScalar.random();
-      const webAuthnAccount0: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey0, 0n, 0n)
+      const webAuthnAccount0: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey0, new WebAuntnInterfaceStub())
       account0 = await webAuthnAccount0.waitDeploy();
 
       const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
-      const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, 0n, 0n)
+      const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebAuntnInterfaceStub())
       account1 = await webAuthnAccount1.waitDeploy();
     });
 
@@ -79,5 +80,4 @@ describe("Quetzal wallet", () => {
       expect(await asset.methods.balance_of_public(account1.getAddress()).view()).toEqual(7n);
     })
   });
-
 });

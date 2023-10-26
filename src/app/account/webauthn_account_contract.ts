@@ -1,14 +1,13 @@
 import { WebAuthnAccountContractArtifact } from "../../artifacts/WebAuthnAccount.js";
 import {
+  AccountManager,
   AuthWitnessProvider,
   BaseAccountContract,
   CompleteAddress,
   Fr,
-  Point,
-  PXE,
   GrumpkinPrivateKey,
+  PXE,
   Salt,
-  AccountManager,
 } from "@aztec/aztec.js";
 
 import { AuthWitness } from '@aztec/types';
@@ -16,23 +15,48 @@ import { AuthWitness } from '@aztec/types';
 export function getWebAuthnAccount(
   pxe: PXE,
   encryptionPrivateKey: GrumpkinPrivateKey,
-  publicKeyX: bigint,
-  publicKeyY: bigint,
+  webAuntnInterface: WebAuntnInterface,
   saltOrAddress: Salt | CompleteAddress = Fr.ZERO,
 ): AccountManager {
-  return new AccountManager(pxe, encryptionPrivateKey, new WebAuthnAccountContract(publicKeyX, publicKeyY), saltOrAddress);
+  return new AccountManager(pxe, encryptionPrivateKey, new WebAuthnAccountContract(webAuntnInterface), saltOrAddress);
+}
+
+export class WebAuthnPublicKey {
+  constructor(
+    readonly x: Uint8Array,
+    readonly y: Uint8Array,
+  ) {
+  }
+}
+
+export class WebAuthnSignature {
+  constructor(
+    readonly challenge: Uint8Array,
+    readonly authenticator_data: Uint8Array,
+    readonly client_data_json: Uint8Array,
+    readonly signatureRaw: Uint8Array
+  ) {
+  }
+}
+
+export interface WebAuntnInterface {
+  getPublicKey(): Promise<WebAuthnPublicKey>;
+
+  sign(challenge: Uint8Array): Promise<WebAuthnSignature>;
 }
 
 /**
  * Account contract that authenticates transactions using WebAuthn signatures
  */
 export class WebAuthnAccountContract extends BaseAccountContract {
-  constructor(readonly publicKeyX: bigint, readonly publicKeyY: bigint) {
+  constructor(readonly webAuntnInterface: WebAuntnInterface) {
     super(WebAuthnAccountContractArtifact);
   }
 
-  getDeploymentArgs(): Promise<any[]> {
-    return Promise.resolve([this.publicKeyX, this.publicKeyY]);
+  async getDeploymentArgs(): Promise<[number, number]> {
+    const publicKey = await this.webAuntnInterface.getPublicKey();
+    // return Promise.resolve([publicKey.x, publicKey.y]);
+    return Promise.resolve([0, 0]);
   }
 
   getAuthWitnessProvider(_address: CompleteAddress): AuthWitnessProvider {
