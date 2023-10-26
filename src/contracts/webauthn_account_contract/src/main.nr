@@ -46,7 +46,7 @@ contract WebAuthnAccount {
     // Constructs the contract
     #[aztec(private)]
     fn constructor(
-        signing_pub_key_x: pub [Field; 1],
+        signing_pub_key_x: pub [Field; 2],
         signing_pub_key_y: pub Field,
     ) {
         emit_unencrypted_log_from_private(&mut context, "constructor");
@@ -101,12 +101,12 @@ contract WebAuthnAccount {
         true
     }
 
-    fn deserialize_and_validate_webauthn_witness(witness: [Field; WEBAUTHN_WITNESS_MAX_LEN], challenge: Field, public_key_x_f: [Field; 1], public_key_y: Field) {
+    fn deserialize_and_validate_webauthn_witness(witness: [Field; WEBAUTHN_WITNESS_MAX_LEN], challenge: Field, public_key_x_f: [Field; 2], public_key_y: Field) {
         // TODO implement
-        let mut public_key_x: [u8; 1] = [0; 1];
-        for i in 0..1 {
-            public_key_x[i] = public_key_x_f[i] as u8;
-        }
+        // let mut public_key_x: [u8; 1] = [0; 1];
+        // for i in 0..1 {
+        //     public_key_x[i] = public_key_x_f[i] as u8;
+        // }
         assert(true);
     }
 

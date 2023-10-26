@@ -57,7 +57,7 @@ export class WebAuthnAccountContract extends BaseAccountContract {
     const publicKey = await this.webAuntnInterface.getPublicKey();
     // return Promise.resolve([publicKey.x, publicKey.y]);
     return Promise.resolve([
-      [0],
+      [0, 1],
       0
     ]);
   }
