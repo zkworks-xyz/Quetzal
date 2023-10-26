@@ -7,7 +7,7 @@ import { AztecAddress, CompleteAddress } from '@aztec/aztec.js';
 import { FunctionArtifact } from '@aztec/foundation/abi';
 import { ReactNode, useState } from 'react';
 import { DeveloperMode } from './modals/developer_mode.js';
-import { TokenContract } from '../artifacts/token/Token.js';
+import { TokenContract } from '@aztec/noir-contracts/types';
 
 const functionTypeSortOrder = {
   secret: 0,

@@ -18,9 +18,7 @@
     "start:sandbox": "SANDBOX_VERSION=0.11.1 /bin/bash -c \"$(curl -fsSL 'https://sandbox.aztec.network')\" ",
     "formatting": "prettier --check ./src && eslint ./src",
     "formatting:fix": "prettier -w ./src",
-    "compile:token": "mkdir -p src/artifacts/token && aztec-cli compile src/contracts/token --outdir ../../artifacts/token --typescript ../../artifacts/token",
-    "compile:webauthn": "mkdir -p src/artifacts/webauthn && aztec-cli compile src/contracts/webauthn_account_contract --outdir ../../artifacts/webauthn --typescript ../../artifacts/webauthn",
-    "compile": "npm run compile:token && npm run compile:webauthn",
+    "compile": "aztec-cli compile src/contracts/webauthn_account_contract --outdir ../../artifacts --typescript ../../artifacts",
     "update:sandbox": "/bin/bash -c \"$(curl -fsSL 'https://sandbox.aztec.network')\"",
     "test:integration": "NODE_NO_WARNINGS=1 node --experimental-vm-modules $(yarn bin jest) --runInBand"
   },
@@ -45,6 +43,7 @@
     "@aztec/aztec.js": "^0.11.1",
     "@aztec/circuits.js": "^0.11.1",
     "@aztec/foundation": "^0.11.1",
+    "@aztec/noir-contracts": "^0.11.1",
     "@aztec/types": "^0.11.1",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",

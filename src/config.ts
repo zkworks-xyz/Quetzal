@@ -1,6 +1,6 @@
 import { PXE, createPXEClient } from '@aztec/aztec.js';
 import { ContractArtifact } from '@aztec/foundation/abi';
-import { TokenContractArtifact } from './artifacts/token/Token.js';
+import { TokenContractArtifact } from "@aztec/noir-contracts/types";
 
 // update this if using a different contract
 
