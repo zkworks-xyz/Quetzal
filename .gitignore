@@ -33,4 +33,5 @@ dist-ssr
 !.yarn/sdks
 !.yarn/versions
 
-src/contracts/target
+src/contracts/token/target
+src/contracts/webauthn_account_contract/target
