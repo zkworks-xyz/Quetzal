@@ -1,27 +1,27 @@
-import { AztecAddress, CompleteAddress } from '@aztec/aztec.js';
+import { AztecAddress, AccountWalletWithPrivateKey } from '@aztec/aztec.js';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { TokenContractArtifact } from '../../artifacts/Token.js';
+// import { TokenContractArtifact } from '../../artifacts/Token.js';
 import { pxe } from '../../config.js';
 import { deployContract } from '../../scripts/deploy_contract.js';
 import SelectWallet from '../components/select_wallet.js';
 import Spinner from '../components/spinner.js';
+import { TokenContract } from '../../artifacts/Token.js'
 
 interface DeveloperModeProps {
-  onContractDeployed: (address: AztecAddress) => void;
+  onContractDeployed: (address: TokenContract) => void;
 }
 
 export function DeveloperMode({ onContractDeployed }: DeveloperModeProps) {
-  const [address, setAddress] = useState<CompleteAddress | null>(null);
+  const [wallet, setWallet] = useState<AccountWalletWithPrivateKey | null>(null);
 
   const deployExampleTokens = async () => {
-    const args = { admin: { address: address?.address.toString() } };
-    return deployContract(address!, TokenContractArtifact, args, pxe);
+    return TokenContract.deploy(wallet!, wallet!.getCompleteAddress()).send().deployed();
   };
 
   const mutation = useMutation({
     mutationFn: deployExampleTokens,
-    onSuccess: (result: AztecAddress) => {
+    onSuccess: (result: TokenContract) => {
       onContractDeployed(result);
     },
   });
@@ -53,7 +53,7 @@ export function DeveloperMode({ onContractDeployed }: DeveloperModeProps) {
             <p className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-400 text-left">
               Pick a admin wallet:
             </p>
-            <SelectWallet onWalletChange={setAddress} />
+            <SelectWallet onWalletChange={setWallet} />
 
             {mutation.isPending ? (
               <div className="py-3">

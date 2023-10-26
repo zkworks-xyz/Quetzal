@@ -2,37 +2,46 @@ import { Listbox } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
 import { classNames } from '../utils.js';
-import { CompleteAddress } from '@aztec/aztec.js';
+import { CompleteAddress, GrumpkinScalar, getUnsafeSchnorrAccount, AccountWalletWithPrivateKey } from '@aztec/aztec.js';
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { pxe } from '../../config.js';
 
-
 const developerWalletNames = ['Alice', 'Bob', 'Charlie', 'Dave', 'Eve', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy'];
 
-interface SelectWithSecondaryProps {
-  onWalletChange: (wallet: CompleteAddress) => void;
+interface SelectWalletProps {
+  onWalletChange: (wallet: AccountWalletWithPrivateKey) => void;
 }
 
-export function useWallets(): UseQueryResult<CompleteAddress[]> {
+export function useWallets(): UseQueryResult<AccountWalletWithPrivateKey[]> {
   return useQuery({
       queryKey: ['getRegisteredAccounts'],
-      queryFn: () => pxe.getRegisteredAccounts()
+      queryFn: async () => {
+        const wallets = [];
+        for (let i = 0; i < 1; i++) {
+          console.log(`Deploying wallet ${i+1}...`)
+          const privateKey = GrumpkinScalar.random();
+          const wallet = await getUnsafeSchnorrAccount(pxe, privateKey).waitDeploy();
+          wallets.push(wallet);
+          console.log(`Wallet ${i+1} deployed.`)
+        }
+        return wallets;
+      }
   });
 }
 
 
-export default function SelectWallet({onWalletChange}: SelectWithSecondaryProps) {
+export default function SelectWallet({onWalletChange}: SelectWalletProps) {
   const { data } = useWallets();
-  const [selectedItem, setSelectedItem] = useState<CompleteAddress | null>(null);
+  const [selectedItem, setSelectedItem] = useState<AccountWalletWithPrivateKey | null>(null);
 
-  const nameForWallet = (selectedAddress: CompleteAddress | null) => {
+  const nameForWallet = (selectedAddress: AccountWalletWithPrivateKey | null) => {
     if (!selectedAddress || !data)
       return "";
     const index = data.findIndex((item) => item == selectedAddress)
     return developerWalletNames[index]
   }
 
-  const onItemSelect = (selectedItem: CompleteAddress) => {
+  const onItemSelect = (selectedItem: AccountWalletWithPrivateKey) => {
     setSelectedItem(selectedItem);
     onWalletChange(selectedItem);
   }
@@ -48,7 +57,7 @@ export default function SelectWallet({onWalletChange}: SelectWithSecondaryProps)
       <div className="relative mt-2">
         <Listbox.Button className="text-left w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
           <span className="truncate">{nameForWallet(selectedItem)}</span>
-          <span className="ml-2 truncate text-gray-500">{selectedItem?.address.toShortString()}</span>
+          <span className="ml-2 truncate text-gray-500">{selectedItem?.getAddress().toShortString()}</span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
           </span>
@@ -57,7 +66,7 @@ export default function SelectWallet({onWalletChange}: SelectWithSecondaryProps)
         <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
           {(data || []).map((item, index) => (
             <Listbox.Option
-              key={item.address.toString()}
+              key={item.getAddress().toString()}
               value={item}
               className={({ active }: { active: boolean }) =>
                 classNames(
@@ -76,7 +85,7 @@ export default function SelectWallet({onWalletChange}: SelectWithSecondaryProps)
                         active ? 'text-indigo-200' : 'text-gray-500',
                       )}
                     >
-                      {item.address.toShortString()}
+                      {item.getAddress().toShortString()}
                     </span>
                   </div>
 
