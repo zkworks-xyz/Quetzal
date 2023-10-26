@@ -30,6 +30,7 @@ const RAW_RUNTIME_STATE =
           ["@aztec/aztec.js", "npm:0.11.1"],\
           ["@aztec/circuits.js", "npm:0.11.1"],\
           ["@aztec/foundation", "npm:0.11.1"],\
+          ["@aztec/noir-contracts", "npm:0.11.1"],\
           ["@aztec/types", "npm:0.11.1"],\
           ["@headlessui/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:1.7.17"],\
           ["@heroicons/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:2.0.18"],\
@@ -212,6 +213,19 @@ const RAW_RUNTIME_STATE =
           ["memdown", "npm:6.1.1"],\
           ["pako", "npm:2.1.0"],\
           ["sha3", "npm:2.1.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@aztec/noir-contracts", [\
+      ["npm:0.11.1", {\
+        "packageLocation": "./.yarn/cache/@aztec-noir-contracts-npm-0.11.1-f2980ee493-1ac2675c42.zip/node_modules/@aztec/noir-contracts/",\
+        "packageDependencies": [\
+          ["@aztec/noir-contracts", "npm:0.11.1"],\
+          ["@aztec/aztec.js", "npm:0.11.1"],\
+          ["@aztec/foundation", "npm:0.11.1"],\
+          ["lodash.omit", "npm:4.5.0"],\
+          ["tslib", "npm:2.6.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11305,6 +11319,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["lodash.omit", [\
+      ["npm:4.5.0", {\
+        "packageLocation": "./.yarn/cache/lodash.omit-npm-4.5.0-786639f9a0-f5c67cd1df.zip/node_modules/lodash.omit/",\
+        "packageDependencies": [\
+          ["lodash.omit", "npm:4.5.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["lodash.partition", [\
       ["npm:4.6.0", {\
         "packageLocation": "./.yarn/cache/lodash.partition-npm-4.6.0-29fab5d792-6912bdf800.zip/node_modules/lodash.partition/",\
@@ -15302,6 +15325,7 @@ const RAW_RUNTIME_STATE =
           ["@aztec/aztec.js", "npm:0.11.1"],\
           ["@aztec/circuits.js", "npm:0.11.1"],\
           ["@aztec/foundation", "npm:0.11.1"],\
+          ["@aztec/noir-contracts", "npm:0.11.1"],\
           ["@aztec/types", "npm:0.11.1"],\
           ["@headlessui/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:1.7.17"],\
           ["@heroicons/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:2.0.18"],\

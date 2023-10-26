@@ -55,7 +55,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aztec/aztec.js@npm:^0.11.1":
+"@aztec/aztec.js@npm:0.11.1, @aztec/aztec.js@npm:^0.11.1":
   version: 0.11.1
   resolution: "@aztec/aztec.js@npm:0.11.1"
   dependencies:
@@ -124,6 +124,18 @@ __metadata:
     pako: "npm:^2.1.0"
     sha3: "npm:^2.1.4"
   checksum: 0b67879eee24ac7d5fff6304c9735b17ef2482118087bdac8aad9ec6c714f2ccda9b446d1754c36c43436978ae07cbb1777e90d69fed93ca16dc1b656d087a96
+  languageName: node
+  linkType: hard
+
+"@aztec/noir-contracts@npm:^0.11.1":
+  version: 0.11.1
+  resolution: "@aztec/noir-contracts@npm:0.11.1"
+  dependencies:
+    "@aztec/aztec.js": "npm:0.11.1"
+    "@aztec/foundation": "npm:0.11.1"
+    lodash.omit: "npm:^4.5.0"
+    tslib: "npm:^2.4.0"
+  checksum: 1ac2675c4283242be89591121a1350142c070a5156e83e0ff4a9f952b47cfc37401ca83f182e2797a636696de0a9932c5ae8cf1b2c86746e81469c87f62059cd
   languageName: node
   linkType: hard
 
@@ -9122,6 +9134,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.omit@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.omit@npm:4.5.0"
+  checksum: f5c67cd1df11f1275662060febb629a4d4e7b547c4bea66454508b5e6096162c2af882aab1ff8cb5dcf2b328f22252416de6ca9c1334588f6310edfac525e511
+  languageName: node
+  linkType: hard
+
 "lodash.partition@npm:^4.6.0":
   version: 4.6.0
   resolution: "lodash.partition@npm:4.6.0"
@@ -12591,6 +12610,7 @@ __metadata:
     "@aztec/aztec.js": "npm:^0.11.1"
     "@aztec/circuits.js": "npm:^0.11.1"
     "@aztec/foundation": "npm:^0.11.1"
+    "@aztec/noir-contracts": "npm:^0.11.1"
     "@aztec/types": "npm:^0.11.1"
     "@headlessui/react": "npm:^1.7.17"
     "@heroicons/react": "npm:^2.0.18"
