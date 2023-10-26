@@ -6,7 +6,7 @@ import { pxe } from '../../config.js';
 import { deployContract } from '../../scripts/deploy_contract.js';
 import SelectWallet from '../components/select_wallet.js';
 import Spinner from '../components/spinner.js';
-import { TokenContract } from '../../artifacts/Token.js'
+import { TokenContract } from '@aztec/noir-contracts/types';
 
 interface DeveloperModeProps {
   onContractDeployed: (address: TokenContract) => void;
