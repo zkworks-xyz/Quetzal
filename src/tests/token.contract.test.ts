@@ -1,4 +1,4 @@
-import { TokenContract } from '../artifacts/Token.js';
+import { TokenContract } from '../artifacts/token/Token.js';
 import { TokenSimulator } from './token_simulator.js';
 import {
   AccountWallet,

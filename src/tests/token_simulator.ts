@@ -1,5 +1,5 @@
 import { AztecAddress, DebugLogger } from '@aztec/aztec.js';
-import { TokenContract } from '../artifacts/Token.js';
+import { TokenContract } from '../artifacts/token/Token.js';
 
 export class TokenSimulator {
   private balancesPrivate: Map<AztecAddress, bigint> = new Map();

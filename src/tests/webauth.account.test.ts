@@ -12,7 +12,7 @@ import {
   PXE
 } from "@aztec/aztec.js";
 import { GrumpkinScalar } from "@aztec/circuits.js";
-import { WebAuthnAccountContractArtifact } from "../contracts/artifacts/webauthn/WebAuthnAccount.js";
+import { WebAuthnAccountContractArtifact } from "../artifacts/webauthn/WebAuthnAccount.js";
 import { AuthWitness } from "@aztec/types";
 
 class WebAuthnAccountContract extends BaseAccountContract {
