@@ -15,7 +15,7 @@ import { AuthWitness } from '@aztec/types';
 export function getWebAuthnAccount(
   pxe: PXE,
   encryptionPrivateKey: GrumpkinPrivateKey,
-  webAuntnInterface: WebAuntnInterfaceIntWitness,
+  webAuntnInterface: WebAuntnInterface,
   saltOrAddress: Salt | CompleteAddress = Fr.ZERO,
 ): AccountManager {
   return new AccountManager(pxe, encryptionPrivateKey, new WebAuthnAccountContract(webAuntnInterface), saltOrAddress);
@@ -55,7 +55,7 @@ export interface WebAuntnInterfaceIntWitness {
  * Account contract that authenticates transactions using WebAuthn signatures
  */
 export class WebAuthnAccountContract extends BaseAccountContract {
-  constructor(readonly webAuntnInterface: WebAuntnInterfaceIntWitness) {
+  constructor(readonly webAuntnInterface: WebAuntnInterface) {
     super(WebAuthnAccountContractArtifact);
   }
 
@@ -71,11 +71,18 @@ export class WebAuthnAccountContract extends BaseAccountContract {
 
 /** Creates auth witnesses using WebAuthn signatures. */
 class WebAuthnWitnessProvider implements AuthWitnessProvider {
-  constructor(private webAuntnInterface: WebAuntnInterfaceIntWitness) {
+  constructor(private webAuntnInterface: WebAuntnInterface) {
   }
 
   async createAuthWitness(message: Fr): Promise<AuthWitness> {
     // TODO generate webauthn signature
-    return new AuthWitness(message, [this.webAuntnInterface.intWitness()]);
+    const signature = await this.webAuntnInterface.sign(message.toBuffer());
+    const witness = [
+      ...signature.signatureRaw,
+      ...signature.authenticator_data,
+      ...signature.challenge,
+      ...signature.client_data_json
+    ];
+    return new AuthWitness(message, witness);
   }
 }

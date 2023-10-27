@@ -12,7 +12,7 @@ import {
 import { GrumpkinScalar } from "@aztec/circuits.js";
 import { getWebAuthnAccount } from "../app/account/webauthn_account_contract.js";
 import { TokenContract } from "@aztec/noir-contracts/types";
-import { WebAuntnInterfaceIntWitnessStub } from "./webauthn_stub.js";
+import { WebAuntnInterfaceInvalidSignatureStub, WebAuntnInterfaceStub } from "./webauthn_stub.js";
 
 describe("Quetzal wallet", () => {
   jest.setTimeout(60_000);
@@ -36,7 +36,7 @@ describe("Quetzal wallet", () => {
 
   it("should deploy WebAuthnAccount contract and check deployment status", async () => {
     const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
-    const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey, new WebAuntnInterfaceIntWitnessStub())
+    const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey, new WebAuntnInterfaceStub())
     let accountWallet = await webAuthnAccount.waitDeploy();
 
     const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress())
@@ -50,11 +50,11 @@ describe("Quetzal wallet", () => {
 
     beforeAll(async () => {
       const encryptionPrivateKey0: GrumpkinScalar = GrumpkinScalar.random();
-      const webAuthnAccount0: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey0, new WebAuntnInterfaceIntWitnessStub())
+      const webAuthnAccount0: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey0, new WebAuntnInterfaceStub())
       account0 = await webAuthnAccount0.waitDeploy();
 
       const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
-      const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebAuntnInterfaceIntWitnessStub())
+      const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebAuntnInterfaceStub())
       account1 = await webAuthnAccount1.waitDeploy();
     });
 
@@ -81,7 +81,7 @@ describe("Quetzal wallet", () => {
     })
 
     it("should fail mint public amount for invalid witness", async () => {
-      const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, GrumpkinScalar.random(), new WebAuntnInterfaceIntWitnessStub(11))
+      const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, GrumpkinScalar.random(), new WebAuntnInterfaceInvalidSignatureStub())
       const account = await webAuthnAccount.waitDeploy();
       const asset = await TokenContract.deploy(account, account.getAddress()).send().deployed();
 
@@ -89,7 +89,7 @@ describe("Quetzal wallet", () => {
       const tx = asset.methods.mint_public(account0.getAddress(), amount).send();
       await expect(
         tx.wait()
-      ).rejects.toThrow("(JSON-RPC PROPAGATED) Cannot satisfy constraint 'assert_eq(13, witness[0])'");
+      ).rejects.toThrow("(JSON-RPC PROPAGATED) Cannot satisfy constraint 'valid_signature'");
     })
   });
 });

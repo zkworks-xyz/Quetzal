@@ -44,7 +44,7 @@ contract WebAuthnAccount {
     }
 
     global ACCOUNT_ACTIONS_STORAGE_SLOT = 2;
-    global WEBAUTHN_WITNESS_MAX_LEN = 1; // TODO change to proper value
+    global WEBAUTHN_WITNESS_MAX_LEN = 236; // TODO change to proper value
 
     // Constructs the contract
     #[aztec(private)]
@@ -105,8 +105,25 @@ contract WebAuthnAccount {
     }
 
     fn deserialize_and_validate_webauthn_witness(witness: [Field; WEBAUTHN_WITNESS_MAX_LEN], challenge: Field, public_key_x: [u8; 32], public_key_y: [u8; 32]) {
-        // TODO validate_webauthn_signature
-        assert_eq(13, witness[0]);
+        let mut signature: [u8; 64] = [0; 64];
+        let mut authenticator_data: [u8; 37] = [0; 37];
+        let mut challenge: [u8; 22] = [0; 22];
+        let mut client_data_json: [u8; 113] = [0; 113];
+
+        for i in 0..64 {
+            signature[i] = witness[i] as u8;
+        }
+        for i in 0..37 {
+            authenticator_data[i] = witness[i + 64] as u8;
+        }
+        for i in 0..22 {
+            // TODO use challenge from params
+            challenge[i] = witness[i + 101] as u8;
+        }
+        for i in 0..113 {
+            client_data_json[i] = witness[i + 123] as u8;
+        }
+        validate_webauthn_signature(authenticator_data, client_data_json, signature, challenge, public_key_x, public_key_y);
     }
 
     // Computes notes hash and nullifier.
