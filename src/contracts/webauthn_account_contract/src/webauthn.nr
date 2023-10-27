@@ -1,10 +1,10 @@
 use dep::std;
 
-fn validate_webauthn_signature(
+fn validate_webauthn_signature<N, M>(
     authenticator_data: [u8; 37],
-    client_data_json: [u8; 113],
+    client_data_json: [u8; N],
     signature: [u8; 64],
-    challenge: [u8; 22],
+    challenge: [u8; M],
     pub_key_x: [u8; 32], 
     pub_key_y: [u8; 32]
 ) {
@@ -12,7 +12,7 @@ fn validate_webauthn_signature(
     let concat = concatenate_arrays(authenticator_data, client_data_json_hash);
     let hashed_data = std::hash::sha256(concat);
 
-    for i in 0..22 {
+    for i in 0..(challenge.len()) {
         assert(challenge[i] == client_data_json[36 + i]);
     }
 
