@@ -105,7 +105,7 @@ contract WebAuthnAccount {
 
     fn deserialize_and_validate_webauthn_witness(witness: [Field; WEBAUTHN_WITNESS_MAX_LEN], challenge: Field, public_key_x: [u8; 32], public_key_y: [u8; 32]) {
         // TODO validate_webauthn_signature
-        assert(true);
+        assert_eq(13, witness[0]);
     }
 
     // Computes notes hash and nullifier.

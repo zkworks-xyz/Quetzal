@@ -1,4 +1,9 @@
-import { WebAuntnInterface, WebAuthnPublicKey, WebAuthnSignature } from "../app/account/webauthn_account_contract.js";
+import {
+  WebAuntnInterface,
+  WebAuntnInterfaceIntWitness,
+  WebAuthnPublicKey,
+  WebAuthnSignature
+} from "../app/account/webauthn_account_contract.js";
 
 export class WebAuntnInterfaceStub implements WebAuntnInterface {
   getPublicKey(): Promise<WebAuthnPublicKey> {
@@ -19,5 +24,22 @@ export class WebAuntnInterfaceStub implements WebAuntnInterface {
       Uint8Array.from(client_data_json),
       Uint8Array.from(signature)
     ));
+  }
+}
+
+export class WebAuntnInterfaceIntWitnessStub implements WebAuntnInterfaceIntWitness {
+
+  constructor(private witness: number = 13) {
+  }
+
+  getPublicKey(): Promise<WebAuthnPublicKey> {
+    return Promise.resolve(new WebAuthnPublicKey(
+      Uint8Array.from([217, 158, 130, 168, 129, 233, 155, 46, 25, 115, 250, 18, 101, 64, 172, 14, 234, 228, 92, 113, 112, 232, 221, 19, 123, 57, 111, 86, 220, 35, 132, 246]),
+      Uint8Array.from([229, 136, 123, 29, 86, 165, 119, 186, 41, 110, 106, 191, 99, 136, 215, 178, 37, 21, 156, 150, 227, 168, 91, 237, 13, 116, 1, 216, 182, 138, 120, 90])
+    ));
+  }
+
+  intWitness(): number {
+    return this.witness;
   }
 }
