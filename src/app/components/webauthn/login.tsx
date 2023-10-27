@@ -24,12 +24,12 @@ async function webAuthnLogin(challenge: Uint8Array) {
 
 const login = async () => {
     let {challenge, authenticator_data, client_data_json, signatureRaw} =
-        await webAuthnLogin(new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]));
+        await webAuthnLogin(new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]));
 
-    const challenge_str = `challenge = [${challenge}}]`;
-    const client_data_json_str = `client_data_json = [${client_data_json}]`;
-    const authenticator_data_str = `authenticator_data = [${authenticator_data}]`;
-    const signature_str = `signature = [${new Uint8Array(signatureRaw)}]`;
+    const challenge_str = `let challenge = [${challenge}];`;
+    const client_data_json_str = `let client_data_json = [${client_data_json}];`;
+    const authenticator_data_str = `let authenticator_data = [${authenticator_data}];`;
+    const signature_str = `let signature = [${new Uint8Array(signatureRaw)}];`;
 
     console.log([challenge_str, authenticator_data_str, client_data_json_str, signature_str].join('\n'));
 };
@@ -52,6 +52,10 @@ function convertASN1toRaw(signatureBuffer: ArrayBuffer) {
     const sStart = usignature[rEnd + 2] === 0 ? rEnd + 3 : rEnd + 2;
     const r = usignature.slice(rStart, rEnd);
     const s = usignature.slice(sStart);
+    if (s[0] > 0x80) {
+        // TODO if is greater than secp256r1n/2 we need to flip s := secp256r1n - s
+        throw new Error('BAD SIGNATURE');
+    }
     return new Uint8Array([...r, ...s]);
 }
 
