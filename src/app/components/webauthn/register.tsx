@@ -43,10 +43,10 @@ async function webAuthnFetchPublicKey(challenge: ArrayBuffer): Promise<{ x: any,
 }
 
 const register = async () => {
-    const challenge = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]);
+    const challenge = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
     const {x, y} = await webAuthnFetchPublicKey(challenge);
-    const pub_key_x_str = `pub_key_x = [${x}]`;
-    const pub_key_y_str = `pub_key_y = [${y}]`;
+    const pub_key_x_str = `let pub_key_x = [${x}];`;
+    const pub_key_y_str = `let pub_key_y = [${y}];`;
     const noir_parameters = [pub_key_x_str, pub_key_y_str].join('\n');
     console.log(noir_parameters);
 }

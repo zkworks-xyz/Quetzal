@@ -1,4 +1,6 @@
 mod public_key_note;
+mod webauthn;
+mod utils;
 
 // Account contract that uses Schnorr signatures for authentication.
 // The signing key is stored in an immutable private note and should be different from the encryption/nullifying key.
@@ -17,8 +19,13 @@ contract WebAuthnAccount {
         account::AccountActions,
         auth_witness::get_auth_witness,
     };
+    use dep::aztec::log::{
+        emit_unencrypted_log_from_private,
+        emit_unencrypted_log,
+    };
 
     use crate::public_key_note::{PublicKeyNote, PublicKeyNoteMethods, PUBLIC_KEY_NOTE_LEN};
+    use crate::webauthn::validate_webauthn_signature;
 
     struct Storage {
         // docs:start:storage
@@ -37,13 +44,15 @@ contract WebAuthnAccount {
     }
 
     global ACCOUNT_ACTIONS_STORAGE_SLOT = 2;
+    global WEBAUTHN_WITNESS_MAX_LEN = 236; // TODO change to proper value
 
     // Constructs the contract
     #[aztec(private)]
     fn constructor(
-        signing_pub_key_x: pub Field,
-        signing_pub_key_y: pub Field,
+        signing_pub_key_x: pub [u8; 32],
+        signing_pub_key_y: pub [u8; 32],
     ) {
+        emit_unencrypted_log_from_private(&mut context, "constructor");
         let this = context.this_address();
         // docs:start:initialize
         let mut pub_key_note = PublicKeyNote::new(signing_pub_key_x, signing_pub_key_y, this);
@@ -53,46 +62,68 @@ contract WebAuthnAccount {
 
     #[aztec(private)]
     fn entrypoint(payload: pub EntrypointPayload) {
+        emit_unencrypted_log_from_private(&mut context, "entrypoint");
         let actions = AccountActions::private(&mut context, ACCOUNT_ACTIONS_STORAGE_SLOT, is_valid_impl);
         actions.entrypoint(payload);
     }
 
     #[aztec(private)]
     fn is_valid(message_hash: Field) -> Field {
+        emit_unencrypted_log_from_private(&mut context, "is_valid");
         let actions = AccountActions::private(&mut context, ACCOUNT_ACTIONS_STORAGE_SLOT, is_valid_impl);
         actions.is_valid(message_hash)
     }
 
     #[aztec(public)]
     fn is_valid_public(message_hash: Field) -> Field {
+        emit_unencrypted_log(&mut context, "is_valid_public");
         let actions = AccountActions::public(&mut context, ACCOUNT_ACTIONS_STORAGE_SLOT, is_valid_impl);
         actions.is_valid_public(message_hash)
     }
 
     #[aztec(public)]
     internal fn set_is_valid_storage(message_hash: Field, value: bool) {
+        emit_unencrypted_log(&mut context, "set_is_valid_storage");
         let actions = AccountActions::public(&mut context, ACCOUNT_ACTIONS_STORAGE_SLOT, is_valid_impl);
         actions.internal_set_is_valid_storage(message_hash, value)
     }
 
     #[contract_library_method]
     fn is_valid_impl(context: &mut PrivateContext, message_hash: Field) -> pub bool {
-        // docs:start:entrypoint
+        emit_unencrypted_log_from_private(context, "is_valid_impl");
+
         // Load public key from storage
         let storage = Storage::init(Context::private(context));
-        // docs:start:get_note
-        let public_key = storage.signing_public_key.get_note();
-        // docs:end:get_note
-        // Load auth witness
-        let witness: [Field; 64] = get_auth_witness(message_hash);
-        let mut signature: [u8; 64] = [0; 64];
-        for i in 0..64 { signature[i] = witness[i] as u8; }
 
-        // Verify signature of the payload bytes
-        let verification = std::schnorr::verify_signature(public_key.x, public_key.y, signature, message_hash.to_be_bytes(32));
-        assert(verification == true);
-        // docs:end:entrypoint
+        let public_key = storage.signing_public_key.get_note();
+
+        // Load auth witness
+        let witness: [Field; WEBAUTHN_WITNESS_MAX_LEN] = get_auth_witness(message_hash);
+        deserialize_and_validate_webauthn_witness(witness, message_hash, public_key.x, public_key.y);
+
         true
+    }
+
+    fn deserialize_and_validate_webauthn_witness(witness: [Field; WEBAUTHN_WITNESS_MAX_LEN], challenge: Field, public_key_x: [u8; 32], public_key_y: [u8; 32]) {
+        let mut signature: [u8; 64] = [0; 64];
+        let mut authenticator_data: [u8; 37] = [0; 37];
+        let mut challenge: [u8; 22] = [0; 22];
+        let mut client_data_json: [u8; 113] = [0; 113];
+
+        for i in 0..64 {
+            signature[i] = witness[i] as u8;
+        }
+        for i in 0..37 {
+            authenticator_data[i] = witness[i + 64] as u8;
+        }
+        for i in 0..22 {
+            // TODO use challenge from params
+            challenge[i] = witness[i + 101] as u8;
+        }
+        for i in 0..113 {
+            client_data_json[i] = witness[i + 123] as u8;
+        }
+        validate_webauthn_signature(authenticator_data, client_data_json, signature, challenge, public_key_x, public_key_y);
     }
 
     // Computes notes hash and nullifier.
