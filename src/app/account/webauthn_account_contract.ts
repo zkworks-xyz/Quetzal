@@ -15,10 +15,10 @@ import { AuthWitness } from '@aztec/types';
 export function getWebAuthnAccount(
   pxe: PXE,
   encryptionPrivateKey: GrumpkinPrivateKey,
-  webAuntnInterface: WebAuntnInterface,
+  webAuthnInterface: WebAuthnInterface,
   saltOrAddress: Salt | CompleteAddress = Fr.ZERO,
 ): AccountManager {
-  return new AccountManager(pxe, encryptionPrivateKey, new WebAuthnAccountContract(webAuntnInterface), saltOrAddress);
+  return new AccountManager(pxe, encryptionPrivateKey, new WebAuthnAccountContract(webAuthnInterface), saltOrAddress);
 }
 
 export class WebAuthnPublicKey {
@@ -39,44 +39,38 @@ export class WebAuthnSignature {
   }
 }
 
-export interface WebAuntnInterface {
+export interface WebAuthnInterface {
   getPublicKey(): Promise<WebAuthnPublicKey>;
 
   sign(challenge: Uint8Array): Promise<WebAuthnSignature>;
-}
-
-export interface WebAuntnInterfaceIntWitness {
-  getPublicKey(): Promise<WebAuthnPublicKey>;
-
-  intWitness(): number;
 }
 
 /**
  * Account contract that authenticates transactions using WebAuthn signatures
  */
 export class WebAuthnAccountContract extends BaseAccountContract {
-  constructor(readonly webAuntnInterface: WebAuntnInterface) {
+  constructor(readonly webAuthnInterface: WebAuthnInterface) {
     super(WebAuthnAccountContractArtifact);
   }
 
   async getDeploymentArgs(): Promise<any[]> {
-    const publicKey = await this.webAuntnInterface.getPublicKey();
+    const publicKey = await this.webAuthnInterface.getPublicKey();
     return Promise.resolve([publicKey.x, publicKey.y]);
   }
 
   getAuthWitnessProvider(_address: CompleteAddress): AuthWitnessProvider {
-    return new WebAuthnWitnessProvider(this.webAuntnInterface);
+    return new WebAuthnWitnessProvider(this.webAuthnInterface);
   }
 }
 
 /** Creates auth witnesses using WebAuthn signatures. */
 class WebAuthnWitnessProvider implements AuthWitnessProvider {
-  constructor(private webAuntnInterface: WebAuntnInterface) {
+  constructor(private webAuthnInterface: WebAuthnInterface) {
   }
 
   async createAuthWitness(message: Fr): Promise<AuthWitness> {
     // TODO generate webauthn signature
-    const signature = await this.webAuntnInterface.sign(message.toBuffer());
+    const signature = await this.webAuthnInterface.sign(message.toBuffer());
     const witness = [
       ...signature.signatureRaw,
       ...signature.authenticator_data,

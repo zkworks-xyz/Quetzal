@@ -1,11 +1,10 @@
 import {
-  WebAuntnInterface,
-  WebAuntnInterfaceIntWitness,
+  WebAuthnInterface,
   WebAuthnPublicKey,
   WebAuthnSignature
 } from "../app/account/webauthn_account_contract.js";
 
-export class WebAuntnInterfaceStub implements WebAuntnInterface {
+export class WebAuthnInterfaceStub implements WebAuthnInterface {
   getPublicKey(): Promise<WebAuthnPublicKey> {
     return Promise.resolve(new WebAuthnPublicKey(
       Uint8Array.from([217, 158, 130, 168, 129, 233, 155, 46, 25, 115, 250, 18, 101, 64, 172, 14, 234, 228, 92, 113, 112, 232, 221, 19, 123, 57, 111, 86, 220, 35, 132, 246]),
@@ -27,7 +26,7 @@ export class WebAuntnInterfaceStub implements WebAuntnInterface {
   }
 }
 
-export class WebAuntnInterfaceInvalidSignatureStub implements WebAuntnInterface {
+export class WebAuthnInterfaceInvalidSignatureStub implements WebAuthnInterface {
   getPublicKey(): Promise<WebAuthnPublicKey> {
     return Promise.resolve(new WebAuthnPublicKey(
       Uint8Array.from([217, 158, 130, 168, 129, 233, 155, 46, 25, 115, 250, 18, 101, 64, 172, 14, 234, 228, 92, 113, 112, 232, 221, 19, 123, 57, 111, 86, 220, 35, 132, 246]),
