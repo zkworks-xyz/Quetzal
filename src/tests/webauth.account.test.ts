@@ -23,7 +23,7 @@ describe("Quetzal wallet", () => {
     pxe = await setupSandbox();
   }, 60_000);
 
-  xit("should deploy SchnorrAccount contract and check deployment status", async () => {
+  it("should deploy SchnorrAccount contract and check deployment status", async () => {
     const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
     const signingPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
     const salt: Fr = Fr.ZERO;
@@ -34,7 +34,7 @@ describe("Quetzal wallet", () => {
     expect(isDeployed).toBe(true);
   });
 
-  xit("should deploy WebAuthnAccount contract and check deployment status", async () => {
+  it("should deploy WebAuthnAccount contract and check deployment status", async () => {
     const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
     const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey, new WebAuntnInterfaceStub())
     let accountWallet = await webAuthnAccount.waitDeploy();
