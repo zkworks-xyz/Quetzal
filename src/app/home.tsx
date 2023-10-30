@@ -5,26 +5,19 @@ import { PXE_URL } from '../config.js';
 import { WalletDropdown } from './components/wallet_dropdown.js';
 import { Contract } from './contract.js';
 import styles from './home.module.scss';
+import { UserAccount } from './model/UserAccount.js';
+import { CreateAccount } from './modals/CreateAccount.js';
+import { Main } from './modals/Main.js';
 
 export function Home() {
-  const [isLoadingWallet, setIsLoadingWallet] = useState(true);
-  const [selectedWallet, setSelectedWallet] = useState<CompleteAddress>();
-  const [selectWalletError, setSelectedWalletError] = useState('');
-
-  const handleSelectWallet = (address: CompleteAddress | undefined) => {
-    setSelectedWallet(address);
-    setIsLoadingWallet(false);
-  };
-
-  const handleSelectWalletError = (msg: string) => {
-    setSelectedWalletError(msg);
-    setIsLoadingWallet(false);
-  };
-
+  const [account, setAccount] = useState<UserAccount | null>(null);
   return (
     <main className={styles.main}>
       <h1 className="text-3xl font-bold underline">Quetzal</h1>
-      <>
+      {account && <Main account={account}/>}
+      {!account && <CreateAccount onAccountCreated={setAccount}/>}
+
+      {/* <>
         {isLoadingWallet && <Loader />}
         {!isLoadingWallet && (
           <>
@@ -44,7 +37,7 @@ export function Home() {
           onSelectChange={handleSelectWallet}
           onError={handleSelectWalletError}
         />
-      </>
+      </> */}
     </main>
   );
 }
