@@ -44,14 +44,6 @@ function parseBuffer(buffer: ArrayBuffer) {
     return String.fromCharCode(...new Uint8Array(buffer));
 }
 
- export const convertUint8ArrayToBigInt = (u8Array: Uint8Array): bigint => {
-    return BigInt('0x' + Buffer.from(u8Array).toString('hex'));
-}
-
-export const convertBigIntToUint8Array = (bigInt: bigint): Uint8Array => {
-    const hexString = bigInt.toString(16);
-    return new Uint8Array(Buffer.from(hexString, 'hex'));
-}
 function convertASN1toRaw(signatureBuffer: ArrayBuffer) {
     // Convert signature from ASN.1 sequence to "raw" format
     const usignature = new Uint8Array(signatureBuffer);
