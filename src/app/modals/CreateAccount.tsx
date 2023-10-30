@@ -40,7 +40,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     console.log("Deploying account...");
     const account = await webAuthnAccount1.waitDeploy();
     console.log(`Deploying account DONE: ${account.getAddress()}`);
-    onAccountCreated({ username: userName, address: '0x123' });
+    onAccountCreated({ username: userName, address: account.getAddress() });
   };
 
   return status === CreationStatus.Creating ? (
