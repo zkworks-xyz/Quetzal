@@ -1,7 +1,9 @@
 import {Button} from "@aztec/aztec-ui";
 import * as React from "react";
 
-async function webAuthnLogin(challenge: Uint8Array) {
+export async function webAuthnLogin(
+  challenge: Uint8Array = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+) {
     const credentialRequestOptions = {
         publicKey: {
             timeout: 60000,

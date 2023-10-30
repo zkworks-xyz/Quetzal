@@ -37,6 +37,12 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     console.log("Deploying token contract...");
     const asset = await TokenContract.deploy(account, account.getAddress()).send().deployed();
     console.log(`Token deployed to ${asset.address}`);
+
+    console.log("Minting 1000 tokens...");
+    const amount: bigint = 1000n;
+    const tx = asset.methods.mint_public(account.getAddress(), amount).send();
+    const receipt = await tx.wait();
+    console.log(`Minting 1000 tokens DONE. Status: ${receipt.status}`);
   };
 
   return status === CreationStatus.Creating ? (
