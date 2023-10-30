@@ -1,5 +1,6 @@
 import {Button} from "@aztec/aztec-ui";
 import * as React from "react";
+import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from "./webauthn.utils.js";
 
 async function webAuthnLogin(challenge: Uint8Array) {
     const credentialRequestOptions = {
@@ -52,11 +53,14 @@ function convertASN1toRaw(signatureBuffer: ArrayBuffer) {
     const sStart = usignature[rEnd + 2] === 0 ? rEnd + 3 : rEnd + 2;
     const r = usignature.slice(rStart, rEnd);
     const s = usignature.slice(sStart);
-    if (s[0] > 0x80) {
-        // TODO if is greater than secp256r1n/2 we need to flip s := secp256r1n - s
-        throw new Error('BAD SIGNATURE');
+    const secp256r1n = 0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551n;
+    const sInt = convertUint8ArrayToBigInt(s);
+    let finalS = s;
+    if (2n * sInt > secp256r1n) {
+      console.log("Converting s");
+      finalS = convertBigIntToUint8Array(secp256r1n - sInt);
     }
-    return new Uint8Array([...r, ...s]);
+    return new Uint8Array([...r, ...finalS]);
 }
 
 export default function WebAuthnLogin() {
