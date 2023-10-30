@@ -3,6 +3,9 @@ import { webAuthnFetchPublicKey } from "../components/webauthn/register.js";
 
 export class WebauthnSigner implements WebAuthnInterface {
 
+  constructor(readonly userName: string) {
+  }
+
   private publicKey: WebAuthnPublicKey | null = null;
 
   async getPublicKey(): Promise<WebAuthnPublicKey> {
@@ -10,7 +13,7 @@ export class WebauthnSigner implements WebAuthnInterface {
       return this.publicKey;
     }
 
-    const { x, y } = await webAuthnFetchPublicKey();
+    const { x, y } = await webAuthnFetchPublicKey(this.userName);
     this.publicKey = new WebAuthnPublicKey(x, y);
     return this.publicKey;
   }

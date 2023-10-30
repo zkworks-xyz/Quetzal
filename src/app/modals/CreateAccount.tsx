@@ -1,18 +1,10 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { WaitCreating } from './WaitCreating.js';
-import {
-  getWebAuthnAccount,
-  WebAuthnInterface,
-  WebAuthnPublicKey,
-  WebAuthnSignature
-} from "../account/webauthn_account_contract.js";
-import { WebAuthnInterfaceStub } from "../../tests/webauthn_stub.js";
+import { getWebAuthnAccount } from "../account/webauthn_account_contract.js";
 import { AccountManager, GrumpkinScalar, PXE } from "@aztec/aztec.js";
 import { setupSandbox } from "../account/utils.js";
 import exports from "webpack";
-import register = exports.util.serialization.register;
-import { webAuthnFetchPublicKey } from "../components/webauthn/register.js";
 import { WebauthnSigner } from "../account/webauthn_signer.js";
 
 export interface CreateAccountProps {
@@ -35,12 +27,12 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     console.log("Setup sandbox DONE");
 
     const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
-    const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebauthnSigner())
+    const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebauthnSigner(userName))
 
     console.log("Deploying account...");
     const account = await webAuthnAccount1.waitDeploy();
     console.log(`Deploying account DONE: ${account.getAddress()}`);
-    onAccountCreated({ username: userName, address: account.getAddress() });
+    onAccountCreated({ username: userName, address: account.getAddress().toString() });
   };
 
   return status === CreationStatus.Creating ? (
