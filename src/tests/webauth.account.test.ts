@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, jest } from "@jest/globals";
-import { setupSandbox } from "./utils.js";
+import { setupSandbox } from "../app/account/utils.js";
 import {
   AccountManager,
   AccountWalletWithPrivateKey,

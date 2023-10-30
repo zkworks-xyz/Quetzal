@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { WaitCreating } from './WaitCreating.js';
+import { getWebAuthnAccount } from "../account/webauthn_account_contract.js";
+import { AccountManager, GrumpkinScalar, PXE } from "@aztec/aztec.js";
+import { setupSandbox } from "../account/utils.js";
+import { WebauthnSigner } from "../account/webauthn_signer.js";
+import { TokenContract } from "../account/token.js";
 
 export interface CreateAccountProps {
   onAccountCreated: (account: UserAccount) => void;
@@ -15,14 +20,33 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [userName, setUserName] = useState<string>('');
   const [status, setStatus] = useState<CreationStatus>(CreationStatus.NotStarted);
   const deployWallet = async () => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
     setStatus(CreationStatus.Creating);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    onAccountCreated({ username: userName, address: '0x123' });
+
+    console.log("Setup sandbox...");
+    const pxe: PXE = await setupSandbox();
+    console.log("Setup sandbox DONE");
+
+    const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
+    const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebauthnSigner(userName))
+
+    console.log("Deploying account...");
+    const account = await webAuthnAccount1.waitDeploy();
+    console.log(`Deploying account DONE: ${account.getAddress()}`);
+    onAccountCreated({ username: userName, address: account.getAddress().toString() });
+
+    console.log("Deploying token contract...");
+    const asset = await TokenContract.deploy(account, account.getAddress()).send().deployed();
+    console.log(`Token deployed to ${asset.address}`);
+
+    console.log("Minting 1000 tokens...");
+    const amount: bigint = 1000n;
+    const tx = asset.methods.mint_public(account.getAddress(), amount).send();
+    const receipt = await tx.wait();
+    console.log(`Minting 1000 tokens DONE. Status: ${receipt.status}`);
   };
 
   return status === CreationStatus.Creating ? (
-    <WaitCreating />
+    <WaitCreating/>
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">

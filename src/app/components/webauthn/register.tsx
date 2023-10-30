@@ -3,14 +3,17 @@ import * as React from "react";
 
 import {decode} from "cbor-x";
 
-async function webAuthnFetchPublicKey(challenge: ArrayBuffer): Promise<{ x: any, y: any }> {
+export async function webAuthnFetchPublicKey(
+  userName: string = "test@zkworks.xyz",
+  challenge: ArrayBuffer = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+): Promise<{ x: any, y: any }> {
     const publicKeyCredentialCreationOptions: any = {
         rp: {
             name: "Quezal smart contract",
         },
         user: {
             id: new Uint8Array(16),
-            name: "test@zkworks.xyz",
+            name: userName,
             displayName: "Test",
         },
         challenge: challenge,
@@ -43,8 +46,7 @@ async function webAuthnFetchPublicKey(challenge: ArrayBuffer): Promise<{ x: any,
 }
 
 const register = async () => {
-    const challenge = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
-    const {x, y} = await webAuthnFetchPublicKey(challenge);
+    const {x, y} = await webAuthnFetchPublicKey();
     const pub_key_x_str = `let pub_key_x = [${x}];`;
     const pub_key_y_str = `let pub_key_y = [${y}];`;
     const noir_parameters = [pub_key_x_str, pub_key_y_str].join('\n');
