@@ -3,7 +3,9 @@ import * as React from "react";
 
 import {decode} from "cbor-x";
 
-async function webAuthnFetchPublicKey(challenge: ArrayBuffer): Promise<{ x: any, y: any }> {
+export async function webAuthnFetchPublicKey(
+  challenge: ArrayBuffer = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+): Promise<{ x: any, y: any }> {
     const publicKeyCredentialCreationOptions: any = {
         rp: {
             name: "Quezal smart contract",
