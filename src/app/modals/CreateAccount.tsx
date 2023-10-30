@@ -4,8 +4,8 @@ import { WaitCreating } from './WaitCreating.js';
 import { getWebAuthnAccount } from "../account/webauthn_account_contract.js";
 import { AccountManager, GrumpkinScalar, PXE } from "@aztec/aztec.js";
 import { setupSandbox } from "../account/utils.js";
-import exports from "webpack";
 import { WebauthnSigner } from "../account/webauthn_signer.js";
+import { TokenContract } from "../account/token.js";
 
 export interface CreateAccountProps {
   onAccountCreated: (account: UserAccount) => void;
@@ -33,6 +33,10 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     const account = await webAuthnAccount1.waitDeploy();
     console.log(`Deploying account DONE: ${account.getAddress()}`);
     onAccountCreated({ username: userName, address: account.getAddress().toString() });
+
+    console.log("Deploying token contract...");
+    const asset = await TokenContract.deploy(account, account.getAddress()).send().deployed();
+    console.log(`Token deployed to ${asset.address}`);
   };
 
   return status === CreationStatus.Creating ? (
