@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
-import { WaitCreating } from './WaitCreating.js';
+import { WaitDialog } from './WaitDialog.js';
 import { getWebAuthnAccount } from "../account/webauthn_account_contract.js";
 import { AccountManager, GrumpkinScalar, PXE } from "@aztec/aztec.js";
 import { setupSandbox } from "../account/utils.js";
@@ -47,7 +47,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   };
 
   return status === CreationStatus.Creating ? (
-    <WaitCreating message={message}/>
+    <WaitDialog message={message}/>
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">

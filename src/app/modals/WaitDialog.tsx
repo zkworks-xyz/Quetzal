@@ -1,8 +1,8 @@
-interface WaitCreatingProps {
+interface WaitDialogProps {
   message: string;
 }
 
-export function WaitCreating({message}: WaitCreatingProps) {
+export function WaitDialog({message}: WaitDialogProps) {
   return (
     <section className="bg-white dark:bg-gray-900 max-w-xl rounded-lg px-8 py-16">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">
