@@ -5,7 +5,7 @@ import {decode} from "cbor-x";
 
 export async function webAuthnFetchPublicKey(
   userName: string = "test@zkworks.xyz",
-  challenge: ArrayBuffer = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+  challenge: ArrayBuffer = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
 ): Promise<{ x: any, y: any }> {
     const publicKeyCredentialCreationOptions: any = {
         rp: {

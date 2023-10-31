@@ -3,7 +3,7 @@ import * as React from "react";
 import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from "./webauthn.utils.js";
 
 export async function webAuthnLogin(
-  challenge: Uint8Array = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+  challenge: Uint8Array = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
 ) {
     const credentialRequestOptions = {
         publicKey: {
@@ -27,7 +27,7 @@ export async function webAuthnLogin(
 
 const login = async () => {
     let {challenge, authenticator_data, client_data_json, signatureRaw} =
-        await webAuthnLogin(new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]));
+        await webAuthnLogin(new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]));
 
     const challenge_str = `let challenge = [${challenge}];`;
     const client_data_json_str = `let client_data_json = [${client_data_json}];`;
