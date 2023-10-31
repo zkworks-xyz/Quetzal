@@ -1,20 +1,38 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { WaitDialog } from './WaitDialog.js';
+import { TokenContract } from '../account/token.js';
+import { AztecAddress } from '@aztec/aztec.js';
 
 export interface SendTokensProps {
   account: UserAccount;
+  tokenContract: TokenContract;
   onClose: () => void;
   onSuccess: () => void;
 }
 
-export function SendTokens({ account, onClose, onSuccess }: SendTokensProps) {
+export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendTokensProps) {
   const [showDialog, setShowDialog] = useState(false);
   const [message, setMessage] = useState('');
+  const [toAddress, setToAddress] = useState<string>('');
+  const [amount, setAmount] = useState<string>('');
+  
   const sendTokens = async () => {
     setShowDialog(true);
     setMessage('Sending tokens...');
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (isNaN(Number(amount))) {
+      alert("Amount should be a number");
+      return;
+    }
+    console.log(`Sending tokens from ${account.account.getAddress().toString()} to ${toAddress} amount: ${amount}`);
+    const tx = tokenContract.methods.transfer_public(
+      account.account.getAddress(),
+      AztecAddress.fromString(toAddress),
+      BigInt(amount),
+      0)
+      .send();
+    const receipt = await tx.wait();
+    console.log(`Sending tokens DONE. Status: ${receipt.status}`);
     setShowDialog(false);
     onSuccess();
   };
@@ -38,7 +56,8 @@ export function SendTokens({ account, onClose, onSuccess }: SendTokensProps) {
               name="email"
               type="email"
               autoComplete="email"
-              className="block w-full rounded-md border-0 bg-white/5 px-2 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+              className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+              onChange={e => setToAddress(e.target.value)}
             />
           </div>
         </div>
@@ -52,7 +71,8 @@ export function SendTokens({ account, onClose, onSuccess }: SendTokensProps) {
               name="first-name"
               id="first-name"
               autoComplete="given-name"
-              className="block w-full rounded-md border-0 bg-white/5 px-2 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+              className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+              onChange={e => setAmount(e.target.value)}
             />
           </div>
         </div>

@@ -7,12 +7,13 @@ export async function webAuthnFetchPublicKey(
   userName: string = "test@zkworks.xyz",
   challenge: ArrayBuffer = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
 ): Promise<{ x: any, y: any }> {
+    const userId = userName.length> 0 ? new TextEncoder().encode(userName): new Uint8Array(16);
     const publicKeyCredentialCreationOptions: any = {
         rp: {
             name: "Quezal smart contract",
         },
         user: {
-            id: new Uint8Array(16),
+            id: userId,
             name: userName,
             displayName: "Test",
         },
