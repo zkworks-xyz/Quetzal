@@ -1,6 +1,6 @@
-import { AztecAddress } from "@aztec/aztec.js";
+import { AccountWalletWithPrivateKey, AztecAddress } from "@aztec/aztec.js";
 
 export interface UserAccount {
   username: string;
-  address: string;
+  account: AccountWalletWithPrivateKey;
 }

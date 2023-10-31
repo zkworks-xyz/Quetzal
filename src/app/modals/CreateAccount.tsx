@@ -32,7 +32,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     console.log("Deploying account...");
     const account = await webAuthnAccount1.waitDeploy();
     console.log(`Deploying account DONE: ${account.getAddress()}`);
-    onAccountCreated({ username: userName, address: account.getAddress().toString() });
+    onAccountCreated({ username: userName, account: account });
 
     console.log("Deploying token contract...");
     const asset = await TokenContract.deploy(account, account.getAddress()).send().deployed();
