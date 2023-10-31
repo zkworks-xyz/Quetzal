@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { WaitDialog } from './WaitDialog.js';
 import { TokenContract } from "../account/token.js";
-import { AztecAddress } from "@aztec/aztec.js";
+import { AztecAddress } from '@aztec/aztec.js';
 
 export interface SendTokensProps {
   account: UserAccount;

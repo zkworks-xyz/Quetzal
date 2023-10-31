@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { SendTokens } from './SentTokens.js';
-import { setupSandbox } from "../account/utils.js";
-import { AztecAddress, PXE } from "@aztec/aztec.js";
-import { TokenContract } from "../account/token.js";
+import { TokenContract } from '../account/token.js';
 
 interface MainProps {
   account: UserAccount;
