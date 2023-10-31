@@ -12,7 +12,7 @@ export async function webAuthnFetchPublicKey(
             name: "Quezal smart contract",
         },
         user: {
-            id: new Uint8Array(16),
+            id: new Uint8Array(16).map(() => Math.floor(Math.random() * 256)),
             name: userName,
             displayName: "Test",
         },
