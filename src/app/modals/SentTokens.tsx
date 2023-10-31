@@ -1,14 +1,25 @@
+import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
+import { WaitDialog } from './WaitDialog.js';
 
 export interface SendTokensProps {
   account: UserAccount;
   onClose: () => void;
+  onSuccess: () => void;
 }
 
-export function SendTokens({ account, onClose }: SendTokensProps) {
-  const sendTokens = async () => {};
+export function SendTokens({ account, onClose, onSuccess }: SendTokensProps) {
+  const [showDialog, setShowDialog] = useState(false);
+  const [message, setMessage] = useState('');
+  const sendTokens = async () => {
+    setShowDialog(true);
+    setMessage('Sending tokens...');
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setShowDialog(false);
+    onSuccess();
+  };
 
-  return (
+  return showDialog ? (<WaitDialog message={message}/>) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">
         <h1 className="mt-4 text-2xl font-semibold tracking-wide text-center text-gray-800 md:text-3xl dark:text-white">
