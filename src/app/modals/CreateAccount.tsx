@@ -42,7 +42,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     const tx = tokenContract.methods.mint_public(account.getAddress(), amount).send();
     const receipt = await tx.wait();
     console.log(`Minting 1234 tokens DONE. Status: ${receipt.status}`);
-    onAccountCreated({ username: userName, address: account.getAddress().toString() }, tokenContract);
+    onAccountCreated({ username: userName, account }, tokenContract);
   };
 
   return status === CreationStatus.Creating ? (
