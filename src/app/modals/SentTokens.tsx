@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { WaitDialog } from './WaitDialog.js';
-import { TokenContract } from "../account/token.js";
+import { TokenContract } from '../account/token.js';
 import { AztecAddress } from '@aztec/aztec.js';
 
 export interface SendTokensProps {
@@ -24,9 +24,7 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
       alert("Amount should be a number");
       return;
     }
-    const amount1 = BigInt(amount);
-
-    console.log(`Sending tokens from ${account.account.getAddress().toString()} to ${toAddress} amount: ${amount1.toString()}`);
+    console.log(`Sending tokens from ${account.account.getAddress().toString()} to ${toAddress} amount: ${amount}`);
     const tx = tokenContract.methods.transfer_public(
       account.account.getAddress(),
       AztecAddress.fromString(toAddress),
