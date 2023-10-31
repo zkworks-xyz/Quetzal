@@ -8,7 +8,7 @@ import { WebauthnSigner } from "../account/webauthn_signer.js";
 import { TokenContract } from "../account/token.js";
 
 export interface CreateAccountProps {
-  onAccountCreated: (account: UserAccount) => void;
+  onAccountCreated: (account: UserAccount, tokenContract: TokenContract) => void;
 }
 
 enum CreationStatus {
@@ -32,17 +32,17 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     console.log("Deploying account...");
     const account = await webAuthnAccount1.waitDeploy();
     console.log(`Deploying account DONE: ${account.getAddress()}`);
-    onAccountCreated({ username: userName, account: account });
 
     console.log("Deploying token contract...");
-    const asset = await TokenContract.deploy(account, account.getAddress()).send().deployed();
-    console.log(`Token deployed to ${asset.address}`);
+    const tokenContract = await TokenContract.deploy(account, account.getAddress()).send().deployed();
+    console.log(`Token deployed to ${tokenContract.address}`);
 
     console.log("Minting 1000 tokens...");
-    const amount: bigint = 1000n;
-    const tx = asset.methods.mint_public(account.getAddress(), amount).send();
+    const amount: bigint = 1234n;
+    const tx = tokenContract.methods.mint_public(account.getAddress(), amount).send();
     const receipt = await tx.wait();
-    console.log(`Minting 1000 tokens DONE. Status: ${receipt.status}`);
+    console.log(`Minting 1234 tokens DONE. Status: ${receipt.status}`);
+    onAccountCreated({ username: userName, account }, tokenContract);
   };
 
   return status === CreationStatus.Creating ? (

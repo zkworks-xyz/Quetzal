@@ -1,18 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { SendTokens } from './SentTokens.js';
+import { setupSandbox } from "../account/utils.js";
+import { AztecAddress, PXE } from "@aztec/aztec.js";
+import { TokenContract } from "../account/token.js";
 
 interface MainProps {
   account: UserAccount;
+  tokenContract: TokenContract;
 }
 
-export function Main({ account }: MainProps) {
+export function Main({ account, tokenContract }: MainProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [balance, setBalance] = useState<string | null>(null)
   const openSendTokens = () => {
     setShowModal(true);
   };
 
-  const refresh = () => {};
+  const refresh = async () => {
+    console.log("Check balance...");
+    const balance = await tokenContract.methods.balance_of_public(account.account.getAddress()).view();
+    console.log(`Check balance DONE. balance: ${balance.toString()}`);
+    setBalance(balance.toString());
+  };
+
+  useEffect( () => {
+    const fetchBalance = async () => {
+      await refresh();
+    }
+    fetchBalance().catch(console.error);
+  }, []);
 
   const copy = () => {
     const value = account.account.getAddress().toString();
@@ -35,7 +52,7 @@ export function Main({ account }: MainProps) {
       </div>
       <p className="mt-16 text-gray-500 dark:text-gray-400 text-base text-left">Balance:</p>
       <div className="mt-1 text-3xl font-semibold tracking-wide text-left text-gray-800 md:text-3xl dark:text-white flex flex-col">
-        <div className="flex-none">1000 aztecs</div>
+        <div className="flex-none">{balance} aztecs</div>
       </div>
       <button
         onClick={() => openSendTokens()}
