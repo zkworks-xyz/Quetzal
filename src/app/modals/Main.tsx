@@ -37,7 +37,7 @@ export function Main({ account, tokenContract }: MainProps) {
   };
 
   return showModal ? (
-    <SendTokens account={account} onClose={() => setShowModal(false)} />
+    <SendTokens account={account} tokenContract={tokenContract} onClose={() => setShowModal(false)} />
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8 flex-auto flex-col">
       <div className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">Your address</div>
@@ -49,9 +49,16 @@ export function Main({ account, tokenContract }: MainProps) {
         >
           Copy{' '}
         </button>
+        <button
+          onClick={() => refresh()}
+          className="px-3 py-1 ml-4 text-xs font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+        >
+          Refresh
+        </button>
       </div>
       <p className="mt-16 text-gray-500 dark:text-gray-400 text-base text-left">Balance:</p>
-      <div className="mt-1 text-3xl font-semibold tracking-wide text-left text-gray-800 md:text-3xl dark:text-white flex flex-col">
+      <div
+        className="mt-1 text-3xl font-semibold tracking-wide text-left text-gray-800 md:text-3xl dark:text-white flex flex-col">
         <div className="flex-none">{balance} aztecs</div>
       </div>
       <button

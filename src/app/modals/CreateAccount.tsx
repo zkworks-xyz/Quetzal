@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { WaitCreating } from './WaitCreating.js';
 import { getWebAuthnAccount } from "../account/webauthn_account_contract.js";
-import { AccountManager, GrumpkinScalar, PXE } from "@aztec/aztec.js";
+import { AccountManager, AztecAddress, GrumpkinScalar, PXE } from "@aztec/aztec.js";
 import { setupSandbox } from "../account/utils.js";
 import { WebauthnSigner } from "../account/webauthn_signer.js";
 import { TokenContract } from "../account/token.js";
@@ -33,15 +33,27 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     const account = await webAuthnAccount1.waitDeploy();
     console.log(`Deploying account DONE: ${account.getAddress()}`);
 
-    console.log("Deploying token contract...");
-    const tokenContract = await TokenContract.deploy(account, account.getAddress()).send().deployed();
-    console.log(`Token deployed to ${tokenContract.address}`);
 
-    console.log("Minting 1000 tokens...");
-    const amount: bigint = 1234n;
-    const tx = tokenContract.methods.mint_public(account.getAddress(), amount).send();
-    const receipt = await tx.wait();
-    console.log(`Minting 1234 tokens DONE. Status: ${receipt.status}`);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const urlTokenAddress = urlParams.get('token');
+    let tokenContract;
+    if (urlTokenAddress) {
+      console.log(`Token address from URL: ${urlTokenAddress}`);
+      tokenContract = await TokenContract.at(AztecAddress.fromString(urlTokenAddress), account);
+      console.log(`Token address from URL found successfully: ${tokenContract.address}`);
+    } else {
+      console.log("Deploying token contract...");
+      tokenContract = await TokenContract.deploy(account, account.getAddress()).send().deployed();
+      console.log(`Token deployed to ${tokenContract.address}`);
+
+      console.log("Minting 1234 tokens...");
+      const amount: bigint = 1234n;
+      const tx = tokenContract.methods.mint_public(account.getAddress(), amount).send();
+      const receipt = await tx.wait();
+      console.log(`Minting 1234 tokens DONE. Status: ${receipt.status}`);
+    }
+
     onAccountCreated({ username: userName, account }, tokenContract);
   };
 
