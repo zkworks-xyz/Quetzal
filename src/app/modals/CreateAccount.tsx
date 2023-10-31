@@ -39,7 +39,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     console.log(`Token deployed to ${tokenContract.address}`);
 
     const amount: bigint = 1234n;
-    setMessage("Minting {amount} tokens...")
+    setMessage(`Minting ${amount} tokens...`)
     const tx = tokenContract.methods.mint_public(account.getAddress(), amount).send();
     const receipt = await tx.wait();
     console.log(`Minting 1234 tokens DONE. Status: ${receipt.status}`);
