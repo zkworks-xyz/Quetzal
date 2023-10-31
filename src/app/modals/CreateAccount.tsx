@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
-import { WaitCreating } from './WaitCreating.js';
+import { WaitDialog } from './WaitDialog.js';
 import { getWebAuthnAccount } from "../account/webauthn_account_contract.js";
 import { AccountManager, GrumpkinScalar, PXE } from "@aztec/aztec.js";
 import { setupSandbox } from "../account/utils.js";
@@ -19,6 +19,7 @@ enum CreationStatus {
 export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [userName, setUserName] = useState<string>('');
   const [status, setStatus] = useState<CreationStatus>(CreationStatus.NotStarted);
+  const [message, setMessage] = useState<string>('Deploying account...');
   const deployWallet = async () => {
     setStatus(CreationStatus.Creating);
 
@@ -29,16 +30,16 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
     const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebauthnSigner(userName))
 
-    console.log("Deploying account...");
+    setMessage("Deploying account...")
     const account = await webAuthnAccount1.waitDeploy();
     console.log(`Deploying account DONE: ${account.getAddress()}`);
 
-    console.log("Deploying token contract...");
+    setMessage("Deploying token contract...")
     const tokenContract = await TokenContract.deploy(account, account.getAddress()).send().deployed();
     console.log(`Token deployed to ${tokenContract.address}`);
 
-    console.log("Minting 1000 tokens...");
     const amount: bigint = 1234n;
+    setMessage(`Minting ${amount} tokens...`)
     const tx = tokenContract.methods.mint_public(account.getAddress(), amount).send();
     const receipt = await tx.wait();
     console.log(`Minting 1234 tokens DONE. Status: ${receipt.status}`);
@@ -46,7 +47,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   };
 
   return status === CreationStatus.Creating ? (
-    <WaitCreating/>
+    <WaitDialog message={message}/>
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">

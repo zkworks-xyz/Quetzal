@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { SendTokens } from './SentTokens.js';
-import { setupSandbox } from "../account/utils.js";
-import { AztecAddress, PXE } from "@aztec/aztec.js";
-import { TokenContract } from "../account/token.js";
+import { setupSandbox } from '../account/utils.js';
+import { AztecAddress, PXE } from '@aztec/aztec.js';
+import { TokenContract } from '../account/token.js';
 
 interface MainProps {
   account: UserAccount;
@@ -12,22 +12,22 @@ interface MainProps {
 
 export function Main({ account, tokenContract }: MainProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [balance, setBalance] = useState<string | null>(null)
+  const [balance, setBalance] = useState<string | null>(null);
   const openSendTokens = () => {
     setShowModal(true);
   };
 
   const refresh = async () => {
-    console.log("Check balance...");
+    console.log('Check balance...');
     const balance = await tokenContract.methods.balance_of_public(account.account.getAddress()).view();
     console.log(`Check balance DONE. balance: ${balance.toString()}`);
     setBalance(balance.toString());
   };
 
-  useEffect( () => {
+  useEffect(() => {
     const fetchBalance = async () => {
       await refresh();
-    }
+    };
     fetchBalance().catch(console.error);
   }, []);
 
@@ -37,7 +37,7 @@ export function Main({ account, tokenContract }: MainProps) {
   };
 
   return showModal ? (
-    <SendTokens account={account} onClose={() => setShowModal(false)} />
+    <SendTokens account={account} onClose={() => setShowModal(false)} onSuccess={() => setShowModal(false)} />
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8 flex-auto flex-col">
       <div className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">Your address</div>
