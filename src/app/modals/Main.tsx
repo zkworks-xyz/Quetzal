@@ -18,25 +18,18 @@ export function Main({ account, tokenContract }: MainProps) {
   };
 
   const refresh = async () => {
-    console.log("Setup sandbox...");
-    const pxe: PXE = await setupSandbox();
-    console.log("Setup sandbox DONE");
-
     console.log("Check balance...");
     const balance = await tokenContract.methods.balance_of_public(AztecAddress.fromString(account.address)).view();
     console.log(`Check balance DONE. balance: ${balance.toString()}`);
     setBalance(balance.toString());
   };
 
-  // useEffect( () => {
-  //   const fetchBalance = async () => {
-  //     await refresh();
-  //   }
-  //   fetchBalance();
-  // }, []);
-
-  console.log("Refresh balance...");
-  refresh().then(() => console.log("Refreshed balance"));
+  useEffect( () => {
+    const fetchBalance = async () => {
+      await refresh();
+    }
+    fetchBalance().catch(console.error);
+  }, []);
 
   const copy = () => {};
 
