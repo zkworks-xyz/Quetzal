@@ -10,34 +10,16 @@ export function Home() {
   const [tokenContract, setTokenContract] = useState<TokenContract | null>(null);
   return (
     <main className={styles.main}>
-      <h1 className="text-3xl font-bold underline">Quetzal</h1>
-      {account && tokenContract && <Main account={account} tokenContract={tokenContract}/>}
-      {!account && <CreateAccount onAccountCreated={(account, tokenContract) => {
-        setAccount(account);
-        setTokenContract(tokenContract);
-      }}/>}
-
-      {/* <>
-        {isLoadingWallet && <Loader />}
-        {!isLoadingWallet && (
-          <>
-            {!!selectWalletError && (
-              <>
-                {`Failed to load accounts. Error: ${selectWalletError}`}
-                <br />
-                {`Make sure PXE from Aztec Sandbox is running at: ${PXE_URL}`}
-              </>
-            )}
-            {!selectWalletError && !selectedWallet && `No accounts.`}
-            {!selectWalletError && !!selectedWallet && <Contract wallet={selectedWallet} />}
-          </>
-        )}
-        <WalletDropdown
-          selected={selectedWallet}
-          onSelectChange={handleSelectWallet}
-          onError={handleSelectWalletError}
+      <h1 className="text-3xl font-bold">Quetzal</h1>
+      {account && tokenContract && <Main account={account} tokenContract={tokenContract} />}
+      {!account && (
+        <CreateAccount
+          onAccountCreated={(account, tokenContract) => {
+            setAccount(account);
+            setTokenContract(tokenContract);
+          }}
         />
-      </> */}
+      )}
     </main>
   );
 }

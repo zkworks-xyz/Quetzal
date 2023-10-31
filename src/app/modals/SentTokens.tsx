@@ -1,20 +1,25 @@
+import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
+import { WaitDialog } from './WaitDialog.js';
 import { TokenContract } from "../account/token.js";
-import { useState } from "react";
 import { AztecAddress } from "@aztec/aztec.js";
 
 export interface SendTokensProps {
   account: UserAccount;
   tokenContract: TokenContract;
   onClose: () => void;
+  onSuccess: () => void;
 }
 
-export function SendTokens({ account, tokenContract, onClose }: SendTokensProps) {
-
+export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendTokensProps) {
+  const [showDialog, setShowDialog] = useState(false);
+  const [message, setMessage] = useState('');
   const [toAddress, setToAddress] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
-
+  
   const sendTokens = async () => {
+    setShowDialog(true);
+    setMessage('Sending tokens...');
     if (isNaN(Number(amount))) {
       alert("Amount should be a number");
       return;
@@ -30,12 +35,12 @@ export function SendTokens({ account, tokenContract, onClose }: SendTokensProps)
       .send();
     const receipt = await tx.wait();
     console.log(`Sending tokens DONE. Status: ${receipt.status}`);
-
+    setShowDialog(false);
+    onSuccess();
   };
 
-
-  return (
-    <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
+  return showDialog ? (<WaitDialog message={message}/>) : (
+    <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">
         <h1 className="mt-4 text-2xl font-semibold tracking-wide text-center text-gray-800 md:text-3xl dark:text-white">
           Send tokens

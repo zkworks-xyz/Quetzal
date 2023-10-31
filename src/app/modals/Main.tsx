@@ -12,22 +12,22 @@ interface MainProps {
 
 export function Main({ account, tokenContract }: MainProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [balance, setBalance] = useState<string | null>(null)
+  const [balance, setBalance] = useState<string | null>(null);
   const openSendTokens = () => {
     setShowModal(true);
   };
 
   const refresh = async () => {
-    console.log("Check balance...");
+    console.log('Check balance...');
     const balance = await tokenContract.methods.balance_of_public(account.account.getAddress()).view();
     console.log(`Check balance DONE. balance: ${balance.toString()}`);
     setBalance(balance.toString());
   };
 
-  useEffect( () => {
+  useEffect(() => {
     const fetchBalance = async () => {
       await refresh();
-    }
+    };
     fetchBalance().catch(console.error);
   }, []);
 
@@ -37,7 +37,7 @@ export function Main({ account, tokenContract }: MainProps) {
   };
 
   return showModal ? (
-    <SendTokens account={account} tokenContract={tokenContract} onClose={() => setShowModal(false)} />
+    <SendTokens account={account} tokenContract={tokenContract} onClose={() => setShowModal(false)} onSuccess={() => setShowModal(false)} />
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8 flex-auto flex-col">
       <div className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">Your address</div>
@@ -57,8 +57,7 @@ export function Main({ account, tokenContract }: MainProps) {
         </button>
       </div>
       <p className="mt-16 text-gray-500 dark:text-gray-400 text-base text-left">Balance:</p>
-      <div
-        className="mt-1 text-3xl font-semibold tracking-wide text-left text-gray-800 md:text-3xl dark:text-white flex flex-col">
+      <div className="mt-1 text-3xl font-semibold tracking-wide text-left text-gray-800 md:text-3xl dark:text-white flex flex-col">
         <div className="flex-none">{balance} aztecs</div>
       </div>
       <button
