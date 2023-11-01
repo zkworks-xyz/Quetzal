@@ -39,7 +39,6 @@
     "rootDir": "./src"
   },
   "dependencies": {
-    "@aztec/aztec-ui": "^0.1.14",
     "@aztec/aztec.js": "^0.11.1",
     "@aztec/circuits.js": "^0.11.1",
     "@aztec/foundation": "^0.11.1",
