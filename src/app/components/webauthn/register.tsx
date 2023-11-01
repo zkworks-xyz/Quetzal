@@ -1,4 +1,3 @@
-import {Button} from "@aztec/aztec-ui";
 import * as React from "react";
 
 import {decode} from "cbor-x";
@@ -56,6 +55,6 @@ const register = async () => {
 
 export default function WebAuthnRegister() {
     return (
-        <Button text={'Create account'} onClick={register}/>
+        <button onClick={register}> Create account </button>
     );
 }

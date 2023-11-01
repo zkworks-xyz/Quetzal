@@ -1,5 +1,3 @@
-import {Button} from "@aztec/aztec-ui";
-import * as React from "react";
 import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from "./webauthn.utils.js";
 
 export async function webAuthnLogin(
@@ -73,6 +71,6 @@ function convertASN1toRaw(signatureBuffer: ArrayBuffer) {
 
 export default function WebAuthnLogin() {
     return (
-        <Button text={'Sign transaction'} onClick={login}/>
+        <button onClick={login}>Sign transaction</button>
     );
 }
