@@ -93,7 +93,6 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
         >
           Create wallet
         </button>
-        Main
       </div>
     </section>
   );
