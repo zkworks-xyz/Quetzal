@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
-import { WaitDialog } from './WaitDialog.js';
+import { InfoDialog } from './InfoDialog.js';
 import { getWebAuthnAccount } from "../account/webauthn_account_contract.js";
 import { AccountManager, AztecAddress, GrumpkinScalar, PXE } from "@aztec/aztec.js";
 import { WebauthnSigner } from "../account/webauthn_signer.js";
@@ -20,7 +20,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [userName, setUserName] = useState<string>('');
   const [status, setStatus] = useState<CreationStatus>(CreationStatus.NotStarted);
   const [message, setMessage] = useState<string>('Deploying account...');
-  const pxe: PXE = usePXE();
+  const {pxe} = usePXE();
   const deployWallet = async () => {
     setStatus(CreationStatus.Creating);
 
@@ -56,7 +56,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   };
 
   return status === CreationStatus.Creating ? (
-    <WaitDialog message={message}/>
+    <InfoDialog title={message}/>
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">

@@ -1,34 +1,38 @@
-import { PXE, createPXEClient, waitForSandbox } from '@aztec/aztec.js';
-import { useEffect, useState, createContext, ReactNode, useContext } from 'react';
-import { WaitDialog } from '../modals/WaitDialog.js';
+import { NodeInfo, PXE, createPXEClient, waitForSandbox } from '@aztec/aztec.js';
+import { useQuery } from '@tanstack/react-query';
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { InfoDialog } from '../modals/InfoDialog.js';
 import { useConfig } from './config.js';
 
-export const PXEContext = createContext<PXE | null>(null);
+export interface PXEInfo {
+    pxe: PXE;
+    nodeInfo: NodeInfo;
+}
+
+export const PXEContext = createContext<PXEInfo | null>(null);
 
 export const PXEProvider = ({ children }: { children: ReactNode }) => {
-  const [pxe, setPXE] = useState<PXE | null>(null);
   const { PXE_URL } = useConfig();
+  const fetchPXE = async () => {
+    const pxe = createPXEClient(PXE_URL);
+    const nodeInfo = await pxe.getNodeInfo();
+    return {pxe, nodeInfo};
+  };
+  const { data, isPending, isError, error } = useQuery<PXEInfo>({ queryKey: ['pxe'], queryFn: fetchPXE });
 
-  useEffect(() => {
-    const init = async () => {
-      const pxe = createPXEClient(PXE_URL);
-      await waitForSandbox(pxe);
-      setPXE(pxe);
-    };
-    init();
-  }, []);
-
-  return pxe ? (
-    <PXEContext.Provider value={pxe}>{children}</PXEContext.Provider>
-  ) : (
-    <WaitDialog message="Can't connect to PXE" />
-  );
+  if (isError) {
+    return <InfoDialog title="⚠️ Can't connect to Aztec network" message={error.message} />;
+  }
+  if (isPending) {
+    return <InfoDialog title="Connecting to Aztec network..." />;
+  }
+  return <PXEContext.Provider value={data}>{children}</PXEContext.Provider>;
 };
 
 export const usePXE = () => {
-  const pxe = useContext(PXEContext);
-  if (!pxe) {
+  const pxeInfo = useContext(PXEContext);
+  if (!pxeInfo) {
     throw new Error('usePXE must be used within a PXEProvider');
   }
-  return pxe;
+  return pxeInfo;
 };
