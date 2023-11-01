@@ -18,10 +18,10 @@ export const PXEProvider = ({ children }: { children: ReactNode }) => {
     const nodeInfo = await pxe.getNodeInfo();
     return {pxe, nodeInfo};
   };
-  const { data, isPending, isError, error } = useQuery<PXEInfo>({ queryKey: ['pxe'], queryFn: fetchPXE });
+  const { data, isPending, isError, error, refetch } = useQuery<PXEInfo>({ queryKey: ['pxe'], queryFn: fetchPXE });
 
   if (isError) {
-    return <InfoDialog title="⚠️ Can't connect to Aztec network" message={error.message} />;
+    return <InfoDialog title="⚠️ Can't connect to Aztec network" message={error.message} retry={refetch} />;
   }
   if (isPending) {
     return <InfoDialog title="Connecting to Aztec network..." />;
