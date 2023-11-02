@@ -19,9 +19,9 @@ fn convert_to_array_to_field(a: [u8; 32]) -> Field {
     res
 }
 
-fn prefix_sha256_hash<N>(prefix_length: u8, input: [u8; N]) -> [u8; 32] {
+pub fn prefix_sha256_hash<N>(prefix_length: u8, input: [u8; N]) -> [u8; 32] {
     let mut result = [0; 32];
-    assert([1, 2, 3].any(|x| x == prefix_length), "Length is not supported");
+    assert([1, 2, 3, 114, 134, 243].any(|x| x == prefix_length), "Length is not supported");
     if prefix_length == 1 {
         result = my_hash(input, [0; 1]);
     }
@@ -30,6 +30,15 @@ fn prefix_sha256_hash<N>(prefix_length: u8, input: [u8; N]) -> [u8; 32] {
     }
     if prefix_length == 3 {
         result = my_hash(input, [0; 3]);
+    }
+    if prefix_length == 114 {
+        result = my_hash(input, [0; 114]);
+    }
+    if prefix_length == 134 {
+        result = my_hash(input, [0; 134]);
+    }
+    if prefix_length == 243 {
+        result = my_hash(input, [0; 243]);
     }
     result
 }
