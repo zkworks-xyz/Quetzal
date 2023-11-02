@@ -29,7 +29,7 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
 
   const fetchTokenContract = async (): Promise<ExtendedContractData | null> => {
     const adminWallet = await adminAccount.getWallet();
-    const result =  await adminWallet.getExtendedContractData(AztecAddress.fromString(TOKEN_CONTRACT_ADDRESS));
+    const result = await adminWallet.getExtendedContractData(AztecAddress.fromString(TOKEN_CONTRACT_ADDRESS));
     return result === undefined ? null : result;
   };
 
@@ -51,6 +51,14 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
       refetch();
     },
   });
+
+  if (mutation.isPending) {
+    return <InfoDialog title="⏳ Deploying tokens..." message="Please wait..." />;
+  }
+
+  if (mutation.isError) {
+    return <InfoDialog title="⚠️ Error fetching token contract" message={mutation.error.message} />;
+  }
 
   if (isError) {
     return <InfoDialog title="⚠️ Error fetching token contract" message={error.message} />;
