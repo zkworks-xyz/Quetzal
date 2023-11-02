@@ -69,9 +69,18 @@ fn test_convert_array_to_field() {
 }
 
 #[test]
-fn test_f() {
+fn test_prefix_sha256_hash() {
     let input = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     assert_eq(std::hash::sha256([1]), prefix_sha256_hash(1, input));
     assert_eq(std::hash::sha256([1, 2]), prefix_sha256_hash(2, input));
     assert_eq(std::hash::sha256([1, 2, 3]), prefix_sha256_hash(3, input));
+    assert_eq(std::hash::sha256([1; 114]), prefix_sha256_hash(114, [1; 1000]));
+    assert_eq(std::hash::sha256([1; 134]), prefix_sha256_hash(134, [1; 1000]));
+    assert_eq(std::hash::sha256([1; 243]), prefix_sha256_hash(243, [1; 1000]));
+}
+
+#[test(should_fail)]
+fn test_prefix_sha256_hash_fail() {
+    let input = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    prefix_sha256_hash(4, input);
 }
