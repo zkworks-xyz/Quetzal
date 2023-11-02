@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
-import { WaitDialog } from './WaitDialog.js';
+import { InfoDialog } from './InfoDialog.js';
 import { TokenContract } from '../account/token.js';
 import { AztecAddress } from '@aztec/aztec.js';
 
@@ -37,7 +37,7 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
     onSuccess();
   };
 
-  return showDialog ? (<WaitDialog message={message}/>) : (
+  return showDialog ? (<InfoDialog title={message}/>) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">
         <h1 className="mt-4 text-2xl font-semibold tracking-wide text-center text-gray-800 md:text-3xl dark:text-white">

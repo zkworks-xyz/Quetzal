@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
-import { WaitDialog } from './WaitDialog.js';
+import { InfoDialog } from './InfoDialog.js';
 import { getWebAuthnAccount } from "../account/webauthn_account_contract.js";
 import { AccountManager, AztecAddress, GrumpkinScalar, PXE } from "@aztec/aztec.js";
-import { setupSandbox } from "../account/utils.js";
 import { WebauthnSigner } from "../account/webauthn_signer.js";
 import { TokenContract } from "../account/token.js";
+import { usePXE } from '../context/pxe.js';
 
 export interface CreateAccountProps {
   onAccountCreated: (account: UserAccount, tokenContract: TokenContract) => void;
@@ -20,12 +20,9 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [userName, setUserName] = useState<string>('');
   const [status, setStatus] = useState<CreationStatus>(CreationStatus.NotStarted);
   const [message, setMessage] = useState<string>('Deploying account...');
+  const {pxe} = usePXE();
   const deployWallet = async () => {
     setStatus(CreationStatus.Creating);
-
-    console.log("Setup sandbox...");
-    const pxe: PXE = await setupSandbox();
-    console.log("Setup sandbox DONE");
 
     const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
     const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebauthnSigner(userName))
@@ -59,7 +56,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   };
 
   return status === CreationStatus.Creating ? (
-    <WaitDialog message={message}/>
+    <InfoDialog title={message}/>
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">
@@ -96,7 +93,6 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
         >
           Create wallet
         </button>
-        Main
       </div>
     </section>
   );
