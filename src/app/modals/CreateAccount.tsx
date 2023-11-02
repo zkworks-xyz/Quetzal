@@ -6,9 +6,10 @@ import { AccountManager, AztecAddress, GrumpkinScalar, PXE } from "@aztec/aztec.
 import { WebauthnSigner } from "../account/webauthn_signer.js";
 import { TokenContract } from "../account/token.js";
 import { usePXE } from '../context/pxe.js';
+import { useDeveloperMode } from '../context/developer_mode.js';
 
 export interface CreateAccountProps {
-  onAccountCreated: (account: UserAccount, tokenContract: TokenContract) => void;
+  onAccountCreated: (account: UserAccount) => void;
 }
 
 enum CreationStatus {
@@ -21,38 +22,24 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [status, setStatus] = useState<CreationStatus>(CreationStatus.NotStarted);
   const [message, setMessage] = useState<string>('Deploying account...');
   const {pxe} = usePXE();
+  const {faucet} = useDeveloperMode();
+
   const deployWallet = async () => {
     setStatus(CreationStatus.Creating);
 
     const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
     const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebauthnSigner(userName))
 
-    setMessage("Deploying account...")
+    setMessage("⏳ Deploying account...")
     const account = await webAuthnAccount1.waitDeploy();
     console.log(`Deploying account DONE: ${account.getAddress()}`);
 
+    const amount: bigint = 1234n;
+    setMessage(`⏳ Minting ${amount} tokens to ${account.getAddress().toShortString()}`)
+    await faucet(account.getAddress(), 1234n)
 
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const urlTokenAddress = urlParams.get('token');
-    let tokenContract;
-    if (urlTokenAddress) {
-      console.log(`Token address from URL: ${urlTokenAddress}`);
-      tokenContract = await TokenContract.at(AztecAddress.fromString(urlTokenAddress), account);
-      console.log(`Token address from URL found successfully: ${tokenContract.address}`);
-    } else {
-      setMessage("Deploying token contract...");
-      tokenContract = await TokenContract.deploy(account, account.getAddress()).send().deployed();
-      console.log(`Token deployed to ${tokenContract.address}`);
 
-      const amount: bigint = 1234n;
-      setMessage(`Minting ${amount} tokens...`)
-      const tx = tokenContract.methods.mint_public(account.getAddress(), amount).send();
-      const receipt = await tx.wait();
-      console.log(`Minting ${amount} tokens DONE. Status: ${receipt.status}`);
-    }
-
-    onAccountCreated({ username: userName, account }, tokenContract);
+    onAccountCreated({ username: userName, account });
   };
 
   return status === CreationStatus.Creating ? (

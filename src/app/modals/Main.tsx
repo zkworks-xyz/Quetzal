@@ -2,21 +2,24 @@ import { useEffect, useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { SendTokens } from './SendTokens.js';
 import { TokenContract } from '../account/token.js';
+import { useTokenList } from '../context/token_list.js';
 
 interface MainProps {
   account: UserAccount;
-  tokenContract: TokenContract;
 }
 
-export function Main({ account, tokenContract }: MainProps) {
+export function Main({ account }: MainProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [balance, setBalance] = useState<string | null>(null);
-  const openSendTokens = () => {
-    setShowModal(true);
-  };
+  const [tokenContract, setTokenContract] = useState<TokenContract | null>(null);
 
   const refresh = async () => {
     console.log('Check balance...');
+
+    const token = useTokenList()[0];
+    const tokenContract = await TokenContract.at(token.address, account.account);
+    setTokenContract(tokenContract);
+
     const balance = await tokenContract.methods.balance_of_public(account.account.getAddress()).view();
     console.log(`Check balance DONE. balance: ${balance.toString()}`);
     setBalance(balance.toString());
@@ -35,7 +38,7 @@ export function Main({ account, tokenContract }: MainProps) {
   };
 
   return showModal ? (
-    <SendTokens account={account} tokenContract={tokenContract} onClose={() => setShowModal(false)} onSuccess={() => setShowModal(false)} />
+    <SendTokens account={account} tokenContract={tokenContract!} onClose={() => setShowModal(false)} onSuccess={() => setShowModal(false)} />
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8 flex-auto flex-col">
       <div className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">Your address</div>
@@ -59,7 +62,7 @@ export function Main({ account, tokenContract }: MainProps) {
         <div className="flex-none">{balance} aztecs</div>
       </div>
       <button
-        onClick={() => openSendTokens()}
+        onClick={() => setShowModal(true)}
         className="w-full px-6 py-2 mt-24 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
       >
         {' '}

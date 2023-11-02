@@ -4,18 +4,18 @@ import { UserAccount } from './model/UserAccount.js';
 import { CreateAccount } from './modals/CreateAccount.js';
 import { Main } from './modals/Main.js';
 import { TokenContract } from './account/token.js';
+import { useTokenList } from './context/token_list.js';
 
 export function Home() {
   const [account, setAccount] = useState<UserAccount | null>(null);
-  const [tokenContract, setTokenContract] = useState<TokenContract | null>(null);
+
   return (
     <>
-      {account && tokenContract && <Main account={account} tokenContract={tokenContract} />}
+      {account && <Main account={account} />}
       {!account && (
         <CreateAccount
-          onAccountCreated={(account, tokenContract) => {
+          onAccountCreated={(account) => {
             setAccount(account);
-            setTokenContract(tokenContract);
           }}
         />
       )}
