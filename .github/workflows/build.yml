@@ -26,7 +26,7 @@ jobs:
       - name: Run webauthn prove test
         run: |
           export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
-          cd src/contracts/webauthn
+          cd src/contracts/webauthn_account_contract
           nargo check
           nargo test
       - name: Install yarn 4
