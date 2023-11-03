@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { SendTokens } from './SendTokens.js';
 import { TokenContract } from '../account/token.js';
-import { useTokenList } from '../context/token_list.js';
+import { TOKEN_LIST } from '../model/token_list.js';
 
 interface MainProps {
   account: UserAccount;
@@ -16,7 +16,7 @@ export function Main({ account }: MainProps) {
   const refresh = async () => {
     console.log('Check balance...');
 
-    const token = useTokenList()[0];
+    const token = TOKEN_LIST[0];
     const tokenContract = await TokenContract.at(token.address, account.account);
     setTokenContract(tokenContract);
 

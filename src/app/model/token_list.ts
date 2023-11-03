@@ -15,7 +15,7 @@ export const TOKEN_LIST = [
   {
     name: 'Ether',
     symbol: 'ETH',
-    address: AztecAddress.fromString(TOKEN_CONTRACT_ADDRESS_AS_STRING),
+    address: TOKEN_CONTRACT_ADDRESS,
     decimals: 18,
     icon_url:
       'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
@@ -23,13 +23,10 @@ export const TOKEN_LIST = [
   {
     name: 'Dai',
     symbol: 'DAI',
-    address: AztecAddress.fromString(TOKEN_CONTRACT_ADDRESS_AS_STRING),
+    address: TOKEN_CONTRACT_ADDRESS,
     decimals: 18,
     icon_url:
       'https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png',
   }
 ];
 
-export const useTokenList = () => {
-    return TOKEN_LIST;
-}

@@ -1,6 +1,5 @@
 import {
   AccountManager,
-  AztecAddress,
   AztecAddressLike,
   ExtendedContractData,
   Fr,
@@ -8,16 +7,16 @@ import {
   INITIAL_SANDBOX_SALTS,
   INITIAL_SANDBOX_SIGNING_KEYS,
   PXE,
-  getSchnorrAccount,
   TxReceipt,
+  getSchnorrAccount
 } from '@aztec/aztec.js';
 import { FieldsOf } from '@aztec/circuits.js';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ReactNode, createContext, useContext } from 'react';
 import { TokenContract } from '../account/token.js';
-import { usePXE } from './pxe.js';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { InfoDialog } from '../modals/InfoDialog.js';
-import { useTokenList } from './token_list.js';
+import { usePXE } from './pxe.js';
+import { TOKEN_LIST } from '../model/token_list.js';
 
 function getSandboxAccounts(pxe: PXE): AccountManager[] {
   return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>
@@ -29,7 +28,7 @@ function getSandboxAccounts(pxe: PXE): AccountManager[] {
 export function DeveloperModeProvider({ children }: { children: ReactNode }) {
   const { pxe } = usePXE();
   const adminAccount = getSandboxAccounts(pxe)[0];
-  const tokenContractAddress = useTokenList()[0].address;
+  const tokenContractAddress = TOKEN_LIST[0].address;
 
   const fetchTokenContract = async (): Promise<ExtendedContractData | null> => {
     const adminWallet = await adminAccount.getWallet();
