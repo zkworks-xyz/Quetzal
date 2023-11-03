@@ -17,6 +17,8 @@ enum CreationStatus {
   Creating,
 }
 
+const FAUCET_AMOUNT = 1234n;
+
 export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [userName, setUserName] = useState<string>('');
   const [account, setAccount] = useState<AccountWalletWithPrivateKey | null>(null);
@@ -38,7 +40,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   };
 
   const mintTokens = async (account: AccountWalletWithPrivateKey) => {
-    await faucet(account.getAddress(), 1234n);
+    await faucet(account.getAddress(), FAUCET_AMOUNT);
     onAccountCreated({ username: userName, account });
   };
 
