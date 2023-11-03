@@ -12,11 +12,6 @@ export interface CreateAccountProps {
   onAccountCreated: (account: UserAccount) => void;
 }
 
-enum CreationStatus {
-  NotStarted,
-  Creating,
-}
-
 const FAUCET_AMOUNT = 1234n;
 
 export function CreateAccount({ onAccountCreated }: CreateAccountProps) {

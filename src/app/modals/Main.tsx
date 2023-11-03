@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { TokenContract } from '../account/token.js';
-import { Alert } from '../components/alert.js';
+import { Alert, AlertType } from '../components/alert.js';
 import { UserAccount } from '../model/UserAccount.js';
 import { TOKEN_LIST } from '../model/token_list.js';
 import { SendTokens } from './SendTokens.js';
@@ -17,17 +17,23 @@ enum CurrentModal {
 
 export function Main({ account }: MainProps) {
   const [modal, setModal] = useState<CurrentModal>(CurrentModal.Main);
-  const [tokenContract, setTokenContract] = useState<TokenContract | null>(null);
 
-  const fetchBalance = async () => {
+  const fetchTokenContract = () => {
     const token = TOKEN_LIST[0];
-    const tokenContract = await TokenContract.at(token.address, account.account);
-    setTokenContract(tokenContract);
-
-    return tokenContract.methods.balance_of_public(account.account.getAddress()).view();
+    return TokenContract.at(token.address, account.account);
   };
 
-  const { data, isError, isPending, refetch } = useQuery({ queryKey: ['balance'], queryFn: fetchBalance });
+  const { data: tokenContract } = useQuery({ queryKey: ['tokenContract'], queryFn: fetchTokenContract });
+
+  const fetchBalance = async () => {
+    return tokenContract!.methods.balance_of_public(account.account.getAddress()).view();
+  };
+
+  const { data, isError, isPending, refetch } = useQuery({
+    queryKey: ['balance'],
+    queryFn: fetchBalance,
+    enabled: !!tokenContract,
+  });
 
   const copy = () => {
     const value = account.account.getAddress().toString();
@@ -47,6 +53,8 @@ export function Main({ account }: MainProps) {
 
   return (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8 flex-auto flex-col">
+      {isError && <Alert message="Error fetching balance" />}
+      {isPending && <Alert message="Fetching balance" alertType={AlertType.info} />}
       <div className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">Your address</div>
       <div className="mt-1 text-gray-800 md:text-xl dark:text-white text-base text-left flex-col">
         {account.account.getAddress().toShortString()}
@@ -65,7 +73,9 @@ export function Main({ account }: MainProps) {
       </div>
       <p className="mt-16 text-gray-500 dark:text-gray-400 text-base text-left">Balance:</p>
       <div className="mt-1 text-3xl font-semibold tracking-wide text-left text-gray-800 md:text-3xl dark:text-white flex flex-col">
-        <div className="flex-none">{data?.toString()} {TOKEN_LIST[0].symbol}</div>
+        <div className="flex-none">
+          {data?.toString()} {TOKEN_LIST[0].symbol}
+        </div>
       </div>
       <button
         onClick={() => setModal(CurrentModal.SendTokens)}
