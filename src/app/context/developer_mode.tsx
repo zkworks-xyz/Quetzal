@@ -1,19 +1,22 @@
 import {
   AccountManager,
-  AztecAddress,
+  AztecAddressLike,
   ExtendedContractData,
   Fr,
   INITIAL_SANDBOX_ENCRYPTION_KEYS,
   INITIAL_SANDBOX_SALTS,
   INITIAL_SANDBOX_SIGNING_KEYS,
   PXE,
-  getSchnorrAccount,
+  TxReceipt,
+  getSchnorrAccount
 } from '@aztec/aztec.js';
-import { ReactNode } from 'react';
-import { TokenContract } from '../account/token.js';
-import { usePXE } from './pxe.js';
+import { FieldsOf } from '@aztec/circuits.js';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { ReactNode, createContext, useContext } from 'react';
+import { TokenContract } from '../account/token.js';
 import { InfoDialog } from '../modals/InfoDialog.js';
+import { usePXE } from './pxe.js';
+import { TOKEN_LIST } from '../model/token_list.js';
 
 function getSandboxAccounts(pxe: PXE): AccountManager[] {
   return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>
@@ -21,15 +24,15 @@ function getSandboxAccounts(pxe: PXE): AccountManager[] {
   );
 }
 
-const TOKEN_CONTRACT_ADDRESS = '0x2f45f498b7912c779dde8e3594622e36d7908088b09e99ab91caaafb40d1f9ef';
 
 export function DeveloperModeProvider({ children }: { children: ReactNode }) {
   const { pxe } = usePXE();
   const adminAccount = getSandboxAccounts(pxe)[0];
+  const tokenContractAddress = TOKEN_LIST[0].address;
 
   const fetchTokenContract = async (): Promise<ExtendedContractData | null> => {
     const adminWallet = await adminAccount.getWallet();
-    const result =  await adminWallet.getExtendedContractData(AztecAddress.fromString(TOKEN_CONTRACT_ADDRESS));
+    const result = await adminWallet.getExtendedContractData(tokenContractAddress);
     return result === undefined ? null : result;
   };
 
@@ -52,6 +55,21 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
     },
   });
 
+  const faucet = async (address: AztecAddressLike, amount: bigint) => {
+    const adminWallet = await adminAccount.getWallet();
+    const tokenContract = await TokenContract.at(tokenContractAddress, adminWallet);
+    const tx = tokenContract.methods.mint_public(address, amount).send();
+    return tx.wait();
+  };
+
+  if (mutation.isPending) {
+    return <InfoDialog title="⏳ Deploying tokens..." message="Please wait..." />;
+  }
+
+  if (mutation.isError) {
+    return <InfoDialog title="⚠️ Error fetching token contract" message={mutation.error.message} />;
+  }
+
   if (isError) {
     return <InfoDialog title="⚠️ Error fetching token contract" message={error.message} />;
   }
@@ -61,7 +79,7 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
   }
 
   return data ? (
-    <>{children}</>
+    <DeveloperContext.Provider value={{ faucet }}>{children}</DeveloperContext.Provider>
   ) : (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">
@@ -84,3 +102,17 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
     </section>
   );
 }
+
+interface DeveloperContextInterface {
+  faucet: (address: AztecAddressLike, amount: bigint) => Promise<FieldsOf<TxReceipt>>;
+}
+
+export const DeveloperContext = createContext<DeveloperContextInterface>({
+  faucet: (address: AztecAddressLike, amount: bigint) => {
+    return Promise.reject(new Error('DeveloperContext not initialized'));
+  },
+});
+
+export const useDeveloperMode = () => {
+  return useContext(DeveloperContext);
+};
