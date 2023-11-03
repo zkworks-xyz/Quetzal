@@ -69,7 +69,7 @@ class WebAuthnWitnessProvider implements AuthWitnessProvider {
 
   async createAuthWitness(message: Fr): Promise<AuthWitness> {
     // TODO generate webauthn signature
-    const signature = await this.webAuthnInterface.sign(message.toBuffer());
+    const signature = await this.webAuthnInterface.sign(new Uint8Array(message.toBuffer()));
     const witness = [
       ...signature.signatureRaw,
       ...signature.authenticatorData,
