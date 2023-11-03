@@ -1,12 +1,12 @@
+import { AccountManager, AccountWalletWithPrivateKey, GrumpkinScalar } from '@aztec/aztec.js';
+import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
+import { getWebAuthnAccount } from '../account/webauthn_account_contract.js';
+import { WebauthnSigner } from '../account/webauthn_signer.js';
+import { useDeveloperMode } from '../context/developer_mode.js';
+import { usePXE } from '../context/pxe.js';
 import { UserAccount } from '../model/UserAccount.js';
 import { InfoDialog } from './InfoDialog.js';
-import { getWebAuthnAccount } from "../account/webauthn_account_contract.js";
-import { AccountManager, AztecAddress, GrumpkinScalar, PXE } from "@aztec/aztec.js";
-import { WebauthnSigner } from "../account/webauthn_signer.js";
-import { TokenContract } from "../account/token.js";
-import { usePXE } from '../context/pxe.js';
-import { useDeveloperMode } from '../context/developer_mode.js';
 
 export interface CreateAccountProps {
   onAccountCreated: (account: UserAccount) => void;
@@ -17,34 +17,63 @@ enum CreationStatus {
   Creating,
 }
 
+const FAUCET_AMOUNT = 1234n;
+
 export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [userName, setUserName] = useState<string>('');
-  const [status, setStatus] = useState<CreationStatus>(CreationStatus.NotStarted);
-  const [message, setMessage] = useState<string>('Deploying account...');
+  const [account, setAccount] = useState<AccountWalletWithPrivateKey | null>(null);
   const {pxe} = usePXE();
   const {faucet} = useDeveloperMode();
+  const amount: bigint = 1234n;
 
   const deployWallet = async () => {
-    setStatus(CreationStatus.Creating);
-
     const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
-    const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebauthnSigner(userName))
-
-    setMessage("⏳ Deploying account...")
+    const webAuthnAccount1: AccountManager = getWebAuthnAccount(
+      pxe,
+      encryptionPrivateKey1,
+      new WebauthnSigner(userName),
+    );
     const account = await webAuthnAccount1.waitDeploy();
-    console.log(`Deploying account DONE: ${account.getAddress()}`);
+    setAccount(account);
+    mintMutation.mutate(account);
+    return account;
+  };
 
-    const amount: bigint = 1234n;
-    setMessage(`⏳ Minting ${amount} tokens to ${account.getAddress().toShortString()}`)
-    await faucet(account.getAddress(), 1234n)
-
-
+  const mintTokens = async (account: AccountWalletWithPrivateKey) => {
+    await faucet(account.getAddress(), FAUCET_AMOUNT);
     onAccountCreated({ username: userName, account });
   };
 
-  return status === CreationStatus.Creating ? (
-    <InfoDialog title={message}/>
-  ) : (
+  const walletMutation = useMutation({ mutationFn: deployWallet });
+  const mintMutation = useMutation({ mutationFn: mintTokens });
+
+  if (mintMutation.isPending) {
+    const title = `⏳ Minting ${amount} tokens to ${account!.getAddress().toShortString()}`;
+    return <InfoDialog title={title} />;
+  } else if (mintMutation.isError) {
+    return (
+      <InfoDialog
+        title="⚠️ Failed to mint tokens"
+        primaryLabel="Try again"
+        primaryAction={() => mintMutation.mutate(account!)}
+      />
+    );
+  } else if (walletMutation.isPending) {
+    return <InfoDialog title="⏳ Deploying account..." />;
+  } else if (walletMutation.isError) {
+    return (
+      <InfoDialog
+        title="⚠️ Failed to deploy account"
+        message={walletMutation.error.message}
+        primaryLabel="Try again"
+        primaryAction={() => walletMutation.mutate()}
+        secondaryLabel="Cancel"
+        secondaryAction={() => walletMutation.reset()}
+        />
+    );
+  }
+
+  return (
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-16">
       <div className="container flex flex-col items-center justify-center px-6 mx-auto">
         <h1 className="mt-4 text-2xl font-semibold tracking-wide text-center text-gray-800 md:text-3xl dark:text-white">
@@ -75,7 +104,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
           placeholder="Enter your email"
         />
         <button
-          onClick={() => deployWallet()}
+          onClick={() => walletMutation.mutate()}
           className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
         >
           Create wallet
