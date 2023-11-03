@@ -1,10 +1,10 @@
+import { TokenContract } from '@aztec/noir-contracts/types';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Alert, AlertType } from '../components/alert.js';
 import { UserAccount } from '../model/UserAccount.js';
-import { SendTokens } from './SendTokens.js';
-import { TokenContract } from '@aztec/noir-contracts/types';
-import { useQuery } from '@tanstack/react-query';
 import { TOKEN_LIST } from '../model/token_list.js';
+import { SendTokens } from './SendTokens.js';
 
 interface MainProps {
   account: UserAccount;
