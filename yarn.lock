@@ -3097,6 +3097,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "classnames@npm:2.3.2"
+  checksum: ba3151c12e8b6a84c64b340ab4259ad0408947652009314462d828e94631505989c6a7d7e796bec1d309be9295d3111b498ad18a9d533fe3e6f859e51e574cbb
+  languageName: node
+  linkType: hard
+
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -9405,6 +9412,7 @@ __metadata:
     autoprefixer: "npm:^10.4.15"
     buffer: "npm:^6.0.3"
     cbor-x: "npm:^1.5.4"
+    classnames: "npm:^2.3.2"
     copy-webpack-plugin: "npm:^11.0.0"
     css-loader: "npm:^6.8.1"
     eslint: "npm:^8.45.0"
