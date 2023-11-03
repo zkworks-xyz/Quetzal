@@ -12,6 +12,8 @@ import {
 
 import { AuthWitness } from '@aztec/types';
 
+const CLIENT_DATA_JSON_MAX_LEN = 255;
+
 export function getWebAuthnAccount(
   pxe: PXE,
   encryptionPrivateKey: GrumpkinPrivateKey,
@@ -75,7 +77,9 @@ class WebAuthnWitnessProvider implements AuthWitnessProvider {
       ...signature.signatureRaw,
       ...signature.authenticator_data,
       ...signature.challenge,
-      ...signature.client_data_json
+      signature.client_data_json.length,
+      ...signature.client_data_json,
+      ...(new Uint8Array(CLIENT_DATA_JSON_MAX_LEN - signature.client_data_json.length))
     ];
     return new AuthWitness(message, witness);
   }

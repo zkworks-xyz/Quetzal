@@ -1,5 +1,7 @@
 import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from "./webauthn.utils.js";
 
+const SUPPORTED_CLIENT_DATA_JSON_LENGTHS = [114, 134, 243]
+
 export async function webAuthnLogin(
   challenge: Uint8Array = new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
 ) {
@@ -17,8 +19,9 @@ export async function webAuthnLogin(
     );
 
     const clientDataJSONLength = new Uint8Array(assertation.response.clientDataJSON).length;
-    if (clientDataJSONLength !== 114) {
-        throw new Error('clientDataJSONLength !== 114. Please use Safari browser. At the moment Noir contract only supports clientDataJSON of length 114. Will add variable length in the future');
+
+    if (!SUPPORTED_CLIENT_DATA_JSON_LENGTHS.includes(clientDataJSONLength)) {
+        throw new Error(`Unsupported clientDataJSON. At the moment Noir contract only supports clientDataJSON of lengths ${SUPPORTED_CLIENT_DATA_JSON_LENGTHS}`);
     }
 
     // @ts-ignore
