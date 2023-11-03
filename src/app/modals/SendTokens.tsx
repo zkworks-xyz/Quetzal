@@ -5,6 +5,7 @@ import { TokenContract } from '@aztec/noir-contracts/types';
 import { AztecAddress } from '@aztec/aztec.js';
 import { useMutation } from '@tanstack/react-query';
 import { PrimaryButton, SecondaryButton } from '../components/button.js';
+import { TOKEN_LIST } from '../model/token_list.js';
 
 export interface SendTokensProps {
   account: UserAccount;
@@ -93,7 +94,9 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
         </div>
 
         <div className="sm:col-span-2">
-          <div className="w-full mt-10 block font-medium leading-6 text-gray-500 dark:text-gray-400 text-left">ETH</div>
+          <div className="w-full mt-10 block font-medium leading-6 text-gray-500 dark:text-gray-400 text-left">
+            {TOKEN_LIST[0].symbol}
+          </div>
         </div>
       </div>
       <div className="flex items-center justify-center w-full mt-6 space-x-2">

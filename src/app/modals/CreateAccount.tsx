@@ -21,9 +21,8 @@ const FAUCET_AMOUNT = 1234n;
 
 export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [userName, setUserName] = useState<string>('');
-  const [account, setAccount] = useState<AccountWalletWithPrivateKey | null>(null);
-  const {pxe} = usePXE();
-  const {faucet} = useDeveloperMode();
+  const { pxe } = usePXE();
+  const { faucet } = useDeveloperMode();
   const amount: bigint = 1234n;
 
   const deployWallet = async () => {
@@ -33,10 +32,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
       encryptionPrivateKey1,
       new WebauthnSigner(userName),
     );
-    const account = await webAuthnAccount1.waitDeploy();
-    setAccount(account);
-    mintMutation.mutate(account);
-    return account;
+    return webAuthnAccount1.waitDeploy();
   };
 
   const mintTokens = async (account: AccountWalletWithPrivateKey) => {
@@ -44,18 +40,24 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
     onAccountCreated({ username: userName, account });
   };
 
-  const walletMutation = useMutation({ mutationFn: deployWallet });
+  const walletMutation = useMutation({
+    mutationFn: deployWallet,
+    onSuccess: account => {
+      mintMutation.mutate(account);
+    },
+  });
   const mintMutation = useMutation({ mutationFn: mintTokens });
 
   if (mintMutation.isPending) {
-    const title = `⏳ Minting ${amount} tokens to ${account!.getAddress().toShortString()}`;
-    return <InfoDialog title={title} />;
+    const to = mintMutation.variables.getAddress().toShortString();
+    const message = `Minting ${amount} tokens to ${to}`;
+    return <InfoDialog title="⏳ Minting tokens" message={message}/>;
   } else if (mintMutation.isError) {
     return (
       <InfoDialog
         title="⚠️ Failed to mint tokens"
         primaryLabel="Try again"
-        primaryAction={() => mintMutation.mutate(account!)}
+        primaryAction={() => mintMutation.mutate(walletMutation.data!)}
       />
     );
   } else if (walletMutation.isPending) {
@@ -69,7 +71,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
         primaryAction={() => walletMutation.mutate()}
         secondaryLabel="Cancel"
         secondaryAction={() => walletMutation.reset()}
-        />
+      />
     );
   }
 
