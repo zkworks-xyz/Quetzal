@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
-import { SendTokens } from './SentTokens.js';
+import { SendTokens } from './SendTokens.js';
 import { TokenContract } from '../account/token.js';
 
 interface MainProps {
