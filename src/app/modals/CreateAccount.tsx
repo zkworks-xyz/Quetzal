@@ -22,8 +22,8 @@ const FAUCET_AMOUNT = 1234n;
 export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [userName, setUserName] = useState<string>('');
   const [account, setAccount] = useState<AccountWalletWithPrivateKey | null>(null);
-  const { pxe } = usePXE();
-  const { faucet } = useDeveloperMode();
+  const {pxe} = usePXE();
+  const {faucet} = useDeveloperMode();
   const amount: bigint = 1234n;
 
   const deployWallet = async () => {
