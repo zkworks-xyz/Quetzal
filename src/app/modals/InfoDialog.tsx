@@ -26,7 +26,7 @@ export function InfoDialog({
           {title}
         </h1>
         {message && <p className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">{message}</p>}
-        {isPrimary && isSecondary && (
+        {(isPrimary || isSecondary) && (
           <div className="flex items-center justify-center w-full mt-6 space-x-2">
             {isPrimary && <PrimaryButton label={primaryLabel} action={primaryAction} />}
             {isSecondary && <SecondaryButton label={secondaryLabel} action={secondaryAction} />}

@@ -6,6 +6,7 @@ import { AztecAddress } from '@aztec/aztec.js';
 import { useMutation } from '@tanstack/react-query';
 import { PrimaryButton, SecondaryButton } from '../components/button.js';
 import { TOKEN_LIST } from '../model/token_list.js';
+import { Input, Label } from '../components/Input.js';
 
 export interface SendTokensProps {
   account: UserAccount;
@@ -40,8 +41,10 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
       <InfoDialog
         title="⚠️ Error sending tokens"
         message={mutation.error.message}
-        primaryLabel="Ok"
-        primaryAction={() => onClose()}
+        primaryLabel="Try again"
+        primaryAction={() => mutation.mutate()}
+        secondaryLabel="Cancel"
+        secondaryAction={() => onClose()}
       />
     );
   }
@@ -56,41 +59,16 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
 
       <div className="mt-10 grid grid-cols-1 gap-x-2 gap-y-8 sm:grid-cols-6">
         <div className="sm:col-span-6">
-          <label
-            htmlFor="address"
-            className="block text-sm font-medium leading-6 text-gray-500 dark:text-gray-400 text-left"
-          >
-            To (address)
-          </label>
-          <div className="mt-2">
-            <input
-              id="address"
-              name="address"
-              type="text"
-              placeholder="0x2f45f498b7912c779dde8e3594622e36d7908088b09e99ab91caaafb40d1f9ef"
-              className="block w-full rounded-md border-0 bg-white/5 px-2 py-1.5 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-              onChange={e => setToAddress(e.target.value)}
-            />
-          </div>
+          <Label htmlFor="address">To (address)</Label>
+          <Input
+            id="address"
+            placeholder="0x2f45f498b7912c779dde8e3594622e36d7908088b09e99ab91caaafb40d1f9ef"
+            onChange={e => setToAddress(e.target.value)}
+          />
         </div>
         <div className="sm:col-span-2">
-          <label
-            htmlFor="amount"
-            className="block text-sm font-medium leading-6 text-gray-500 dark:text-gray-400 text-left"
-          >
-            Amount
-          </label>
-          <div className="mt-2">
-            <input
-              type="text"
-              name="amount"
-              id="amount"
-              placeholder="10"
-              autoComplete="transaction-amount"
-              className="min-w-0 w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-              onChange={e => setAmount(e.target.value)}
-            />
-          </div>
+          <Label htmlFor="amount">Amount</Label>
+          <Input id="amount" placeholder="10" onChange={e => setAmount(e.target.value)} />
         </div>
 
         <div className="sm:col-span-2">

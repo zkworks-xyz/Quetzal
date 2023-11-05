@@ -17,7 +17,7 @@
     "start:dev": "webpack serve --mode=development",
     "start:sandbox": "SANDBOX_VERSION=0.11.1 /bin/bash -c \"$(curl -fsSL 'https://sandbox.aztec.network')\" ",
     "formatting": "prettier --check ./src && eslint ./src",
-    "formatting:fix": "prettier -w ./src",
+    "formatting:fix": "prettier -w ./src && eslint --fix ./src",
     "compile": "aztec-cli compile src/contracts/webauthn_account_contract --outdir ../../artifacts --typescript ../../artifacts",
     "update:sandbox": "/bin/bash -c \"$(curl -fsSL 'https://sandbox.aztec.network')\"",
     "test:integration": "NODE_NO_WARNINGS=1 node --experimental-vm-modules $(yarn bin jest) --runInBand"
@@ -51,6 +51,7 @@
     "buffer": "^6.0.3",
     "cbor-x": "^1.5.4",
     "classnames": "^2.3.2",
+    "eslint-config-prettier": "^9.0.0",
     "node-sass": "^9.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

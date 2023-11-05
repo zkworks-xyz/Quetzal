@@ -1,0 +1,23 @@
+name: CI
+
+on: ["push"]
+
+jobs:
+  formatting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install yarn 4
+        run: |
+          corepack enable
+          yarn set version latest
+      - name: Install depdendencies
+        run: |
+          yarn --version
+          yarn install
+      - name: Formatting
+        run: yarn formatting
