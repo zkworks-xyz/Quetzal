@@ -9,7 +9,7 @@ It is in early stage of development, with more features to come.
 
 Make sure you install the prerequisites:
 1. [Node.js](https://nodejs.org/en) version 20 or later
-2. [Yarn](https://yarnpkg.com/) version 3 or later
+2. [Yarn](https://yarnpkg.com/) version 4 or later
 3. [Docker](https://www.docker.com/)
 
 Next, to install dependencies, use the following command:
@@ -48,7 +48,20 @@ yarn start:dev
 
 To interact with the app, navigate to [http://localhost:5173](http://localhost:5173).
 
-## Testing
+## Formatter
+
+To run linters, use the following command:
+```
+yarn formatting
+```
+
+And to fix what is possible autmatically:
+```
+yarn formatting:fix
+```
+
+
+## Tests
 
 To run integration tests, make sure Aztec sandbox is running.
 Then, type the following command in a terminal:
@@ -105,3 +118,4 @@ And compile contracts with following command. It might take longer than usual.
 ```sh
 yarn compile
 ```
+
