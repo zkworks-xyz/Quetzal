@@ -33,8 +33,8 @@ export class WebAuthnPublicKey {
 export class WebAuthnSignature {
   constructor(
     readonly challenge: Uint8Array,
-    readonly authenticator_data: Uint8Array,
-    readonly client_data_json: Uint8Array,
+    readonly authenticatorData: Uint8Array,
+    readonly clientDataJson: Uint8Array,
     readonly signatureRaw: Uint8Array,
   ) {}
 }
@@ -72,11 +72,11 @@ class WebAuthnWitnessProvider implements AuthWitnessProvider {
     const signature = await this.webAuthnInterface.sign(message.toBuffer());
     const witness = [
       ...signature.signatureRaw,
-      ...signature.authenticator_data,
+      ...signature.authenticatorData,
       ...signature.challenge,
-      signature.client_data_json.length,
-      ...signature.client_data_json,
-      ...new Uint8Array(CLIENT_DATA_JSON_MAX_LEN - signature.client_data_json.length),
+      signature.clientDataJson.length,
+      ...signature.clientDataJson,
+      ...new Uint8Array(CLIENT_DATA_JSON_MAX_LEN - signature.clientDataJson.length),
     ];
     return new AuthWitness(message, witness);
   }

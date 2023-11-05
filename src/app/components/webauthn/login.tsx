@@ -30,10 +30,10 @@ export async function webAuthnLogin(
     .replaceAll('=', '')
     .split('')
     .map(c => c.charCodeAt(0));
-  const authenticator_data = new Uint8Array(assertation.response.authenticatorData);
-  const client_data_json = new Uint8Array(assertation.response.clientDataJSON);
+  const authenticatorData = new Uint8Array(assertation.response.authenticatorData);
+  const clientDataJson = new Uint8Array(assertation.response.clientDataJSON);
   const signatureRaw = convertASN1toRaw(assertation.response.signature);
-  return { challenge: challenge1, authenticator_data, client_data_json, signatureRaw };
+  return { challenge: challenge1, authenticatorData, clientDataJson, signatureRaw };
 }
 
 function toBase64url(buffer: ArrayBuffer): string {

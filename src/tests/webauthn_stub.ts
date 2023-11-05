@@ -21,11 +21,11 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
       65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
       65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69,
     ];
-    const authenticator_data = [
+    const authenticatorData = [
       73, 150, 13, 229, 136, 14, 140, 104, 116, 52, 23, 15, 100, 118, 96, 91, 143, 228, 174, 185, 162, 134, 50, 199,
       153, 92, 243, 186, 131, 29, 151, 99, 29, 0, 0, 0, 0,
     ];
-    const client_data_json = [
+    const clientDataJson = [
       123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116, 104, 110, 46, 103, 101, 116, 34, 44, 34, 99,
       104, 97, 108, 108, 101, 110, 103, 101, 34, 58, 34, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
       65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 34,
@@ -40,8 +40,8 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
     return Promise.resolve(
       new WebAuthnSignature(
         Uint8Array.from(challenge),
-        Uint8Array.from(authenticator_data),
-        Uint8Array.from(client_data_json),
+        Uint8Array.from(authenticatorData),
+        Uint8Array.from(clientDataJson),
         Uint8Array.from(signature),
       ),
     );
@@ -69,11 +69,11 @@ export class WebAuthnInterfaceInvalidSignatureStub implements WebAuthnInterface 
       65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
       65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69,
     ];
-    const authenticator_data = [
+    const authenticatorData = [
       73, 150, 13, 229, 136, 14, 140, 104, 116, 52, 23, 15, 100, 118, 96, 91, 143, 228, 174, 185, 162, 134, 50, 199,
       153, 92, 243, 186, 131, 29, 151, 99, 29, 0, 0, 0, 0,
     ];
-    const client_data_json = [
+    const clientDataJson = [
       123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116, 104, 110, 46, 103, 101, 116, 34, 44, 34, 99,
       104, 97, 108, 108, 101, 110, 103, 101, 34, 58, 34, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
       65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 34,
@@ -88,8 +88,8 @@ export class WebAuthnInterfaceInvalidSignatureStub implements WebAuthnInterface 
     return Promise.resolve(
       new WebAuthnSignature(
         Uint8Array.from(challenge),
-        Uint8Array.from(authenticator_data),
-        Uint8Array.from(client_data_json),
+        Uint8Array.from(authenticatorData),
+        Uint8Array.from(clientDataJson),
         Uint8Array.from(signature),
       ),
     );
