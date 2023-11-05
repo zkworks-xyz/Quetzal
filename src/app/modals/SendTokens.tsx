@@ -40,8 +40,10 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
       <InfoDialog
         title="⚠️ Error sending tokens"
         message={mutation.error.message}
-        primaryLabel="Ok"
-        primaryAction={() => onClose()}
+        primaryLabel="Try again"
+        primaryAction={() => mutation.mutate()}
+        secondaryLabel="Cancel"
+        secondaryAction={() => onClose()}
       />
     );
   }
