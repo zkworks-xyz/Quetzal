@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { InfoDialog } from './InfoDialog.js';
-import { TokenContract } from '../account/token.js';
+import { TokenContract } from '@aztec/noir-contracts/types';
 import { AztecAddress } from '@aztec/aztec.js';
 
 export interface SendTokensProps {
