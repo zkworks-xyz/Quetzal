@@ -12,7 +12,7 @@ export function Home() {
       {account && <Main account={account} />}
       {!account && (
         <CreateAccount
-          onAccountCreated={(account) => {
+          onAccountCreated={account => {
             setAccount(account);
           }}
         />

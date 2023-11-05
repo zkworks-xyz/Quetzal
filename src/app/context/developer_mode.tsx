@@ -8,7 +8,7 @@ import {
   INITIAL_SANDBOX_SIGNING_KEYS,
   PXE,
   TxReceipt,
-  getSchnorrAccount
+  getSchnorrAccount,
 } from '@aztec/aztec.js';
 import { FieldsOf } from '@aztec/circuits.js';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -23,7 +23,6 @@ function getSandboxAccounts(pxe: PXE): AccountManager[] {
     getSchnorrAccount(pxe, encryptionKey, INITIAL_SANDBOX_SIGNING_KEYS[i], INITIAL_SANDBOX_SALTS[i]),
   );
 }
-
 
 export function DeveloperModeProvider({ children }: { children: ReactNode }) {
   const { pxe } = usePXE();

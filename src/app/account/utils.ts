@@ -1,4 +1,4 @@
-import { createPXEClient, waitForSandbox } from "@aztec/aztec.js";
+import { createPXEClient, waitForSandbox } from '@aztec/aztec.js';
 
 export const setupSandbox = async () => {
   const { PXE_URL = 'http://localhost:8080' } = process.env;

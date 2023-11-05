@@ -46,7 +46,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   if (mintMutation.isPending) {
     const to = mintMutation.variables.getAddress().toShortString();
     const message = `Minting ${amount} tokens to ${to}`;
-    return <InfoDialog title="⏳ Minting tokens" message={message}/>;
+    return <InfoDialog title="⏳ Minting tokens" message={message} />;
   } else if (mintMutation.isError) {
     return (
       <InfoDialog

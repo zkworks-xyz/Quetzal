@@ -23,7 +23,10 @@ export function Main({ account }: MainProps) {
     return TokenContract.at(token.address, account.account);
   };
 
-  const { data: tokenContract } = useQuery({ queryKey: ['tokenContract'], queryFn: fetchTokenContract });
+  const { data: tokenContract } = useQuery({
+    queryKey: ['tokenContract'],
+    queryFn: fetchTokenContract,
+  });
 
   const fetchBalance = async () => {
     return tokenContract!.methods.balance_of_public(account.account.getAddress()).view();

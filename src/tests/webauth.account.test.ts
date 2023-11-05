@@ -1,5 +1,5 @@
-import { beforeAll, describe, expect, it, jest } from "@jest/globals";
-import { setupSandbox } from "../app/account/utils.js";
+import { beforeAll, describe, expect, it, jest } from '@jest/globals';
+import { setupSandbox } from '../app/account/utils.js';
 import {
   AccountManager,
   AccountWalletWithPrivateKey,
@@ -7,14 +7,14 @@ import {
   getSchnorrAccount,
   isContractDeployed,
   PXE,
-  TxStatus
-} from "@aztec/aztec.js";
-import { GrumpkinScalar } from "@aztec/circuits.js";
-import { getWebAuthnAccount } from "../app/account/webauthn_account_contract.js";
-import { TokenContract } from "@aztec/noir-contracts/types";
-import { WebAuthnInterfaceInvalidSignatureStub, WebAuthnInterfaceStub } from "./webauthn_stub.js";
+  TxStatus,
+} from '@aztec/aztec.js';
+import { GrumpkinScalar } from '@aztec/circuits.js';
+import { getWebAuthnAccount } from '../app/account/webauthn_account_contract.js';
+import { TokenContract } from '@aztec/noir-contracts/types';
+import { WebAuthnInterfaceInvalidSignatureStub, WebAuthnInterfaceStub } from './webauthn_stub.js';
 
-describe("Quetzal wallet", () => {
+describe('Quetzal wallet', () => {
   jest.setTimeout(60_000);
 
   let pxe: PXE;
@@ -23,23 +23,23 @@ describe("Quetzal wallet", () => {
     pxe = await setupSandbox();
   }, 60_000);
 
-  it("should deploy SchnorrAccount contract and check deployment status", async () => {
+  it('should deploy SchnorrAccount contract and check deployment status', async () => {
     const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
     const signingPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
     const salt: Fr = Fr.ZERO;
     const schnorrAccount: AccountManager = getSchnorrAccount(pxe, encryptionPrivateKey, signingPrivateKey, salt);
     let accountWallet: AccountWalletWithPrivateKey = await schnorrAccount.waitDeploy();
 
-    const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress())
+    const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress());
     expect(isDeployed).toBe(true);
   });
 
-  it("should deploy WebAuthnAccount contract and check deployment status", async () => {
+  it('should deploy WebAuthnAccount contract and check deployment status', async () => {
     const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
-    const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey, new WebAuthnInterfaceStub())
+    const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey, new WebAuthnInterfaceStub());
     let accountWallet = await webAuthnAccount.waitDeploy();
 
-    const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress())
+    const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress());
     expect(isDeployed).toBe(true);
   });
 
@@ -50,20 +50,28 @@ describe("Quetzal wallet", () => {
 
     beforeAll(async () => {
       const encryptionPrivateKey0: GrumpkinScalar = GrumpkinScalar.random();
-      const webAuthnAccount0: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey0, new WebAuthnInterfaceStub())
+      const webAuthnAccount0: AccountManager = getWebAuthnAccount(
+        pxe,
+        encryptionPrivateKey0,
+        new WebAuthnInterfaceStub(),
+      );
       account0 = await webAuthnAccount0.waitDeploy();
 
       const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
-      const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebAuthnInterfaceStub())
+      const webAuthnAccount1: AccountManager = getWebAuthnAccount(
+        pxe,
+        encryptionPrivateKey1,
+        new WebAuthnInterfaceStub(),
+      );
       account1 = await webAuthnAccount1.waitDeploy();
     });
 
-    it("should properly deploy token", async () => {
+    it('should properly deploy token', async () => {
       asset = await TokenContract.deploy(account0, account0.getAddress()).send().deployed();
       console.log(`Token deployed to ${asset.address}`);
     });
 
-    it("should mint public amount", async () => {
+    it('should mint public amount', async () => {
       const amount: bigint = 1000n;
       const tx = asset.methods.mint_public(account0.getAddress(), amount).send();
       const receipt = await tx.wait();
@@ -72,24 +80,26 @@ describe("Quetzal wallet", () => {
       expect(await asset.methods.total_supply().view()).toEqual(amount);
     });
 
-    it("should transfer public amount", async () => {
+    it('should transfer public amount', async () => {
       const tx = asset.methods.transfer_public(account0.getAddress(), account1.getAddress(), 7, 0).send();
       const receipt = await tx.wait();
       expect(receipt.status).toBe(TxStatus.MINED);
       expect(await asset.methods.balance_of_public(account0.getAddress()).view()).toEqual(993n);
       expect(await asset.methods.balance_of_public(account1.getAddress()).view()).toEqual(7n);
-    })
+    });
 
-    it("should fail mint public amount for invalid witness", async () => {
-      const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, GrumpkinScalar.random(), new WebAuthnInterfaceInvalidSignatureStub())
+    it('should fail mint public amount for invalid witness', async () => {
+      const webAuthnAccount: AccountManager = getWebAuthnAccount(
+        pxe,
+        GrumpkinScalar.random(),
+        new WebAuthnInterfaceInvalidSignatureStub(),
+      );
       const account = await webAuthnAccount.waitDeploy();
       const asset = await TokenContract.deploy(account, account.getAddress()).send().deployed();
 
       const amount: bigint = 1000n;
       const tx = asset.methods.mint_public(account0.getAddress(), amount).send();
-      await expect(
-        tx.wait()
-      ).rejects.toThrow("(JSON-RPC PROPAGATED) Cannot satisfy constraint 'valid_signature'");
-    })
+      await expect(tx.wait()).rejects.toThrow("(JSON-RPC PROPAGATED) Cannot satisfy constraint 'valid_signature'");
+    });
   });
 });
