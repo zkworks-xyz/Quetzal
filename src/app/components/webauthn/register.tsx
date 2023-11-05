@@ -28,7 +28,6 @@ export async function webAuthnFetchPublicKey(
     attestation: 'direct',
   };
 
-  // @ts-ignore
   const credential: any = await navigator.credentials.create({
     publicKey: publicKeyCredentialCreationOptions,
   });
@@ -38,8 +37,7 @@ export async function webAuthnFetchPublicKey(
   const dataView = new DataView(new ArrayBuffer(2));
   const idLenBytes = authData.slice(53, 55);
   idLenBytes.forEach((value: any, index: any) => dataView.setUint8(index, value));
-  // @ts-ignore
-  const credentialIdLength = dataView.getUint16();
+  const credentialIdLength = dataView.getUint16(0);
   const publicKeyBytes = authData.slice(55 + credentialIdLength);
   const publicKeyObject = decode(new Uint8Array(publicKeyBytes.buffer));
   const x = publicKeyObject[-2];
@@ -48,11 +46,7 @@ export async function webAuthnFetchPublicKey(
 }
 
 const register = async () => {
-  const { x, y } = await webAuthnFetchPublicKey();
-  const pub_key_x_str = `let pub_key_x = [${x}];`;
-  const pub_key_y_str = `let pub_key_y = [${y}];`;
-  const noir_parameters = [pub_key_x_str, pub_key_y_str].join('\n');
-  console.log(noir_parameters);
+  await webAuthnFetchPublicKey();
 };
 
 export default function WebAuthnRegister() {

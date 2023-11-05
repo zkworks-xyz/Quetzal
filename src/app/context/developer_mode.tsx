@@ -49,8 +49,8 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
 
   const mutation = useMutation({
     mutationFn: deployExampleTokens,
-    onSuccess: (data, variables, context) => {
-      refetch();
+    onSuccess: async (_data, _variables, _context) => {
+      await refetch();
     },
   });
 
@@ -107,7 +107,7 @@ interface DeveloperContextInterface {
 }
 
 export const DeveloperContext = createContext<DeveloperContextInterface>({
-  faucet: (address: AztecAddressLike, amount: bigint) => {
+  faucet: (_address: AztecAddressLike, _amount: bigint) => {
     return Promise.reject(new Error('DeveloperContext not initialized'));
   },
 });

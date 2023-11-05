@@ -38,9 +38,9 @@ export function Main({ account }: MainProps) {
     enabled: !!tokenContract,
   });
 
-  const copy = () => {
+  const copy = async () => {
     const value = account.account.getAddress().toString();
-    navigator.clipboard.writeText(value);
+    await navigator.clipboard.writeText(value);
   };
 
   if (CurrentModal.SendTokens === modal) {

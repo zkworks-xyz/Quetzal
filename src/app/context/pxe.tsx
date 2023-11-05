@@ -1,6 +1,6 @@
-import { NodeInfo, PXE, createPXEClient, waitForSandbox } from '@aztec/aztec.js';
+import { NodeInfo, PXE, createPXEClient } from '@aztec/aztec.js';
 import { useQuery } from '@tanstack/react-query';
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useContext } from 'react';
 import { InfoDialog } from '../modals/InfoDialog.js';
 import { useConfig } from './config.js';
 

@@ -28,7 +28,7 @@ describe('Quetzal wallet', () => {
     const signingPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
     const salt: Fr = Fr.ZERO;
     const schnorrAccount: AccountManager = getSchnorrAccount(pxe, encryptionPrivateKey, signingPrivateKey, salt);
-    let accountWallet: AccountWalletWithPrivateKey = await schnorrAccount.waitDeploy();
+    const accountWallet: AccountWalletWithPrivateKey = await schnorrAccount.waitDeploy();
 
     const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress());
     expect(isDeployed).toBe(true);
@@ -37,7 +37,7 @@ describe('Quetzal wallet', () => {
   it('should deploy WebAuthnAccount contract and check deployment status', async () => {
     const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
     const webAuthnAccount: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey, new WebAuthnInterfaceStub());
-    let accountWallet = await webAuthnAccount.waitDeploy();
+    const accountWallet = await webAuthnAccount.waitDeploy();
 
     const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress());
     expect(isDeployed).toBe(true);
@@ -68,7 +68,6 @@ describe('Quetzal wallet', () => {
 
     it('should properly deploy token', async () => {
       asset = await TokenContract.deploy(account0, account0.getAddress()).send().deployed();
-      console.log(`Token deployed to ${asset.address}`);
     });
 
     it('should mint public amount', async () => {

@@ -17,13 +17,13 @@ export const TOKEN_LIST = [
     symbol: 'ETH',
     address: TOKEN_CONTRACT_ADDRESS,
     decimals: 18,
-    icon_url: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
+    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png',
   },
   {
     name: 'Dai',
     symbol: 'DAI',
     address: TOKEN_CONTRACT_ADDRESS,
     decimals: 18,
-    icon_url: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png',
+    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png',
   },
 ];
