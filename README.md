@@ -61,9 +61,42 @@ yarn test:integration
 ## Upgrading environment
 
 Updating environment checklist
-- in `package.json` update `install:noir` script, to look something like this: `... | bash noirup -v X.X.X-aztec.X`
-- in `package.json` update `install:sandbox` script to look like something like this: `docker pull aztecprotocol/aztec-sandbox:X.X.X`
-- update @aztec/cli to list with following command `npm install -g @aztec/cli`
-- in `package.json` update following packages: `@aztec/aztec-ui`, `@aztec/aztec.js`, `@aztec/circuits.js` and `@aztec/foundation`
-- compile contracts with `yarn compile`
+- in `package.json` update `install:noir` script, to look something like this:
+```sh
+"curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.xx.x-aztec.x",
+```
+noirup -v X.X.X-aztec.X`
+- in `package.json` update `install:sandbox` script to look like something like this:
+```
+"docker pull aztecprotocol/aztec-sandbox:0.xx.x",
+```
+- update @aztec/cli to list with following command:
+```sh
+npm install -g @aztec/cli
+```
+
+- in `package.json` update following dependencies:
+```json
+    "@aztec/aztec.js": "^0.xx.x",
+    "@aztec/circuits.js": "^0.xx.x",
+    "@aztec/foundation": "^0.xx.x",
+    "@aztec/noir-contracts": "^0.xx.x",
+    "@aztec/types": "^0.xx.x",
+```
+- update noir
+```sh
+yarn install:noir
+```
+- update sandbox
+```sh
+yarn install:sandbox
+```
+- update dependencies
+```sh
+yarn
+```
+- compile contracts with following command, it might take longer than usual
+```sh
+yarn compile
+```
 
