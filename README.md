@@ -60,22 +60,19 @@ yarn test:integration
 
 ## Upgrading environment
 
-Updating environment checklist
-- in `package.json` update `install:noir` script, to look something like this:
-```sh
-"curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.xx.x-aztec.x",
-```
-noirup -v X.X.X-aztec.X`
-- in `package.json` update `install:sandbox` script to look like something like this:
-```
-"docker pull aztecprotocol/aztec-sandbox:0.xx.x",
-```
-- update @aztec/cli to list with following command:
-```sh
-npm install -g @aztec/cli
+To upgrade environment execute the following steps.
+
+In `package.json` update `install:noir` script, to look something like this:
+```json
+"install:noir": "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.17.0-aztec.2",
 ```
 
-- in `package.json` update following dependencies:
+In `package.json` update `install:sandbox` script to look like something like this:
+```json
+"install:sandbox": "docker pull aztecprotocol/aztec-sandbox:0.xx.x",
+```
+
+In `package.json` update following dependencies:
 ```json
     "@aztec/aztec.js": "^0.xx.x",
     "@aztec/circuits.js": "^0.xx.x",
@@ -83,20 +80,28 @@ npm install -g @aztec/cli
     "@aztec/noir-contracts": "^0.xx.x",
     "@aztec/types": "^0.xx.x",
 ```
-- update noir
+
+Update @aztec/cli to the latest version with following command:
+```sh
+npm install -g @aztec/cli
+```
+
+Update noir with previously prepared script:
 ```sh
 yarn install:noir
 ```
-- update sandbox
+
+Update sandbox with previously prepared script:
 ```sh
 yarn install:sandbox
 ```
-- update dependencies
+
+Update yarn dependencies:
 ```sh
 yarn
 ```
-- compile contracts with following command, it might take longer than usual
+
+And compile contracts with following command. It might take longer than usual.
 ```sh
 yarn compile
 ```
-
