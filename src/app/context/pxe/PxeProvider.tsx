@@ -1,8 +1,8 @@
 import { NodeInfo, PXE, createPXEClient } from '@aztec/aztec.js';
 import { useQuery } from '@tanstack/react-query';
-import { ReactNode, createContext, useContext } from 'react';
-import { InfoDialog } from '../modals/InfoDialog.js';
-import { useConfig } from './config.js';
+import { ReactNode, createContext } from 'react';
+import { InfoDialog } from '../../modals/InfoDialog.js';
+import { useConfig } from '../config/useConfig.js';
 
 export interface PXEInfo {
   pxe: PXE;
@@ -34,12 +34,4 @@ export const PXEProvider = ({ children }: { children: ReactNode }) => {
     return <InfoDialog title="⏳ Connecting to Aztec network..." />;
   }
   return <PXEContext.Provider value={data}>{children}</PXEContext.Provider>;
-};
-
-export const usePXE = () => {
-  const pxeInfo = useContext(PXEContext);
-  if (!pxeInfo) {
-    throw new Error('usePXE must be used within a PXEProvider');
-  }
-  return pxeInfo;
 };

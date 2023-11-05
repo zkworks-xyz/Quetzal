@@ -1,4 +1,4 @@
-import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from './webauthn.utils.js';
+import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from './convert.js';
 
 const SUPPORTED_CLIENT_DATA_JSON_LENGTHS = [114, 134, 243];
 
@@ -20,8 +20,9 @@ export async function webAuthnLogin(
   const clientDataJSONLength = new Uint8Array(assertation.response.clientDataJSON).length;
 
   if (!SUPPORTED_CLIENT_DATA_JSON_LENGTHS.includes(clientDataJSONLength)) {
+    const len = SUPPORTED_CLIENT_DATA_JSON_LENGTHS;
     throw new Error(
-      `Unsupported clientDataJSON. At the moment Noir contract only supports clientDataJSON of lengths ${SUPPORTED_CLIENT_DATA_JSON_LENGTHS}`,
+      `Unsupported clientDataJSON. At the moment Noir contract only supports clientDataJSON of lengths ${len}`,
     );
   }
 
@@ -34,12 +35,6 @@ export async function webAuthnLogin(
   const signatureRaw = convertASN1toRaw(assertation.response.signature);
   return { challenge: challenge1, authenticator_data, client_data_json, signatureRaw };
 }
-
-const login = async () => {
-  await webAuthnLogin(
-    new Uint8Array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
-  );
-};
 
 function toBase64url(buffer: ArrayBuffer): string {
   const txt: string = btoa(parseBuffer(buffer)); // base64
@@ -65,8 +60,4 @@ function convertASN1toRaw(signatureBuffer: ArrayBuffer) {
     finalS = convertBigIntToUint8Array(secp256r1n - sInt);
   }
   return new Uint8Array([...r, ...finalS]);
-}
-
-export default function WebAuthnLogin() {
-  return <button onClick={login}>Sign transaction</button>;
 }

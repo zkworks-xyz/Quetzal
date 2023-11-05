@@ -7,16 +7,15 @@ import {
   INITIAL_SANDBOX_SALTS,
   INITIAL_SANDBOX_SIGNING_KEYS,
   PXE,
-  TxReceipt,
   getSchnorrAccount,
 } from '@aztec/aztec.js';
-import { FieldsOf } from '@aztec/circuits.js';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { ReactNode, createContext, useContext } from 'react';
-import { TokenContract } from '../account/token.js';
-import { InfoDialog } from '../modals/InfoDialog.js';
-import { usePXE } from './pxe.js';
-import { TOKEN_LIST } from '../model/token_list.js';
+import { ReactNode } from 'react';
+import { TokenContract } from '../../account/token.js';
+import { InfoDialog } from '../../modals/InfoDialog.js';
+import { TOKEN_LIST } from '../../model/token_list.js';
+import { usePXE } from '../pxe/usePxe.js';
+import { DeveloperContext } from './DeveloperContext.js';
 
 function getSandboxAccounts(pxe: PXE): AccountManager[] {
   return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>
@@ -101,17 +100,3 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
     </section>
   );
 }
-
-interface DeveloperContextInterface {
-  faucet: (address: AztecAddressLike, amount: bigint) => Promise<FieldsOf<TxReceipt>>;
-}
-
-export const DeveloperContext = createContext<DeveloperContextInterface>({
-  faucet: (_address: AztecAddressLike, _amount: bigint) => {
-    return Promise.reject(new Error('DeveloperContext not initialized'));
-  },
-});
-
-export const useDeveloperMode = () => {
-  return useContext(DeveloperContext);
-};

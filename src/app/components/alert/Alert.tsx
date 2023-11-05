@@ -1,11 +1,5 @@
 import classNames from 'classnames';
-
-export enum AlertType {
-  error,
-  warning,
-  success,
-  info,
-}
+import { AlertType } from './AlertType.js';
 
 const COLORS = {
   [AlertType.error]: 'bg-red-500',

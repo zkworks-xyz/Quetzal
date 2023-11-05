@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { TokenContract } from '../account/token.js';
-import { Alert, AlertType } from '../components/alert.js';
+import { Alert } from '../components/alert/Alert.js';
+import { AlertType } from '../components/alert/AlertType.js';
 import { UserAccount } from '../model/UserAccount.js';
 import { TOKEN_LIST } from '../model/token_list.js';
 import { SendTokens } from './SendTokens.js';

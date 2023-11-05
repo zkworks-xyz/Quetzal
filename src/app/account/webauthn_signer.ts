@@ -1,5 +1,5 @@
 import { WebAuthnInterface, WebAuthnPublicKey, WebAuthnSignature } from './webauthn_account_contract.js';
-import { webAuthnFetchPublicKey } from '../components/webauthn/register.js';
+import { webAuthnFetchPublicKey } from '../components/webauthn/webAuthnFetchPublicKey.js';
 import { webAuthnLogin } from '../components/webauthn/login.js';
 
 export class WebauthnSigner implements WebAuthnInterface {

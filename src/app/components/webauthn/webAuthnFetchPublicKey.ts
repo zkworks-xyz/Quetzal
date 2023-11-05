@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { decode } from 'cbor-x';
 
 export async function webAuthnFetchPublicKey(
@@ -43,12 +41,4 @@ export async function webAuthnFetchPublicKey(
   const x = publicKeyObject[-2];
   const y = publicKeyObject[-3];
   return { x, y };
-}
-
-const register = async () => {
-  await webAuthnFetchPublicKey();
-};
-
-export default function WebAuthnRegister() {
-  return <button onClick={register}> Create account </button>;
 }

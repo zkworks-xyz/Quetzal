@@ -3,8 +3,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { getWebAuthnAccount } from '../account/webauthn_account_contract.js';
 import { WebauthnSigner } from '../account/webauthn_signer.js';
-import { useDeveloperMode } from '../context/developer_mode.js';
-import { usePXE } from '../context/pxe.js';
+import { useDeveloperMode } from '../context/developer_mode/useDeveloperMode.js';
+import { usePXE } from '../context/pxe/usePxe.js';
 import { UserAccount } from '../model/UserAccount.js';
 import { InfoDialog } from './InfoDialog.js';
 
