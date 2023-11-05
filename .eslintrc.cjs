@@ -42,7 +42,7 @@ module.exports = {
     'no-console': 'error',
     'no-constant-condition': 'off',
     camelcase: "error",
-    'max-len': ['warn', { code: 120 }],
+    'max-len': ['error', { code: 120 }],
     'no-restricted-imports': [
       'error',
       {
