@@ -7,6 +7,8 @@ import { useDeveloperMode } from '../context/developer_mode/useDeveloperMode.js'
 import { usePXE } from '../context/pxe/usePxe.js';
 import { UserAccount } from '../model/UserAccount.js';
 import { InfoDialog } from './InfoDialog.js';
+import { PrimaryButton } from '../components/button.js';
+import { Input } from '../components/Input.js';
 
 export interface CreateAccountProps {
   onAccountCreated: (account: UserAccount) => void;
@@ -86,26 +88,8 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
             <li>To deploy example tokens and start the wallet, click the Continue button below.</li>
           </ul>
         </div>
-        <label htmlFor="email-address" className="sr-only">
-          Email address
-        </label>
-        <input
-          id="email-address"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-          value={userName}
-          onChange={e => setUserName(e.target.value)}
-          className="min-w-0 w-full rounded-md border-0 bg-white/5 px-3.5 py-2 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-          placeholder="Enter your email"
-        />
-        <button
-          onClick={() => walletMutation.mutate()}
-          className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
-        >
-          Create wallet
-        </button>
+        <Input id="email-address" placeholder="Enter account name" onChange={e => setUserName(e.target.value)} />
+        <PrimaryButton classes="w-full py-3" label="Create wallet" action={() => walletMutation.mutate()} />
       </div>
     </section>
   );

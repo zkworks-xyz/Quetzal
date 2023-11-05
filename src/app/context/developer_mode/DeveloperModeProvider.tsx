@@ -16,6 +16,7 @@ import { InfoDialog } from '../../modals/InfoDialog.js';
 import { TOKEN_LIST } from '../../model/token_list.js';
 import { usePXE } from '../pxe/usePxe.js';
 import { DeveloperContext } from './DeveloperContext.js';
+import { PrimaryButton } from '../../components/button.js';
 
 function getSandboxAccounts(pxe: PXE): AccountManager[] {
   return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>
@@ -89,13 +90,7 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
             You are connected to Aztec Developer Sandbox. Before you can start wallet, deploy example tokens.
           </p>
         </div>
-
-        <button
-          onClick={() => mutation.mutate()}
-          className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
-        >
-          Start developer mode
-        </button>
+        <PrimaryButton classes="w-full" action={() => mutation.mutate()} label="Start developer mode" />
       </div>
     </section>
   );
