@@ -3,7 +3,7 @@ use dep::std;
 global MAX_LEN = 255;
 
 fn base64_encode_url_safe_no_pad<N, M>(input: [u8; N], mut result: [u8; M]) -> [u8; M] {
-    check_result_length(input, result);
+    assert(base64_calculate_length(input) == M);
 
     let mut max_result = [0; MAX_LEN];
     let mut max_input = [0; MAX_LEN];
@@ -23,16 +23,16 @@ fn base64_encode_url_safe_no_pad<N, M>(input: [u8; N], mut result: [u8; M]) -> [
     result
 }
 
-fn check_result_length<N, M>(input: [u8; N], result: [u8; M]) {
-    let last_chunk_length: u32 = (input.len() as u32) % 3;
-    let mut last_chunk_encoded_length = 0;
-    if last_chunk_length == 1 {
-        last_chunk_encoded_length = 2;
-    } else if last_chunk_length == 2 {
-        last_chunk_encoded_length = 3;
+fn base64_calculate_length<N>(input: [u8; N]) -> u32 {
+    let input_suffix_len: u32 = (input.len() as u32) % 3;
+    let mut base64_suffix_len = 0;
+    if input_suffix_len == 1 {
+        base64_suffix_len = 2;
+    } else if input_suffix_len == 2 {
+        base64_suffix_len = 3;
     }
 
-    assert(4 * (input.len() as u32 / 3) + last_chunk_encoded_length == result.len() as u32);
+    4 * (input.len() as u32 / 3) + base64_suffix_len
 }
 
 fn convert_chunk(input: [u8; 3]) -> [u8; 4] {
