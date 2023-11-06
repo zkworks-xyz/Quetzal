@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UserAccount } from '../model/UserAccount.js';
 import { SendTokens } from './SendTokens.js';
-import { TokenContract } from '../account/token.js';
+import { TokenContract } from '@aztec/noir-contracts/types';
 import { TOKEN_LIST } from '../model/token_list.js';
 
 interface MainProps {

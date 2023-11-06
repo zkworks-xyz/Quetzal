@@ -13,7 +13,7 @@ import {
 import { FieldsOf } from '@aztec/circuits.js';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ReactNode, createContext, useContext } from 'react';
-import { TokenContract } from '../account/token.js';
+import { TokenContract } from '@aztec/noir-contracts/types';
 import { InfoDialog } from '../modals/InfoDialog.js';
 import { usePXE } from './pxe.js';
 import { TOKEN_LIST } from '../model/token_list.js';
