@@ -1,4 +1,5 @@
 use dep::std;
+use crate::utils::as_byte;
 
 global MAX_LEN = 255;
 
@@ -64,12 +65,23 @@ fn convert_base64_number(n: u8) -> u8 {
 }
 
 #[test]
-fn test_base64_encode_url_safe_no_pad() {
+fn test_convert_base64_number() {
+    assert_eq(as_byte("A"), convert_base64_number(0));
+    assert_eq(as_byte("Z"), convert_base64_number(25));
+    assert_eq(as_byte("a"), convert_base64_number(26));
+    assert_eq(as_byte("z"), convert_base64_number(51));
+    assert_eq(as_byte("0"), convert_base64_number(52));
+    assert_eq(as_byte("9"), convert_base64_number(61));
+    assert_eq(as_byte("-"), convert_base64_number(62));
+    assert_eq(as_byte("_"), convert_base64_number(63));
+}
+
+#[test]
+fn test_base64_encode_url_safe_no_pad_simple() {
     assert_eq(base64_encode_url_safe_no_pad([], []), []);
     assert_eq(base64_encode_url_safe_no_pad([0], [0; 2]), "AA".as_bytes());
     assert_eq(base64_encode_url_safe_no_pad([25 << 2], [0; 2]), "ZA".as_bytes());
     assert_eq(base64_encode_url_safe_no_pad([26 << 2], [0; 2]), "aA".as_bytes());
-    
     assert_eq(base64_encode_url_safe_no_pad([52 << 2], [0; 2]), "0A".as_bytes());
     assert_eq(base64_encode_url_safe_no_pad([62 << 2], [0; 2]), "-A".as_bytes());
     assert_eq(base64_encode_url_safe_no_pad([63 << 2], [0; 2]), "_A".as_bytes());
@@ -79,8 +91,12 @@ fn test_base64_encode_url_safe_no_pad() {
     assert_eq(base64_encode_url_safe_no_pad([1,2,3,4,5], [0; 7]), "AQIDBAU".as_bytes());
     assert_eq(base64_encode_url_safe_no_pad([1,2,3,4,5,6], [0; 8]), "AQIDBAUG".as_bytes());
     assert_eq(base64_encode_url_safe_no_pad([1,2,3,4,5,6,7, 27<<2, 53<<2, 62<<2], [0; 14]), "AQIDBAUGB2zU-A".as_bytes());
-    assert_eq(base64_encode_url_safe_no_pad(
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], [0; 43]), 
+}
+
+#[test]
+fn test_base64_encode_url_safe_no_pad_32_bytes_input() {
+    assert_eq(
+        base64_encode_url_safe_no_pad([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32], [0; 43]), 
         "AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA".as_bytes());
 
     assert_eq(
