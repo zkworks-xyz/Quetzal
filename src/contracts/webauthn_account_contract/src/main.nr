@@ -124,7 +124,6 @@ contract WebAuthnAccount {
         }
 
         // TODO convert challenge -> [u8; 32] -> base64 [u8; 43] 
-        // convert challenge to base64 [u8; 43]
 
         for i in 0..CHALLENGE_LEN {
             // TODO use challenge from params
