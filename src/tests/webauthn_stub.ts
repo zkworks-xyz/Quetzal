@@ -17,10 +17,6 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
   }
 
   sign(_challenge: Uint8Array): Promise<WebAuthnSignature> {
-    const challenge = [
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69,
-    ];
     const authenticatorData = [
       73, 150, 13, 229, 136, 14, 140, 104, 116, 52, 23, 15, 100, 118, 96, 91, 143, 228, 174, 185, 162, 134, 50, 199,
       153, 92, 243, 186, 131, 29, 151, 99, 29, 0, 0, 0, 0,
@@ -39,7 +35,6 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
     ];
     return Promise.resolve(
       new WebAuthnSignature(
-        Uint8Array.from(challenge),
         Uint8Array.from(authenticatorData),
         Uint8Array.from(clientDataJson),
         Uint8Array.from(signature),
@@ -65,10 +60,6 @@ export class WebAuthnInterfaceInvalidSignatureStub implements WebAuthnInterface 
   }
 
   sign(_challenge: Uint8Array): Promise<WebAuthnSignature> {
-    const challenge = [
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69,
-    ];
     const authenticatorData = [
       73, 150, 13, 229, 136, 14, 140, 104, 116, 52, 23, 15, 100, 118, 96, 91, 143, 228, 174, 185, 162, 134, 50, 199,
       153, 92, 243, 186, 131, 29, 151, 99, 29, 0, 0, 0, 0,
@@ -87,7 +78,6 @@ export class WebAuthnInterfaceInvalidSignatureStub implements WebAuthnInterface 
     ];
     return Promise.resolve(
       new WebAuthnSignature(
-        Uint8Array.from(challenge),
         Uint8Array.from(authenticatorData),
         Uint8Array.from(clientDataJson),
         Uint8Array.from(signature),

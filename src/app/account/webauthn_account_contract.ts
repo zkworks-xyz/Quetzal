@@ -32,7 +32,6 @@ export class WebAuthnPublicKey {
 
 export class WebAuthnSignature {
   constructor(
-    readonly challenge: Uint8Array,
     readonly authenticatorData: Uint8Array,
     readonly clientDataJson: Uint8Array,
     readonly signatureRaw: Uint8Array,
@@ -73,7 +72,6 @@ class WebAuthnWitnessProvider implements AuthWitnessProvider {
     const witness = [
       ...signature.signatureRaw,
       ...signature.authenticatorData,
-      ...signature.challenge,
       signature.clientDataJson.length,
       ...signature.clientDataJson,
       ...new Uint8Array(CLIENT_DATA_JSON_MAX_LEN - signature.clientDataJson.length),

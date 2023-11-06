@@ -2,11 +2,7 @@ import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from './convert.
 
 const SUPPORTED_CLIENT_DATA_JSON_LENGTHS = [114, 134, 243];
 
-export async function webAuthnLogin(
-  challenge: Uint8Array = new Uint8Array([
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-  ]),
-) {
+export async function webAuthnLogin(challenge: Uint8Array) {
   const credentialRequestOptions = {
     publicKey: {
       timeout: 60000,
@@ -26,23 +22,10 @@ export async function webAuthnLogin(
     );
   }
 
-  const challenge1 = toBase64url(challenge)
-    .replaceAll('=', '')
-    .split('')
-    .map(c => c.charCodeAt(0));
   const authenticatorData = new Uint8Array(assertation.response.authenticatorData);
   const clientDataJson = new Uint8Array(assertation.response.clientDataJSON);
   const signatureRaw = convertASN1toRaw(assertation.response.signature);
-  return { challenge: challenge1, authenticatorData, clientDataJson, signatureRaw };
-}
-
-function toBase64url(buffer: ArrayBuffer): string {
-  const txt: string = btoa(parseBuffer(buffer)); // base64
-  return txt.replaceAll('+', '-').replaceAll('/', '_');
-}
-
-function parseBuffer(buffer: ArrayBuffer) {
-  return String.fromCharCode(...new Uint8Array(buffer));
+  return { authenticatorData, clientDataJson, signatureRaw };
 }
 
 function convertASN1toRaw(signatureBuffer: ArrayBuffer) {
