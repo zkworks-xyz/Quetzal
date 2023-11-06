@@ -50,6 +50,17 @@ fn prefix<N, M>(input: [u8; N], mut result: [u8; M]) -> [u8; M] {
     result
 }
 
+fn as_byte(s: str<1>) -> u8 {
+    s.as_bytes()[0]
+}
+
+#[test]
+fn test_as_byte() {
+    assert_eq(97, as_byte("a"));
+    assert_eq(65, as_byte("A"));
+    assert_eq(35, as_byte("#"));
+}
+
 #[test]
 fn test_convert_field_to_array() {
     let max_field_value = 21888242871839275222246405745257275088548364400416034343698204186575808495617;

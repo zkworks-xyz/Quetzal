@@ -1,6 +1,7 @@
 mod public_key_note;
 mod webauthn;
 mod utils;
+mod base64;
 
 // Account contract that uses Schnorr signatures for authentication.
 // The signing key is stored in an immutable private note and should be different from the encryption/nullifying key.
@@ -121,6 +122,9 @@ contract WebAuthnAccount {
         for i in 0..AUTHENTICATOR_DATA_LEN {
             authenticator_data[i] = witness[i + SIGNATURE_LEN] as u8;
         }
+
+        // TODO convert challenge -> [u8; 32] -> base64 [u8; 43] 
+
         for i in 0..CHALLENGE_LEN {
             // TODO use challenge from params
             challenge[i] = witness[i + (SIGNATURE_LEN + AUTHENTICATOR_DATA_LEN)] as u8;
