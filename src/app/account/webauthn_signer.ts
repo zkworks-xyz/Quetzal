@@ -18,8 +18,7 @@ export class WebauthnSigner implements WebAuthnInterface {
   }
 
   async sign(challengeParam: Uint8Array): Promise<WebAuthnSignature> {
-    const { challenge, authenticatorData, clientDataJson, signatureRaw } =
-      await webAuthnLogin(challengeParam);
+    const { challenge, authenticatorData, clientDataJson, signatureRaw } = await webAuthnLogin(challengeParam);
     return new WebAuthnSignature(new Uint8Array(challenge), authenticatorData, clientDataJson, signatureRaw);
   }
 }
