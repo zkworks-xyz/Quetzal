@@ -9,7 +9,7 @@ It is in early stage of development, with more features to come.
 
 Make sure you install the prerequisites:
 1. [Node.js](https://nodejs.org/en) version 20 or later
-2. [Yarn](https://yarnpkg.com/) version 3 or later
+2. [Yarn](https://yarnpkg.com/) version 4 or later
 3. [Docker](https://www.docker.com/)
 
 Next, to install dependencies, use the following command:
@@ -48,7 +48,20 @@ yarn start:dev
 
 To interact with the app, navigate to [http://localhost:5173](http://localhost:5173).
 
-## Testing
+## Formatter
+
+To run linters, use the following command:
+```
+yarn formatting
+```
+
+And to fix what is possible autmatically:
+```
+yarn formatting:fix
+```
+
+
+## Tests
 
 To run integration tests, make sure Aztec sandbox is running.
 Then, type the following command in a terminal:
@@ -60,10 +73,49 @@ yarn test:integration
 
 ## Upgrading environment
 
-Updating environment checklist
-- in `package.json` update `install:noir` script, to look something like this: `... | bash noirup -v X.X.X-aztec.X`
-- in `package.json` update `install:sandbox` script to look like something like this: `docker pull aztecprotocol/aztec-sandbox:X.X.X`
-- update @aztec/cli to list with following command `npm install -g @aztec/cli`
-- in `package.json` update following packages: `@aztec/aztec-ui`, `@aztec/aztec.js`, `@aztec/circuits.js` and `@aztec/foundation`
-- compile contracts with `yarn compile`
+To upgrade environment execute the following steps.
+
+In `package.json` update `install:noir` script, to look something like this:
+```json
+"install:noir": "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.17.0-aztec.2",
+```
+
+In `package.json` update `install:sandbox` script to look like something like this:
+```json
+"install:sandbox": "docker pull aztecprotocol/aztec-sandbox:0.xx.x",
+```
+
+In `package.json` update following dependencies:
+```json
+    "@aztec/aztec.js": "^0.xx.x",
+    "@aztec/circuits.js": "^0.xx.x",
+    "@aztec/foundation": "^0.xx.x",
+    "@aztec/noir-contracts": "^0.xx.x",
+    "@aztec/types": "^0.xx.x",
+```
+
+Update @aztec/cli to the latest version with following command:
+```sh
+npm install -g @aztec/cli
+```
+
+Update noir with previously prepared script:
+```sh
+yarn install:noir
+```
+
+Update sandbox with previously prepared script:
+```sh
+yarn install:sandbox
+```
+
+Update yarn dependencies:
+```sh
+yarn
+```
+
+And compile contracts with following command. It might take longer than usual.
+```sh
+yarn compile
+```
 
