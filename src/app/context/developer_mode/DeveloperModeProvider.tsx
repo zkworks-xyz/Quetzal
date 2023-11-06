@@ -13,10 +13,10 @@ import { TokenContract } from '@aztec/noir-contracts/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { PrimaryButton } from '../../components/button.js';
-import { InfoDialog } from '../modals/InfoDialog.js';
-import { TOKEN_LIST } from '../model/token_list.js';
+import { InfoDialog } from '../../modals/InfoDialog.js';
+import { TOKEN_LIST } from '../../model/token_list.js';
 import { DeveloperContext } from './DeveloperContext.js';
-import { usePXE } from './pxe.js';
+import { usePXE } from '../pxe/usePxe.js';
 
 function getSandboxAccounts(pxe: PXE): AccountManager[] {
   return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>
