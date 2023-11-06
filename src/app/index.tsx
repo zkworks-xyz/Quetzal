@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { DeveloperModeProvider } from './context/developer_mode.js';
-import { PXEProvider } from './context/pxe.js';
+import { DeveloperModeProvider } from './context/developer_mode/DeveloperModeProvider.js';
+import { PXEProvider } from './context/pxe/PxeProvider.js';
 import { Home } from './home.js';
 import './index.css';
 import styles from './home.module.scss';

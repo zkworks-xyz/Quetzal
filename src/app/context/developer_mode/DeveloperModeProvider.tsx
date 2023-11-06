@@ -7,23 +7,22 @@ import {
   INITIAL_SANDBOX_SALTS,
   INITIAL_SANDBOX_SIGNING_KEYS,
   PXE,
-  TxReceipt,
-  getSchnorrAccount
+  getSchnorrAccount,
 } from '@aztec/aztec.js';
-import { FieldsOf } from '@aztec/circuits.js';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { ReactNode, createContext, useContext } from 'react';
 import { TokenContract } from '@aztec/noir-contracts/types';
-import { InfoDialog } from '../modals/InfoDialog.js';
-import { usePXE } from './pxe.js';
-import { TOKEN_LIST } from '../model/token_list.js';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ReactNode } from 'react';
+import { PrimaryButton } from '../../components/button.js';
+import { InfoDialog } from '../../modals/InfoDialog.js';
+import { TOKEN_LIST } from '../../model/token_list.js';
+import { DeveloperContext } from './DeveloperContext.js';
+import { usePXE } from '../pxe/usePxe.js';
 
 function getSandboxAccounts(pxe: PXE): AccountManager[] {
   return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>
     getSchnorrAccount(pxe, encryptionKey, INITIAL_SANDBOX_SIGNING_KEYS[i], INITIAL_SANDBOX_SALTS[i]),
   );
 }
-
 
 export function DeveloperModeProvider({ children }: { children: ReactNode }) {
   const { pxe } = usePXE();
@@ -50,8 +49,8 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
 
   const mutation = useMutation({
     mutationFn: deployExampleTokens,
-    onSuccess: (data, variables, context) => {
-      refetch();
+    onSuccess: async (_data, _variables, _context) => {
+      await refetch();
     },
   });
 
@@ -91,28 +90,8 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
             You are connected to Aztec Developer Sandbox. Before you can start wallet, deploy example tokens.
           </p>
         </div>
-
-        <button
-          onClick={() => mutation.mutate()}
-          className="w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50"
-        >
-          Start developer mode
-        </button>
+        <PrimaryButton classes="w-full" action={() => mutation.mutate()} label="Start developer mode" />
       </div>
     </section>
   );
 }
-
-interface DeveloperContextInterface {
-  faucet: (address: AztecAddressLike, amount: bigint) => Promise<FieldsOf<TxReceipt>>;
-}
-
-export const DeveloperContext = createContext<DeveloperContextInterface>({
-  faucet: (address: AztecAddressLike, amount: bigint) => {
-    return Promise.reject(new Error('DeveloperContext not initialized'));
-  },
-});
-
-export const useDeveloperMode = () => {
-  return useContext(DeveloperContext);
-};

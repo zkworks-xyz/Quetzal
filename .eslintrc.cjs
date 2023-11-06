@@ -18,7 +18,7 @@ module.exports = {
       node: true,
     },
   },
-  ignorePatterns: ['dest', 'webpack.config.js', '.eslintrc.cjs'],
+  ignorePatterns: ['dest', 'webpack.config.js', '.eslintrc.cjs', 'src/artifacts/**/*'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   overrides: [
@@ -31,7 +31,7 @@ module.exports = {
     },
   ],
   rules: {
-    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    'react-refresh/only-export-components': ['error', { allowConstantExport: true }],
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
@@ -39,10 +39,10 @@ module.exports = {
     '@typescript-eslint/await-thenable': 'error',
     '@typescript-eslint/no-floating-promises': 2,
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
-    'require-await': 2,
-    'no-console': 'warn',
+    'no-console': 'error',
     'no-constant-condition': 'off',
-    camelcase: 2,
+    camelcase: "error",
+    'max-len': ['error', { code: 120 }],
     'no-restricted-imports': [
       'error',
       {
