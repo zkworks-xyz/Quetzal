@@ -87,9 +87,9 @@ export class WebAuthnAccountContract extends ContractBase {
     ) => ContractFunctionInteraction) &
       Pick<ContractMethod, 'selector'>;
 
-    /** deserialize_and_validate_webauthn_witness(challenge: field, public_key_x: array, public_key_y: array) */
+    /** deserialize_and_validate_webauthn_witness(challenge_field: field, public_key_x: array, public_key_y: array) */
     deserialize_and_validate_webauthn_witness: ((
-      challenge: FieldLike,
+      challenge_field: FieldLike,
       public_key_x: (bigint | number)[],
       public_key_y: (bigint | number)[],
     ) => ContractFunctionInteraction) &
