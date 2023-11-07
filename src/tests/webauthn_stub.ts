@@ -3,16 +3,12 @@ import { secp256r1 } from '@noble/curves/p256';
 import { sha256 } from '@noble/hashes/sha256';
 
 export class WebAuthnInterfaceStub implements WebAuthnInterface {
-
   private secretKey = Uint8Array.from([
-    106, 113, 6, 18, 145, 37, 60, 49,
-    237, 121, 236, 243, 249, 170, 204, 206,
-    86, 235, 171, 238, 180, 132, 227, 97,
-    202, 92, 2, 15, 245, 100, 169, 250,
+    106, 113, 6, 18, 145, 37, 60, 49, 237, 121, 236, 243, 249, 170, 204, 206, 86, 235, 171, 238, 180, 132, 227, 97, 202,
+    92, 2, 15, 245, 100, 169, 250,
   ]);
 
-  constructor(readonly validSignature: boolean = true) {
-  }
+  constructor(readonly validSignature: boolean = true) {}
 
   getPublicKey(): Promise<WebAuthnPublicKey> {
     const pub = secp256r1.getPublicKey(this.secretKey, false);
@@ -28,26 +24,31 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
       153, 92, 243, 186, 131, 29, 151, 99, 29, 0, 0, 0, 0,
     ];
 
-    const challengeBase64 = Buffer.from(challenge).toString('base64')
-      .replaceAll('+', '-').replaceAll('/', '_')
+    const challengeBase64 = Buffer.from(challenge)
+      .toString('base64')
+      .replaceAll('+', '-')
+      .replaceAll('/', '_')
       .replaceAll('=', '')
       .split('')
       .map(c => c.charCodeAt(0));
 
-    const clientDataJson = [...[
-      123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116, 104, 110, 46, 103, 101, 116, 34, 44, 34, 99,
-      104, 97, 108, 108, 101, 110, 103, 101, 34, 58, 34],
+    const clientDataJson = [
+      ...[
+        123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116, 104, 110, 46, 103, 101, 116, 34, 44, 34,
+        99, 104, 97, 108, 108, 101, 110, 103, 101, 34, 58, 34,
+      ],
       ...challengeBase64,
-      ...[34, 44, 34, 111, 114, 105, 103, 105, 110, 34, 58, 34, 104, 116, 116, 112, 58, 47, 47, 108, 111, 99, 97, 108,
-        104, 111, 115, 116, 58, 53, 49, 55, 51, 34, 125],
+      ...[
+        34, 44, 34, 111, 114, 105, 103, 105, 110, 34, 58, 34, 104, 116, 116, 112, 58, 47, 47, 108, 111, 99, 97, 108,
+        104, 111, 115, 116, 58, 53, 49, 55, 51, 34, 125,
+      ],
     ];
 
-    const clientDataJsonHash = sha256
-      .create()
-      .update(Uint8Array.from(clientDataJson))
-      .digest();
+    const clientDataJsonHash = sha256.create().update(Uint8Array.from(clientDataJson)).digest();
 
-    const sig = secp256r1.sign(new Uint8Array([...authenticatorData, ...clientDataJsonHash]), this.secretKey, { prehash: true });
+    const sig = secp256r1.sign(new Uint8Array([...authenticatorData, ...clientDataJsonHash]), this.secretKey, {
+      prehash: true,
+    });
     const signature = [...sig.toCompactRawBytes()];
     return Promise.resolve(
       new WebAuthnSignature(
