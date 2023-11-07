@@ -1,4 +1,3 @@
-import { TokenContract } from '@aztec/noir-contracts/types';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { useState } from 'react';
@@ -6,7 +5,14 @@ import { Alert } from '../components/alert/Alert.js';
 import { AlertType } from '../components/alert/AlertType.js';
 import { PrimaryButton, SmallButton } from '../components/button.js';
 import { UserAccount } from '../model/UserAccount.js';
-import { TOKEN_LIST } from '../model/token_list.js';
+import {
+  BalanceMap,
+  TOKEN_LIST,
+  TokenContractMap,
+  fetchTokenBalances,
+  fetchTokenContracts,
+  formatBalance,
+} from '../model/token_list.js';
 import { SendTokens } from './SendTokens.js';
 
 interface MainProps {
@@ -20,25 +26,32 @@ enum CurrentModal {
 
 export function Main({ account }: MainProps) {
   const [modal, setModal] = useState<CurrentModal>(CurrentModal.Main);
+  const [tokenContracts, setTokenContracts] = useState<TokenContractMap | null>(null);
+  const [balances, setBalances] = useState<BalanceMap>(
+    () => new Map(TOKEN_LIST.map(token => [token.address.toString(), 0n])),
+  );
 
-  const fetchTokenContract = () => {
-    const token = TOKEN_LIST[0];
-    return TokenContract.at(token.address, account.account);
+  const fetchContracts = async () => {
+    const tokenContracts = await fetchTokenContracts(account.account);
+    setTokenContracts(tokenContracts);
+    return tokenContracts;
   };
 
-  const { data: tokenContract } = useQuery({
-    queryKey: ['tokenContract'],
-    queryFn: fetchTokenContract,
+  useQuery({
+    queryKey: ['tokenContracts'],
+    queryFn: fetchContracts,
   });
 
-  const fetchBalance = async () => {
-    return tokenContract!.methods.balance_of_public(account.account.getAddress()).view();
+  const fetchBalances = async () => {
+    const balances = await fetchTokenBalances(account.account.getAddress(), tokenContracts!.values());
+    setBalances(balances);
+    return balances;
   };
 
-  const { data, isError, isPending, refetch } = useQuery({
-    queryKey: ['balance'],
-    queryFn: fetchBalance,
-    enabled: !!tokenContract,
+  const { isError, isPending, refetch } = useQuery({
+    queryKey: ['balances'],
+    queryFn: fetchBalances,
+    enabled: tokenContracts !== null && tokenContracts.size > 0,
   });
 
   const copy = async () => {
@@ -50,7 +63,7 @@ export function Main({ account }: MainProps) {
     return (
       <SendTokens
         account={account}
-        tokenContract={tokenContract!}
+        tokenContract={tokenContracts!.values().next().value}
         onClose={() => setModal(CurrentModal.Main)}
         onSuccess={() => setModal(CurrentModal.Main)}
       />
@@ -67,16 +80,25 @@ export function Main({ account }: MainProps) {
         <SmallButton action={() => copy()} label="Copy" />
         <SmallButton action={() => refetch()} label="Refresh" />
       </div>
-      <p className="mt-16 text-gray-500 dark:text-gray-400 text-base text-left">Balance:</p>
+      <p className="mt-16 text-gray-500 dark:text-gray-400 text-base text-left">Assets:</p>
       <div
         className={classNames(
           'mt-1 text-3xl font-semibold tracking-wide text-left text-gray-800 md:text-3xl',
           'dark:text-white flex flex-col',
         )}
       >
-        <div className="flex-none">
-          {data?.toString()} {TOKEN_LIST[0].symbol}
-        </div>
+        {TOKEN_LIST.map(token => (
+          <div className="flex items-center justify-between py-4" key={token.address.toString()}>
+            <div className="flex-shrink-0">
+              <img className="max-w-full h-8" src={token.logoURI} alt={token.symbol} />
+            </div>
+            <div className="flex-grow px-2">
+              <p>
+                {formatBalance(balances.get(token.address.toString()))} {token.symbol}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
       <PrimaryButton action={() => setModal(CurrentModal.SendTokens)} classes="w-full mt-24" label="Send" />
     </section>
