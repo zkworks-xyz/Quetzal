@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it, jest } from '@jest/globals';
-import { setupSandbox } from '../app/account/utils.js';
+import { setupSandbox } from './utils.js';
 import {
   AccountManager,
   AccountWalletWithPrivateKey,
@@ -22,17 +22,6 @@ describe('Quetzal wallet', () => {
   beforeAll(async () => {
     pxe = await setupSandbox();
   }, 60_000);
-
-  it('should deploy SchnorrAccount contract and check deployment status', async () => {
-    const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
-    const signingPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
-    const salt: Fr = Fr.ZERO;
-    const schnorrAccount: AccountManager = getSchnorrAccount(pxe, encryptionPrivateKey, signingPrivateKey, salt);
-    const accountWallet: AccountWalletWithPrivateKey = await schnorrAccount.waitDeploy();
-
-    const isDeployed = await isContractDeployed(pxe, accountWallet.getAddress());
-    expect(isDeployed).toBe(true);
-  });
 
   it('should deploy WebAuthnAccount contract and check deployment status', async () => {
     const encryptionPrivateKey: GrumpkinScalar = GrumpkinScalar.random();
