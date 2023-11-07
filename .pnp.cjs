@@ -34,6 +34,8 @@ const RAW_RUNTIME_STATE =
           ["@headlessui/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:1.7.17"],\
           ["@heroicons/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:2.0.18"],\
           ["@jest/globals", "npm:29.7.0"],\
+          ["@noble/curves", "npm:1.2.0"],\
+          ["@noble/hashes", "npm:1.3.2"],\
           ["@tanstack/eslint-plugin-query", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:5.0.0"],\
           ["@tanstack/react-query", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:5.0.0"],\
           ["@types/jest", "npm:29.5.5"],\
@@ -11630,6 +11632,8 @@ const RAW_RUNTIME_STATE =
           ["@headlessui/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:1.7.17"],\
           ["@heroicons/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:2.0.18"],\
           ["@jest/globals", "npm:29.7.0"],\
+          ["@noble/curves", "npm:1.2.0"],\
+          ["@noble/hashes", "npm:1.3.2"],\
           ["@tanstack/eslint-plugin-query", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:5.0.0"],\
           ["@tanstack/react-query", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:5.0.0"],\
           ["@types/jest", "npm:29.5.5"],\

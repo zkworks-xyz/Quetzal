@@ -27,6 +27,8 @@ contract WebAuthnAccount {
 
     use crate::public_key_note::{PublicKeyNote, PublicKeyNoteMethods, PUBLIC_KEY_NOTE_LEN};
     use crate::webauthn::{validate_webauthn_signature, CLIENT_DATA_JSON_MAX_LEN};
+    use crate::utils::convert_field_to_array;
+    use crate::base64::base64_encode_url_safe_no_pad;
 
     struct Storage {
         // docs:start:storage
@@ -106,15 +108,17 @@ contract WebAuthnAccount {
 
     global SIGNATURE_LEN = 64;
     global AUTHENTICATOR_DATA_LEN = 37;
+    global WEBAUTHN_WITNESS_MAX_LEN = 357; // SIGNATURE_LEN + AUTHENTICATOR_DATA_LEN + CLIENT_DATA_JSON_MAX_LEN + 1
     global CHALLENGE_LEN = 43;
-    global WEBAUTHN_WITNESS_MAX_LEN = 400; // SIGNATURE_LEN + AUTHENTICATOR_DATA_LEN + CHALLENGE_LEN + CLIENT_DATA_JSON_MAX_LEN + 1
 
-    fn deserialize_and_validate_webauthn_witness(witness: [Field; WEBAUTHN_WITNESS_MAX_LEN], challenge: Field, public_key_x: [u8; 32], public_key_y: [u8; 32]) {
+    fn deserialize_and_validate_webauthn_witness(witness: [Field; WEBAUTHN_WITNESS_MAX_LEN], challenge_field: Field, public_key_x: [u8; 32], public_key_y: [u8; 32]) {
         let mut signature: [u8; 64] = [0; 64];
         let mut authenticator_data: [u8; 37] = [0; 37];
-        let mut challenge: [u8; CHALLENGE_LEN] = [0; CHALLENGE_LEN];
         let mut client_data_json_len: u8 = 0;
         let mut client_data_json: [u8; CLIENT_DATA_JSON_MAX_LEN] = [0; CLIENT_DATA_JSON_MAX_LEN];
+
+        let challenge_array: [u8; 32] = convert_field_to_array(challenge_field);
+        let challenge_base64: [u8; CHALLENGE_LEN] = base64_encode_url_safe_no_pad(challenge_array, [0; CHALLENGE_LEN]);
 
         for i in 0..SIGNATURE_LEN {
             signature[i] = witness[i] as u8;
@@ -123,17 +127,11 @@ contract WebAuthnAccount {
             authenticator_data[i] = witness[i + SIGNATURE_LEN] as u8;
         }
 
-        // TODO convert challenge -> [u8; 32] -> base64 [u8; 43] 
-
-        for i in 0..CHALLENGE_LEN {
-            // TODO use challenge from params
-            challenge[i] = witness[i + (SIGNATURE_LEN + AUTHENTICATOR_DATA_LEN)] as u8;
-        }
-        client_data_json_len = witness[(SIGNATURE_LEN + AUTHENTICATOR_DATA_LEN + CHALLENGE_LEN)] as u8;
+        client_data_json_len = witness[(SIGNATURE_LEN + AUTHENTICATOR_DATA_LEN)] as u8;
         for i in 0..CLIENT_DATA_JSON_MAX_LEN {
-            client_data_json[i] = witness[i + (SIGNATURE_LEN + AUTHENTICATOR_DATA_LEN + CHALLENGE_LEN + 1)] as u8;
+            client_data_json[i] = witness[i + (SIGNATURE_LEN + AUTHENTICATOR_DATA_LEN + 1)] as u8;
         }
-        validate_webauthn_signature(authenticator_data, client_data_json_len, client_data_json, signature, challenge, public_key_x, public_key_y);
+        validate_webauthn_signature(authenticator_data, client_data_json_len, client_data_json, signature, challenge_base64, public_key_x, public_key_y);
     }
 
     // Computes notes hash and nullifier.

@@ -12,7 +12,7 @@ import {
 import { GrumpkinScalar } from '@aztec/circuits.js';
 import { getWebAuthnAccount } from '../app/account/webauthn_account_contract.js';
 import { TokenContract } from '@aztec/noir-contracts/types';
-import { WebAuthnInterfaceInvalidSignatureStub, WebAuthnInterfaceStub } from './webauthn_stub.js';
+import { WebAuthnInterfaceStub } from './webauthn_stub.js';
 
 describe('Quetzal wallet', () => {
   jest.setTimeout(60_000);
@@ -91,7 +91,7 @@ describe('Quetzal wallet', () => {
       const webAuthnAccount: AccountManager = getWebAuthnAccount(
         pxe,
         GrumpkinScalar.random(),
-        new WebAuthnInterfaceInvalidSignatureStub(),
+        new WebAuthnInterfaceStub(false),
       );
       const account = await webAuthnAccount.waitDeploy();
       const asset = await TokenContract.deploy(account, account.getAddress()).send().deployed();
