@@ -1,7 +1,7 @@
 import { decode } from 'cbor-x';
 
 export async function webauthnCreatePublicKey(userName: string): Promise<{ x: Uint8Array; y: Uint8Array }> {
-  const userId = userName.length > 0 ? new TextEncoder().encode(userName) : new Uint8Array(16);
+  const userId: Uint8Array = userName.length > 0 ? new TextEncoder().encode(userName) : new Uint8Array(16);
   const publicKeyCredentialCreationOptions: any = {
     rp: {
       name: 'Quezal smart contract',
@@ -14,8 +14,10 @@ export async function webauthnCreatePublicKey(userName: string): Promise<{ x: Ui
     challenge: new Uint8Array(32),
     pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
     allowCredentials: [
-      { type: 'public-key', transports: ['internal'] },
-      // ... more Credential IDs can be supplied.
+      {
+        type: 'public-key',
+        transports: ['internal'],
+      },
     ],
     timeout: 60000,
     attestation: 'direct',
