@@ -1,6 +1,8 @@
-import { WebAuthnInterface, WebAuthnPublicKey, WebAuthnSignature } from './webauthn_account_contract.js';
+import { WebAuthnInterface } from './webauthn_account_contract.js';
 import { webauthnCreatePublicKey } from './webauthn_create_public_key.js';
 import { webAuthnSignChallenge } from './webauth_sign_challange.js';
+import { WebAuthnPublicKey } from './WebAuthnPublicKey.js';
+import { WebAuthnSignature } from './WebAuthnSignature.js';
 
 export class WebauthnSigner implements WebAuthnInterface {
   constructor(readonly userName: string) {}

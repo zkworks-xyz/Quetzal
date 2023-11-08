@@ -11,8 +11,8 @@ import {
 } from '@aztec/aztec.js';
 
 import { AuthWitness } from '@aztec/types';
-
-const CLIENT_DATA_JSON_MAX_LEN = 255;
+import { WebAuthnPublicKey } from './WebAuthnPublicKey.js';
+import { WebAuthnSignature } from './WebAuthnSignature.js';
 
 export function getWebAuthnAccount(
   pxe: PXE,
@@ -21,31 +21,6 @@ export function getWebAuthnAccount(
   saltOrAddress: Salt | CompleteAddress = Fr.ZERO,
 ): AccountManager {
   return new AccountManager(pxe, encryptionPrivateKey, new WebAuthnAccountContract(webAuthnInterface), saltOrAddress);
-}
-
-export class WebAuthnPublicKey {
-  constructor(
-    readonly x: Uint8Array,
-    readonly y: Uint8Array,
-  ) {}
-}
-
-export class WebAuthnSignature {
-  constructor(
-    readonly authenticatorData: Uint8Array,
-    readonly clientDataJson: Uint8Array,
-    readonly signatureRaw: Uint8Array,
-  ) {}
-
-  toArray(): number[] {
-    return [
-      ...this.signatureRaw,
-      ...this.authenticatorData,
-      this.clientDataJson.length,
-      ...this.clientDataJson,
-      ...new Uint8Array(CLIENT_DATA_JSON_MAX_LEN - this.clientDataJson.length),
-    ];
-  }
 }
 
 export interface WebAuthnInterface {
