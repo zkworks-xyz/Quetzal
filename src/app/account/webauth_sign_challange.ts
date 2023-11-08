@@ -24,11 +24,11 @@ export async function webAuthnSignChallenge(challenge: Uint8Array) {
 
   const authenticatorData = new Uint8Array(assertation.response.authenticatorData);
   const clientDataJson = new Uint8Array(assertation.response.clientDataJSON);
-  const signatureRaw = convertSignatureInASN1FormattoRaw(assertation.response.signature);
+  const signatureRaw = convertSignatureInASN1FormatToRaw(assertation.response.signature);
   return { authenticatorData, clientDataJson, signatureRaw };
 }
 
-function convertSignatureInASN1FormattoRaw(signatureBuffer: ArrayBuffer): Uint8Array {
+function convertSignatureInASN1FormatToRaw(signatureBuffer: ArrayBuffer): Uint8Array {
   const usignature = new Uint8Array(signatureBuffer);
   const rStart = usignature[4] === 0 ? 5 : 4;
   const rEnd = rStart + 32;
