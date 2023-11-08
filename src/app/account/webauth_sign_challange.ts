@@ -1,8 +1,8 @@
-import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from './convert.js';
+import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from './utils.js';
 
 const SUPPORTED_CLIENT_DATA_JSON_LENGTHS = [114, 134, 243];
 
-export async function webAuthnLogin(challenge: Uint8Array) {
+export async function webAuthnSignChallenge(challenge: Uint8Array) {
   const credentialRequestOptions = {
     publicKey: {
       timeout: 60000,
@@ -24,11 +24,11 @@ export async function webAuthnLogin(challenge: Uint8Array) {
 
   const authenticatorData = new Uint8Array(assertation.response.authenticatorData);
   const clientDataJson = new Uint8Array(assertation.response.clientDataJSON);
-  const signatureRaw = convertASN1toRaw(assertation.response.signature);
+  const signatureRaw = convertSignatureInASN1FormattoRaw(assertation.response.signature);
   return { authenticatorData, clientDataJson, signatureRaw };
 }
 
-function convertASN1toRaw(signatureBuffer: ArrayBuffer) {
+function convertSignatureInASN1FormattoRaw(signatureBuffer: ArrayBuffer): Uint8Array {
   // Convert signature from ASN.1 sequence to "raw" format
   const usignature = new Uint8Array(signatureBuffer);
   const rStart = usignature[4] === 0 ? 5 : 4;
