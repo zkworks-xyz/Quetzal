@@ -1,5 +1,6 @@
 import {
   AccountWalletWithPrivateKey,
+  AuthWitnessProvider,
   AztecAddress,
   CompleteAddress,
   DefaultAccountInterface,
@@ -9,12 +10,10 @@ import {
   PXE,
   Point,
 } from '@aztec/aztec.js';
-import { WebAuthnWitnessProvider } from '../app/account/webauthn_account_contract.js';
 import {
   deserializeAccountWalletWithPrivateKey,
   serializeAccountWalletWithPrivateKey,
 } from '../app/context/current_account/serialization.js';
-import { WebAuthnInterfaceStub } from './webauthn_stub.js';
 
 const TEST_ADDRESS = AztecAddress.fromString('0x1eb060c038bf73cb4e070e44e88a319a8f75bcee2b0d326966b3594c88f9f160');
 const TEST_PUBLIC_KEY = new Point(
@@ -28,7 +27,7 @@ const TEST_ENCRYPTION_PRIVATE_KEY = new GrumpkinScalar(
   18379267687739255569405876019247933532445267054176851471598688189245092777366n,
 );
 
-const TEST_WEB_AUTH_WITNESS_PROVIDER = new WebAuthnWitnessProvider(new WebAuthnInterfaceStub());
+const TEST_WEB_AUTH_WITNESS_PROVIDER = {} as AuthWitnessProvider;
 
 const NODE_INFO: NodeInfo = {} as NodeInfo;
 
