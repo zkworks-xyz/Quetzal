@@ -3,7 +3,7 @@ import { GrumpkinScalar } from '@aztec/circuits.js';
 import { TokenContract } from '@aztec/noir-contracts/types';
 import { beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { getWebAuthnAccount } from '../app/account/webauthn_account_contract.js';
-import { setupSandbox } from './utils.js';
+import { setupSandbox } from '../app/account/utils.js';
 import { WebAuthnInterfaceStub } from './webauthn_stub.js';
 
 describe('Quetzal wallet', () => {
