@@ -2,7 +2,6 @@ import {
   AccountManager,
   AztecAddressLike,
   ExtendedContractData,
-  Fr,
   INITIAL_SANDBOX_ENCRYPTION_KEYS,
   INITIAL_SANDBOX_SALTS,
   INITIAL_SANDBOX_SIGNING_KEYS,
@@ -14,9 +13,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { PrimaryButton } from '../../components/button.js';
 import { InfoDialog } from '../../modals/InfoDialog.js';
-import { TOKEN_LIST } from '../../model/token_list.js';
-import { DeveloperContext } from './DeveloperContext.js';
+import { TOKEN_LIST, deployTestTokens } from '../../model/token_list.js';
 import { usePXE } from '../pxe/usePxe.js';
+import { DeveloperContext } from './DeveloperContext.js';
 
 function getSandboxAccounts(pxe: PXE): AccountManager[] {
   return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>
@@ -41,10 +40,7 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
   });
 
   const deployExampleTokens = async () => {
-    const adminWallet = await adminAccount.getWallet();
-    return TokenContract.deploy(adminWallet, adminWallet.getAddress())
-      .send({ contractAddressSalt: Fr.ZERO })
-      .deployed();
+    return deployTestTokens(await adminAccount.getWallet());
   };
 
   const mutation = useMutation({
