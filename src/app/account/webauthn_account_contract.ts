@@ -32,11 +32,20 @@ export class WebAuthnPublicKey {
 
 export class WebAuthnSignature {
   constructor(
-    readonly challenge: Uint8Array,
     readonly authenticatorData: Uint8Array,
     readonly clientDataJson: Uint8Array,
     readonly signatureRaw: Uint8Array,
   ) {}
+
+  toArray(): number[] {
+    return [
+      ...this.signatureRaw,
+      ...this.authenticatorData,
+      this.clientDataJson.length,
+      ...this.clientDataJson,
+      ...new Uint8Array(CLIENT_DATA_JSON_MAX_LEN - this.clientDataJson.length),
+    ];
+  }
 }
 
 export interface WebAuthnInterface {
@@ -59,25 +68,11 @@ export class WebAuthnAccountContract extends BaseAccountContract {
   }
 
   getAuthWitnessProvider(_address: CompleteAddress): AuthWitnessProvider {
-    return new WebAuthnWitnessProvider(this.webAuthnInterface);
-  }
-}
-
-/** Creates auth witnesses using WebAuthn signatures. */
-class WebAuthnWitnessProvider implements AuthWitnessProvider {
-  constructor(private webAuthnInterface: WebAuthnInterface) {}
-
-  async createAuthWitness(message: Fr): Promise<AuthWitness> {
-    // TODO generate webauthn signature
-    const signature = await this.webAuthnInterface.sign(new Uint8Array(message.toBuffer()));
-    const witness = [
-      ...signature.signatureRaw,
-      ...signature.authenticatorData,
-      ...signature.challenge,
-      signature.clientDataJson.length,
-      ...signature.clientDataJson,
-      ...new Uint8Array(CLIENT_DATA_JSON_MAX_LEN - signature.clientDataJson.length),
-    ];
-    return new AuthWitness(message, witness);
+    return <AuthWitnessProvider>{
+      createAuthWitness: async (message: Fr): Promise<AuthWitness> => {
+        const signature = await this.webAuthnInterface.sign(new Uint8Array(message.toBuffer()));
+        return new AuthWitness(message, signature.toArray());
+      },
+    };
   }
 }

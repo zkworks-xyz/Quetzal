@@ -1,6 +1,6 @@
 import { WebAuthnInterface, WebAuthnPublicKey, WebAuthnSignature } from './webauthn_account_contract.js';
-import { webAuthnFetchPublicKey } from '../components/webauthn/webAuthnFetchPublicKey.js';
-import { webAuthnLogin } from '../components/webauthn/login.js';
+import { webauthnCreatePublicKey } from './webauthn_create_public_key.js';
+import { webAuthnSignChallenge } from './webauth_sign_challange.js';
 
 export class WebauthnSigner implements WebAuthnInterface {
   constructor(readonly userName: string) {}
@@ -12,14 +12,13 @@ export class WebauthnSigner implements WebAuthnInterface {
       return this.publicKey;
     }
 
-    const { x, y } = await webAuthnFetchPublicKey(this.userName);
+    const { x, y } = await webauthnCreatePublicKey(this.userName);
     this.publicKey = new WebAuthnPublicKey(x, y);
     return this.publicKey;
   }
 
-  async sign(_challengeParam: Uint8Array): Promise<WebAuthnSignature> {
-    // TODO use challengeParam
-    const { challenge, authenticatorData, clientDataJson, signatureRaw } = await webAuthnLogin();
-    return new WebAuthnSignature(new Uint8Array(challenge), authenticatorData, clientDataJson, signatureRaw);
+  async sign(challengeParam: Uint8Array): Promise<WebAuthnSignature> {
+    const { authenticatorData, clientDataJson, signatureRaw } = await webAuthnSignChallenge(challengeParam);
+    return new WebAuthnSignature(authenticatorData, clientDataJson, signatureRaw);
   }
 }

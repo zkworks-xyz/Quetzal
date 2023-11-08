@@ -1,96 +1,55 @@
 import { WebAuthnInterface, WebAuthnPublicKey, WebAuthnSignature } from '../app/account/webauthn_account_contract.js';
+import { secp256r1 } from '@noble/curves/p256';
+import { sha256 } from '@noble/hashes/sha256';
+import { base64encode, noPad, safeUrl, toNumberArray } from '../app/account/utils.js';
 
 export class WebAuthnInterfaceStub implements WebAuthnInterface {
+  private secretKey = Uint8Array.from([
+    106, 113, 6, 18, 145, 37, 60, 49, 237, 121, 236, 243, 249, 170, 204, 206, 86, 235, 171, 238, 180, 132, 227, 97, 202,
+    92, 2, 15, 245, 100, 169, 250,
+  ]);
+
+  constructor(readonly validSignature: boolean = true) {}
+
   getPublicKey(): Promise<WebAuthnPublicKey> {
-    return Promise.resolve(
-      new WebAuthnPublicKey(
-        Uint8Array.from([
-          232, 155, 149, 83, 161, 121, 57, 152, 190, 94, 194, 196, 50, 138, 34, 150, 50, 132, 156, 142, 157, 46, 110,
-          191, 24, 252, 215, 219, 14, 167, 123, 177,
-        ]),
-        Uint8Array.from([
-          209, 135, 117, 243, 19, 54, 46, 174, 93, 114, 37, 231, 234, 2, 194, 226, 112, 129, 87, 208, 143, 214, 86, 114,
-          202, 29, 239, 172, 51, 187, 44, 249,
-        ]),
-      ),
-    );
+    const pub = secp256r1.getPublicKey(this.secretKey, false);
+    const x = pub.subarray(1, 33);
+    const y = pub.subarray(33, 65);
+
+    return Promise.resolve(new WebAuthnPublicKey(x, y));
   }
 
-  sign(_challenge: Uint8Array): Promise<WebAuthnSignature> {
-    const challenge = [
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69,
-    ];
-    const authenticatorData = [
+  async sign(challenge: Uint8Array): Promise<WebAuthnSignature> {
+    const authenticatorData: number[] = [
       73, 150, 13, 229, 136, 14, 140, 104, 116, 52, 23, 15, 100, 118, 96, 91, 143, 228, 174, 185, 162, 134, 50, 199,
       153, 92, 243, 186, 131, 29, 151, 99, 29, 0, 0, 0, 0,
     ];
-    const clientDataJson = [
-      123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116, 104, 110, 46, 103, 101, 116, 34, 44, 34, 99,
-      104, 97, 108, 108, 101, 110, 103, 101, 34, 58, 34, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 34,
-      44, 34, 111, 114, 105, 103, 105, 110, 34, 58, 34, 104, 116, 116, 112, 58, 47, 47, 108, 111, 99, 97, 108, 104, 111,
-      115, 116, 58, 53, 49, 55, 51, 34, 125,
+
+    const challengeBase64: number[] = toNumberArray(noPad(safeUrl(base64encode(challenge))));
+
+    const clientDataJson: number[] = [
+      ...[
+        123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116, 104, 110, 46, 103, 101, 116, 34, 44, 34,
+        99, 104, 97, 108, 108, 101, 110, 103, 101, 34, 58, 34,
+      ],
+      ...challengeBase64,
+      ...[
+        34, 44, 34, 111, 114, 105, 103, 105, 110, 34, 58, 34, 104, 116, 116, 112, 58, 47, 47, 108, 111, 99, 97, 108,
+        104, 111, 115, 116, 58, 53, 49, 55, 51, 34, 125,
+      ],
     ];
-    const signature = [
-      142, 114, 209, 59, 85, 51, 124, 10, 189, 151, 231, 169, 97, 1, 220, 91, 24, 25, 29, 33, 111, 40, 252, 40, 14, 196,
-      205, 100, 125, 196, 120, 62, 60, 196, 100, 41, 212, 143, 57, 228, 175, 199, 23, 146, 199, 243, 216, 2, 182, 243,
-      59, 8, 114, 235, 53, 15, 13, 88, 26, 204, 49, 179, 199, 149,
-    ];
+
+    const clientDataJsonHash: Uint8Array = sha256.create().update(Uint8Array.from(clientDataJson)).digest();
+
+    const sig = secp256r1.sign(new Uint8Array([...authenticatorData, ...clientDataJsonHash]), this.secretKey, {
+      prehash: true,
+    });
+    const signature = [...sig.toCompactRawBytes()];
     return Promise.resolve(
       new WebAuthnSignature(
-        Uint8Array.from(challenge),
         Uint8Array.from(authenticatorData),
         Uint8Array.from(clientDataJson),
-        Uint8Array.from(signature),
-      ),
-    );
-  }
-}
-
-export class WebAuthnInterfaceInvalidSignatureStub implements WebAuthnInterface {
-  getPublicKey(): Promise<WebAuthnPublicKey> {
-    return Promise.resolve(
-      new WebAuthnPublicKey(
-        Uint8Array.from([
-          232, 155, 149, 83, 161, 121, 57, 152, 190, 94, 194, 196, 50, 138, 34, 150, 50, 132, 156, 142, 157, 46, 110,
-          191, 24, 252, 215, 219, 14, 167, 123, 177,
-        ]),
-        Uint8Array.from([
-          209, 135, 117, 243, 19, 54, 46, 174, 93, 114, 37, 231, 234, 2, 194, 226, 112, 129, 87, 208, 143, 214, 86, 114,
-          202, 29, 239, 172, 51, 187, 44, 249,
-        ]),
-      ),
-    );
-  }
-
-  sign(_challenge: Uint8Array): Promise<WebAuthnSignature> {
-    const challenge = [
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69,
-    ];
-    const authenticatorData = [
-      73, 150, 13, 229, 136, 14, 140, 104, 116, 52, 23, 15, 100, 118, 96, 91, 143, 228, 174, 185, 162, 134, 50, 199,
-      153, 92, 243, 186, 131, 29, 151, 99, 29, 0, 0, 0, 0,
-    ];
-    const clientDataJson = [
-      123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116, 104, 110, 46, 103, 101, 116, 34, 44, 34, 99,
-      104, 97, 108, 108, 101, 110, 103, 101, 34, 58, 34, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66,
-      65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 66, 65, 81, 69, 34,
-      44, 34, 111, 114, 105, 103, 105, 110, 34, 58, 34, 104, 116, 116, 112, 58, 47, 47, 108, 111, 99, 97, 108, 104, 111,
-      115, 116, 58, 53, 49, 55, 51, 34, 125,
-    ];
-    const signature = [
-      1, 114, 209, 59, 85, 51, 124, 10, 189, 151, 231, 169, 97, 1, 220, 91, 24, 25, 29, 33, 111, 40, 252, 40, 14, 196,
-      205, 100, 125, 196, 120, 62, 60, 196, 100, 41, 212, 143, 57, 228, 175, 199, 23, 146, 199, 243, 216, 2, 182, 243,
-      59, 8, 114, 235, 53, 15, 13, 88, 26, 204, 49, 179, 199, 149,
-    ];
-    return Promise.resolve(
-      new WebAuthnSignature(
-        Uint8Array.from(challenge),
-        Uint8Array.from(authenticatorData),
-        Uint8Array.from(clientDataJson),
-        Uint8Array.from(signature),
+        Uint8Array.from(this.validSignature ? signature : new Uint8Array(64).fill(0)),
       ),
     );
   }

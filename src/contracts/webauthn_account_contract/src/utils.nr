@@ -3,7 +3,7 @@ use dep::std;
 fn convert_field_to_array(f: Field) -> [u8; 32] {
     let mut res = [0; 32];
     let slice = f.to_be_bytes(32);
-    for i in 0..slice.len() {
+    for i in 0..32 {
         res[i] = slice[i];
     }
     res
