@@ -13,7 +13,7 @@ import { WebAuthnWitnessProvider } from '../app/account/webauthn_account_contrac
 import {
   deserializeAccountWalletWithPrivateKey,
   serializeAccountWalletWithPrivateKey,
-} from '../app/context/current_account/serialization.js';
+} from '../app/context/current_wallet/serialization.js';
 import { WebAuthnInterfaceStub } from './webauthn_stub.js';
 
 const TEST_ADDRESS = AztecAddress.fromString('0x1eb060c038bf73cb4e070e44e88a319a8f75bcee2b0d326966b3594c88f9f160');

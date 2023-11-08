@@ -5,7 +5,7 @@ import { getWebAuthnAccount } from '../account/webauthn_account_contract.js';
 import { WebauthnSigner } from '../account/webauthn_signer.js';
 import { useDeveloperMode } from '../context/developer_mode/useDeveloperMode.js';
 import { usePXE } from '../context/pxe/usePxe.js';
-import { UserWallet } from '../model/UserWallet.js';
+import { UserWallet } from '../context/current_wallet/UserWallet.js';
 import { InfoDialog } from './InfoDialog.js';
 import { PrimaryButton } from '../components/button.js';
 import { Input } from '../components/Input.js';

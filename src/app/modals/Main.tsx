@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Alert } from '../components/alert/Alert.js';
 import { AlertType } from '../components/alert/AlertType.js';
 import { PrimaryButton, SmallButton } from '../components/button.js';
-import { UserWallet } from '../model/UserWallet.js';
+import { UserWallet } from '../context/current_wallet/UserWallet.js';
 import {
   BalanceMap,
   TOKEN_LIST,
