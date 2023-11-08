@@ -20,7 +20,7 @@
     "formatting:fix": "prettier -w ./src && eslint --fix ./src",
     "compile": "aztec-cli compile src/contracts/webauthn_account_contract --outdir ../../artifacts --typescript ../../artifacts",
     "update:sandbox": "/bin/bash -c \"$(curl -fsSL 'https://sandbox.aztec.network')\"",
-    "test:integration": "NODE_NO_WARNINGS=1 node --experimental-vm-modules $(yarn bin jest) --runInBand"
+    "test:integration": "NODE_NO_WARNINGS=1 node --experimental-vm-modules $(yarn bin jest) --runInBand \"$@\""
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
