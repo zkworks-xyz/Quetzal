@@ -24,14 +24,14 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
       return;
     }
     const tx = tokenContract.methods
-      .transfer_public(account.account.getAddress(), AztecAddress.fromString(toAddress), BigInt(amount), 0)
+      .transfer_public(account.wallet.getAddress(), AztecAddress.fromString(toAddress), BigInt(amount), 0)
       .send();
     return tx.wait();
   };
 
   const mutation = useMutation({ mutationFn: sendTokens, onSuccess });
   if (mutation.isPending) {
-    const from = account.account.getAddress().toShortString();
+    const from = account.wallet.getAddress().toShortString();
     const to = AztecAddress.fromString(toAddress).toShortString();
     const message = `Sending tokens from ${from} to ${to} amount: ${amount}`;
     return <InfoDialog title="⏳ Sending tokens" message={message} />;

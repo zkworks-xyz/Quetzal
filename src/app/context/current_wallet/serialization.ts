@@ -11,6 +11,8 @@ import {
   Point,
 } from '@aztec/aztec.js';
 import { UserWallet } from './UserWallet.js';
+import { WebAuthnWitnessProvider } from '../../account/webauthn_account_contract.js';
+import { WebauthnSigner } from '../../account/webauthn_signer.js';
 
 export function accountWalletWithPrivateKeyToObject(wallet: AccountWalletWithPrivateKey): object {
   const completeAddress = wallet.getCompleteAddress();
@@ -25,7 +27,8 @@ export function accountWalletWithPrivateKeyToObject(wallet: AccountWalletWithPri
 }
 
 const reviver =
-  (pxe: PXE, authWitnessProvider: AuthWitnessProvider, nodeInfo: NodeInfo) => (key: string, value: any) => {
+  (pxe: PXE, nodeInfo: NodeInfo, authWitnessProvider: AuthWitnessProvider | undefined = undefined) =>
+  (key: string, value: any) => {
     if (key == 'completeAddress') {
       return new CompleteAddress(
         AztecAddress.fromString(value.address),
@@ -35,6 +38,9 @@ const reviver =
     } else if (key == 'encryptionPrivateKey') {
       return GrumpkinScalar.fromString(value);
     } else if (key == 'wallet') {
+      if (authWitnessProvider == null) {
+        authWitnessProvider = new WebAuthnWitnessProvider(new WebauthnSigner('shouldNotUse'));
+      }
       const account = new DefaultAccountInterface(authWitnessProvider, value.completeAddress, nodeInfo);
       return new AccountWalletWithPrivateKey(pxe, account, value.encryptionPrivateKey);
     }
@@ -51,9 +57,9 @@ export function serializeUserWallet(userWallet: UserWallet): string {
 export async function deserializeUserWallet(
   json: string,
   pxe: PXE,
-  authWitnessProvider: AuthWitnessProvider,
+  authWitnessProvider: AuthWitnessProvider | undefined = undefined,
 ): Promise<UserWallet> {
-  const userWallet = JSON.parse(json, reviver(pxe, authWitnessProvider, await pxe.getNodeInfo()));
+  const userWallet = JSON.parse(json, reviver(pxe, await pxe.getNodeInfo(), authWitnessProvider));
   if (!userWallet.name) {
     throw new TypeError('Deserialization error: userWallet name is missing');
   }
