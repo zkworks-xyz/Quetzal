@@ -1,6 +1,7 @@
 import { WebAuthnInterface, WebAuthnPublicKey, WebAuthnSignature } from '../app/account/webauthn_account_contract.js';
 import { secp256r1 } from '@noble/curves/p256';
 import { sha256 } from '@noble/hashes/sha256';
+import { base64encode, noPad, safeUrl, toNumberArray } from '../app/account/utils.js';
 
 export class WebAuthnInterfaceStub implements WebAuthnInterface {
   private secretKey = Uint8Array.from([
@@ -8,7 +9,8 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
     92, 2, 15, 245, 100, 169, 250,
   ]);
 
-  constructor(readonly validSignature: boolean = true) {}
+  constructor(readonly validSignature: boolean = true) {
+  }
 
   getPublicKey(): Promise<WebAuthnPublicKey> {
     const pub = secp256r1.getPublicKey(this.secretKey, false);
@@ -19,20 +21,14 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
   }
 
   async sign(challenge: Uint8Array): Promise<WebAuthnSignature> {
-    const authenticatorData = [
+    const authenticatorData: number[] = [
       73, 150, 13, 229, 136, 14, 140, 104, 116, 52, 23, 15, 100, 118, 96, 91, 143, 228, 174, 185, 162, 134, 50, 199,
       153, 92, 243, 186, 131, 29, 151, 99, 29, 0, 0, 0, 0,
     ];
 
-    const challengeBase64 = Buffer.from(challenge)
-      .toString('base64')
-      .replaceAll('+', '-')
-      .replaceAll('/', '_')
-      .replaceAll('=', '')
-      .split('')
-      .map(c => c.charCodeAt(0));
+    const challengeBase64: number[] = toNumberArray(noPad(safeUrl(base64encode(challenge))));
 
-    const clientDataJson = [
+    const clientDataJson: number[] = [
       ...[
         123, 34, 116, 121, 112, 101, 34, 58, 34, 119, 101, 98, 97, 117, 116, 104, 110, 46, 103, 101, 116, 34, 44, 34,
         99, 104, 97, 108, 108, 101, 110, 103, 101, 34, 58, 34,
@@ -44,7 +40,7 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
       ],
     ];
 
-    const clientDataJsonHash = sha256.create().update(Uint8Array.from(clientDataJson)).digest();
+    const clientDataJsonHash: Uint8Array = sha256.create().update(Uint8Array.from(clientDataJson)).digest();
 
     const sig = secp256r1.sign(new Uint8Array([...authenticatorData, ...clientDataJsonHash]), this.secretKey, {
       prehash: true,
