@@ -22,7 +22,7 @@ export function PrimaryButton({ label, action, classes = '' }: ButtonProps) {
   );
 }
 
-export function SecondaryButton({ label, action, classes = ''  }: ButtonProps) {
+export function SecondaryButton({ label, action, classes = '' }: ButtonProps) {
   return (
     <button
       onClick={() => action()}
