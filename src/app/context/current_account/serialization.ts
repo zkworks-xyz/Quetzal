@@ -1,47 +1,48 @@
 import {
-  AccountContract,
-  AccountManager,
   AccountWalletWithPrivateKey,
+  AuthWitnessProvider,
   AztecAddress,
   CompleteAddress,
+  DefaultAccountInterface,
   Fr,
   GrumpkinScalar,
   PXE,
   Point,
 } from '@aztec/aztec.js';
 
-export function serializeCompleteAddress(completeAddress: CompleteAddress): string {
-  return JSON.stringify({
-    address: completeAddress.address.toString(),
-    publicKey: completeAddress.publicKey.toString(),
-    partialAddress: completeAddress.partialAddress.toString(),
-  });
-}
-
-export function deserializeCompleteAddress(serialized: string): CompleteAddress {
-  const data = JSON.parse(serialized);
-  return new CompleteAddress(
-    AztecAddress.fromString(data.address),
-    Point.fromString(data.publicKey),
-    Fr.fromString(data.partialAddress),
-  );
-}
-
 export function serializeAccountWalletWithPrivateKey(wallet: AccountWalletWithPrivateKey): string {
+  const completeAddress = wallet.getCompleteAddress();
   return JSON.stringify({
-    completeAddress: serializeCompleteAddress(wallet.getCompleteAddress()),
+    completeAddress: {
+      address: completeAddress.address.toString(),
+      publicKey: completeAddress.publicKey.toString(),
+      partialAddress: completeAddress.partialAddress.toString(),
+    },
     encryptionPrivateKey: wallet.getEncryptionPrivateKey().toString(),
   });
 }
 
 export async function deserializeAccountWalletWithPrivateKey(
-  pxe: PXE,
-  accountContract: AccountContract,
   serialized: string,
+  pxe: PXE,
+  authWitnessProvider: AuthWitnessProvider,
 ): Promise<AccountWalletWithPrivateKey> {
-  const data = JSON.parse(serialized);
-  const completeAddress = deserializeCompleteAddress(data.completeAddress);
-  const manager = new AccountManager(pxe, data.encryptionPrivateKey, accountContract, completeAddress);
-  const account = await manager.getAccount();
-  return new AccountWalletWithPrivateKey(pxe, account, GrumpkinScalar.fromString(data.encryptionPrivateKey));
+  function reviver(key: string, value: any) {
+    if (key == 'completeAddress') {
+      return new CompleteAddress(
+        AztecAddress.fromString(value.address),
+        Point.fromString(value.publicKey),
+        Fr.fromString(value.partialAddress),
+      );
+    } else if (key == 'encryptionPrivateKey') {
+      return GrumpkinScalar.fromString(value);
+    } else if (key == '') {
+      const account = new DefaultAccountInterface(authWitnessProvider, value.completeAddress, nodeInfo);
+      return new AccountWalletWithPrivateKey(pxe, account, value.encryptionPrivateKey);
+    }
+    return value;
+  }
+
+  const nodeInfo = await pxe.getNodeInfo();
+  return JSON.parse(serialized, reviver);
 }
