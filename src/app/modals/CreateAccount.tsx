@@ -5,13 +5,13 @@ import { getWebAuthnAccount } from '../account/webauthn_account_contract.js';
 import { WebauthnSigner } from '../account/webauthn_signer.js';
 import { useDeveloperMode } from '../context/developer_mode/useDeveloperMode.js';
 import { usePXE } from '../context/pxe/usePxe.js';
-import { UserAccount } from '../model/UserAccount.js';
+import { UserWallet } from '../model/UserWallet.js';
 import { InfoDialog } from './InfoDialog.js';
 import { PrimaryButton } from '../components/button.js';
 import { Input } from '../components/Input.js';
 
 export interface CreateAccountProps {
-  onAccountCreated: (account: UserAccount) => void;
+  onAccountCreated: (account: UserWallet) => void;
 }
 
 const FAUCET_AMOUNT = 1234n;

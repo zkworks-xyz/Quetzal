@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import { CreateAccount } from './modals/CreateAccount.js';
 import { Main } from './modals/Main.js';
-import { UserAccount } from './model/UserAccount.js';
+import { UserWallet } from './model/UserWallet.js';
 
 export function Home() {
-  const [account, setAccount] = useState<UserAccount | null>(null);
+  const [account, setWallet] = useState<UserWallet | null>(null);
 
   return (
     <>
@@ -13,7 +13,7 @@ export function Home() {
       {!account && (
         <CreateAccount
           onAccountCreated={account => {
-            setAccount(account);
+            setWallet(account);
           }}
         />
       )}
