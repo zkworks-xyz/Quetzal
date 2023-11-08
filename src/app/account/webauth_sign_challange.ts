@@ -29,18 +29,22 @@ export async function webAuthnSignChallenge(challenge: Uint8Array) {
 }
 
 function convertSignatureInASN1FormattoRaw(signatureBuffer: ArrayBuffer): Uint8Array {
-  // Convert signature from ASN.1 sequence to "raw" format
   const usignature = new Uint8Array(signatureBuffer);
   const rStart = usignature[4] === 0 ? 5 : 4;
   const rEnd = rStart + 32;
   const sStart = usignature[rEnd + 2] === 0 ? rEnd + 3 : rEnd + 2;
   const r = usignature.slice(rStart, rEnd);
   const s = usignature.slice(sStart);
-  const secp256r1n = 0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551n;
-  const sInt = convertUint8ArrayToBigInt(s);
-  let finalS = s;
-  if (2n * sInt > secp256r1n) {
-    finalS = convertBigIntToUint8Array(secp256r1n - sInt);
-  }
+  const finalS = flipSValueIfBiggerThanHalfOfN(s);
   return new Uint8Array([...r, ...finalS]);
+}
+
+function flipSValueIfBiggerThanHalfOfN(s: Uint8Array) {
+  const secp256r1n: bigint = 0xffffffff00000000ffffffffffffffffbce6faada7179e84f3b9cac2fc632551n;
+  const sInt = convertUint8ArrayToBigInt(s);
+  if (2n * sInt > secp256r1n) {
+    return convertBigIntToUint8Array(secp256r1n - sInt);
+  } else {
+    return s;
+  }
 }
