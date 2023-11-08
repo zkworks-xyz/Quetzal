@@ -25,7 +25,11 @@ export async function webauthnCreatePublicKey(userName: string): Promise<{ x: Ui
     publicKey: publicKeyCredentialCreationOptions,
   });
 
-  const decodedAttestationObj = decode(new Uint8Array(credential.response.attestationObject));
+  return getPublicKeyXYFromAttestationObject(credential.response.attestationObject);
+}
+
+function getPublicKeyXYFromAttestationObject(attestationObject: ArrayBuffer): { x: Uint8Array; y: Uint8Array } {
+  const decodedAttestationObj = decode(new Uint8Array(attestationObject));
   const { authData } = decodedAttestationObj;
   const dataView = new DataView(new ArrayBuffer(2));
   const idLenBytes = authData.slice(53, 55);
