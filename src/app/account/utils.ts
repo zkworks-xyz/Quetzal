@@ -16,9 +16,7 @@ export function noPad(input: string): string {
 }
 
 export function safeUrl(input: string): string {
-  return input
-    .replaceAll('+', '-')
-    .replaceAll('/', '_');
+  return input.replaceAll('+', '-').replaceAll('/', '_');
 }
 
 export function toNumberArray(input: string): number[] {

@@ -3,7 +3,9 @@ import { base64encode, convertBigIntToUint8Array, convertUint8ArrayToBigInt, noP
 
 describe('utils', () => {
   it('should properly encode Uint8Array to base64', () => {
-    expect(base64encode(new TextEncoder().encode('Many hands make light work.'))).toBe('TWFueSBoYW5kcyBtYWtlIGxpZ2h0IHdvcmsu');
+    expect(base64encode(new TextEncoder().encode('Many hands make light work.'))).toBe(
+      'TWFueSBoYW5kcyBtYWtlIGxpZ2h0IHdvcmsu',
+    );
   });
 
   it('should properly remove pad from base64 encoded string', () => {

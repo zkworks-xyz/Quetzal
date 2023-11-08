@@ -9,8 +9,7 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
     92, 2, 15, 245, 100, 169, 250,
   ]);
 
-  constructor(readonly validSignature: boolean = true) {
-  }
+  constructor(readonly validSignature: boolean = true) {}
 
   getPublicKey(): Promise<WebAuthnPublicKey> {
     const pub = secp256r1.getPublicKey(this.secretKey, false);
