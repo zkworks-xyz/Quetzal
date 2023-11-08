@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Alert } from '../components/alert/Alert.js';
 import { AlertType } from '../components/alert/AlertType.js';
 import { PrimaryButton, SmallButton } from '../components/button.js';
-import { UserAccount } from '../model/UserAccount.js';
+import { UserWallet } from '../context/current_wallet/UserWallet.js';
 import {
   BalanceMap,
   TOKEN_LIST,
@@ -14,9 +14,10 @@ import {
   formatBalance,
 } from '../model/token_list.js';
 import { SendTokens } from './SendTokens.js';
+import { useCurrentWallet } from '../context/current_wallet/useCurrentWallet.js';
 
 interface MainProps {
-  account: UserAccount;
+  account: UserWallet;
 }
 
 enum CurrentModal {
@@ -30,9 +31,10 @@ export function Main({ account }: MainProps) {
   const [balances, setBalances] = useState<BalanceMap>(
     () => new Map(TOKEN_LIST.map(token => [token.address.toString(), 0n])),
   );
+  const { clearCurrentWallet } = useCurrentWallet();
 
   const fetchContracts = async () => {
-    const tokenContracts = await fetchTokenContracts(account.account);
+    const tokenContracts = await fetchTokenContracts(account.wallet);
     setTokenContracts(tokenContracts);
     return tokenContracts;
   };
@@ -43,7 +45,7 @@ export function Main({ account }: MainProps) {
   });
 
   const fetchBalances = async () => {
-    const balances = await fetchTokenBalances(account.account.getAddress(), tokenContracts!.values());
+    const balances = await fetchTokenBalances(account.wallet.getAddress(), tokenContracts!.values());
     setBalances(balances);
     return balances;
   };
@@ -55,7 +57,7 @@ export function Main({ account }: MainProps) {
   });
 
   const copy = async () => {
-    const value = account.account.getAddress().toString();
+    const value = account.wallet.getAddress().toString();
     await navigator.clipboard.writeText(value);
   };
 
@@ -74,9 +76,10 @@ export function Main({ account }: MainProps) {
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8 flex-auto flex-col">
       {isError && <Alert message="Error fetching balance" />}
       {isPending && <Alert message="Fetching balance" alertType={AlertType.info} />}
+      <SmallButton action={() => clearCurrentWallet()} label="Logout" classes="flex-left" />
       <div className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">Your address</div>
       <div className="mt-1 text-gray-800 md:text-xl dark:text-white text-base text-left flex-col">
-        {account.account.getAddress().toShortString()}
+        {account.wallet.getAddress().toShortString()}
         <SmallButton action={() => copy()} label="Copy" />
         <SmallButton action={() => refetch()} label="Refresh" />
       </div>

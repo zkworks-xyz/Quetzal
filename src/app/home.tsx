@@ -1,19 +1,16 @@
-import { useState } from 'react';
-
 import { CreateAccount } from './modals/CreateAccount.js';
 import { Main } from './modals/Main.js';
-import { UserAccount } from './model/UserAccount.js';
+import { useCurrentWallet } from './context/current_wallet/useCurrentWallet.js';
 
 export function Home() {
-  const [account, setAccount] = useState<UserAccount | null>(null);
-
+  const { currentWallet, setCurrentWallet } = useCurrentWallet();
   return (
     <>
-      {account && <Main account={account} />}
-      {!account && (
+      {currentWallet && <Main account={currentWallet} />}
+      {!currentWallet && (
         <CreateAccount
           onAccountCreated={account => {
-            setAccount(account);
+            setCurrentWallet(account);
           }}
         />
       )}

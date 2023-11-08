@@ -5,36 +5,32 @@ import { getWebAuthnAccount } from '../account/webauthn_account_contract.js';
 import { WebauthnSigner } from '../account/webauthn_signer.js';
 import { useDeveloperMode } from '../context/developer_mode/useDeveloperMode.js';
 import { usePXE } from '../context/pxe/usePxe.js';
-import { UserAccount } from '../model/UserAccount.js';
+import { UserWallet } from '../context/current_wallet/UserWallet.js';
 import { InfoDialog } from './InfoDialog.js';
 import { PrimaryButton } from '../components/button.js';
 import { Input } from '../components/Input.js';
 
 export interface CreateAccountProps {
-  onAccountCreated: (account: UserAccount) => void;
+  onAccountCreated: (account: UserWallet) => void;
 }
 
 const FAUCET_AMOUNT = 1234n;
 
 export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
-  const [userName, setUserName] = useState<string>('');
+  const [name, setName] = useState<string>('');
   const { pxe } = usePXE();
   const { faucet } = useDeveloperMode();
   const amount: bigint = 1234n;
 
   const deployWallet = async () => {
     const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
-    const webAuthnAccount1: AccountManager = getWebAuthnAccount(
-      pxe,
-      encryptionPrivateKey1,
-      new WebauthnSigner(userName),
-    );
+    const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebauthnSigner(name));
     return webAuthnAccount1.waitDeploy();
   };
 
-  const mintTokens = async (account: AccountWalletWithPrivateKey) => {
-    await faucet(account.getAddress(), FAUCET_AMOUNT);
-    onAccountCreated({ username: userName, account });
+  const mintTokens = async (wallet: AccountWalletWithPrivateKey) => {
+    await faucet(wallet.getAddress(), FAUCET_AMOUNT);
+    onAccountCreated({ name, wallet });
   };
 
   const walletMutation = useMutation({
@@ -88,7 +84,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
             <li>To deploy example tokens and start the wallet, click the Continue button below.</li>
           </ul>
         </div>
-        <Input id="email-address" placeholder="Enter account name" onChange={e => setUserName(e.target.value)} />
+        <Input id="email-address" placeholder="Enter account name" onChange={e => setName(e.target.value)} />
         <PrimaryButton classes="w-full py-3" label="Create wallet" action={() => walletMutation.mutate()} />
       </div>
     </section>

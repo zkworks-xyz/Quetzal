@@ -68,11 +68,15 @@ export class WebAuthnAccountContract extends BaseAccountContract {
   }
 
   getAuthWitnessProvider(_address: CompleteAddress): AuthWitnessProvider {
-    return <AuthWitnessProvider>{
-      createAuthWitness: async (message: Fr): Promise<AuthWitness> => {
-        const signature = await this.webAuthnInterface.sign(new Uint8Array(message.toBuffer()));
-        return new AuthWitness(message, signature.toArray());
-      },
-    };
+    return new WebAuthnWitnessProvider(this.webAuthnInterface);
+  }
+}
+
+export class WebAuthnWitnessProvider implements AuthWitnessProvider {
+  constructor(readonly webAuthnInterface: WebAuthnInterface) {}
+
+  async createAuthWitness(message: Fr): Promise<AuthWitness> {
+    const signature = await this.webAuthnInterface.sign(new Uint8Array(message.toBuffer()));
+    return new AuthWitness(message, signature.toArray());
   }
 }

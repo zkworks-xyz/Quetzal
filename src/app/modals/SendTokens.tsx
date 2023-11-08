@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserAccount } from '../model/UserAccount.js';
+import { UserWallet } from '../context/current_wallet/UserWallet.js';
 import { InfoDialog } from './InfoDialog.js';
 import { TokenContract } from '@aztec/noir-contracts/types';
 import { AztecAddress } from '@aztec/aztec.js';
@@ -9,7 +9,7 @@ import { TOKEN_LIST } from '../model/token_list.js';
 import { Input, Label } from '../components/Input.js';
 
 export interface SendTokensProps {
-  account: UserAccount;
+  account: UserWallet;
   tokenContract: TokenContract;
   onClose: () => void;
   onSuccess: () => void;
@@ -24,14 +24,14 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
       return;
     }
     const tx = tokenContract.methods
-      .transfer_public(account.account.getAddress(), AztecAddress.fromString(toAddress), BigInt(amount), 0)
+      .transfer_public(account.wallet.getAddress(), AztecAddress.fromString(toAddress), BigInt(amount), 0)
       .send();
     return tx.wait();
   };
 
   const mutation = useMutation({ mutationFn: sendTokens, onSuccess });
   if (mutation.isPending) {
-    const from = account.account.getAddress().toShortString();
+    const from = account.wallet.getAddress().toShortString();
     const to = AztecAddress.fromString(toAddress).toShortString();
     const message = `Sending tokens from ${from} to ${to} amount: ${amount}`;
     return <InfoDialog title="⏳ Sending tokens" message={message} />;

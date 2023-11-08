@@ -6,6 +6,7 @@ import { PXEProvider } from './context/pxe/PxeProvider.js';
 import { Home } from './home.js';
 import './index.css';
 import styles from './home.module.scss';
+import { CurrentWalletProvider } from './context/current_wallet/CurrentWalletProvider.js';
 
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -17,7 +18,9 @@ root.render(
         <h1 className="text-3xl font-bold">Quetzal</h1>
         <PXEProvider>
           <DeveloperModeProvider>
-            <Home />
+            <CurrentWalletProvider>
+              <Home />
+            </CurrentWalletProvider>
           </DeveloperModeProvider>
         </PXEProvider>
       </main>

@@ -10,10 +10,8 @@ import {
   PXE,
   Point,
 } from '@aztec/aztec.js';
-import {
-  deserializeAccountWalletWithPrivateKey,
-  serializeAccountWalletWithPrivateKey,
-} from '../app/context/current_account/serialization.js';
+import { UserWallet } from '../app/context/current_wallet/UserWallet.js';
+import { deserializeUserWallet, serializeUserWallet } from '../app/context/current_wallet/serialization.js';
 
 const TEST_ADDRESS = AztecAddress.fromString('0x1eb060c038bf73cb4e070e44e88a319a8f75bcee2b0d326966b3594c88f9f160');
 const TEST_PUBLIC_KEY = new Point(
@@ -36,7 +34,7 @@ const TEST_ACCOUNT = new DefaultAccountInterface(TEST_WEB_AUTH_WITNESS_PROVIDER,
 describe('AccountWalletWithPrivateKey', () => {
   let pxe: PXE;
   let wallet: AccountWalletWithPrivateKey;
-
+  let userWallet: UserWallet;
   beforeAll(async () => {
     pxe = {
       getNodeInfo: () => {
@@ -44,19 +42,24 @@ describe('AccountWalletWithPrivateKey', () => {
       },
     } as any;
     wallet = new AccountWalletWithPrivateKey(pxe, TEST_ACCOUNT, TEST_ENCRYPTION_PRIVATE_KEY);
+    userWallet = {
+      wallet: wallet,
+      name: 'test',
+    };
   }, 60_000);
 
-  it('roundtrip', async () => {
-    const serialized = serializeAccountWalletWithPrivateKey(wallet);
-    const deserialized = await deserializeAccountWalletWithPrivateKey(serialized, pxe, TEST_WEB_AUTH_WITNESS_PROVIDER);
-    expect(deserialized.getCompleteAddress()).toStrictEqual(wallet.getCompleteAddress());
-    expect(deserialized.getEncryptionPrivateKey()).toStrictEqual(wallet.getEncryptionPrivateKey());
+  it('UserWallet roundtrip', async () => {
+    const serialized = serializeUserWallet(userWallet);
+    const deserialized = await deserializeUserWallet(serialized, pxe, TEST_WEB_AUTH_WITNESS_PROVIDER);
+    expect(deserialized.wallet.getCompleteAddress()).toStrictEqual(wallet.getCompleteAddress());
+    expect(deserialized.wallet.getEncryptionPrivateKey()).toStrictEqual(wallet.getEncryptionPrivateKey());
+    expect(deserialized.name).toEqual('test');
   });
 
   it('deserialize with missing field', async () => {
-    const serialized = '{"encryptionPrivateKey":"0x28a24bff8661d4b203c0b16327ebad7bccc31718a49dcedb4a288aa3b2f7cd96"}';
+    const serialized = '{"name":"test"}';
     await expect(
-      async () => await deserializeAccountWalletWithPrivateKey(serialized, pxe, TEST_WEB_AUTH_WITNESS_PROVIDER),
+      async () => await deserializeUserWallet(serialized, pxe, TEST_WEB_AUTH_WITNESS_PROVIDER),
     ).rejects.toThrow(TypeError);
   });
 });
