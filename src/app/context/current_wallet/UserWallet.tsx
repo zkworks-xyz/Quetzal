@@ -1,6 +1,6 @@
 import { AccountWalletWithPrivateKey } from '@aztec/aztec.js';
 
-export interface UserAccount {
+export interface UserWallet {
   username: string;
   account: AccountWalletWithPrivateKey;
 }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserAccount } from '../model/UserAccount.js';
+import { UserWallet } from '../context/current_wallet/UserWallet.js';
 import { InfoDialog } from './InfoDialog.js';
 import { TokenContract } from '@aztec/noir-contracts/types';
 import { AztecAddress } from '@aztec/aztec.js';
@@ -9,7 +9,7 @@ import { TOKEN_LIST } from '../model/token_list.js';
 import { Input, Label } from '../components/Input.js';
 
 export interface SendTokensProps {
-  account: UserAccount;
+  account: UserWallet;
   tokenContract: TokenContract;
   onClose: () => void;
   onSuccess: () => void;

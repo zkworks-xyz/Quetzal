@@ -13,7 +13,7 @@ import {
 import {
   deserializeAccountWalletWithPrivateKey,
   serializeAccountWalletWithPrivateKey,
-} from '../app/context/current_account/serialization.js';
+} from '../app/context/current_wallet/serialization.js';
 
 const TEST_ADDRESS = AztecAddress.fromString('0x1eb060c038bf73cb4e070e44e88a319a8f75bcee2b0d326966b3594c88f9f160');
 const TEST_PUBLIC_KEY = new Point(
