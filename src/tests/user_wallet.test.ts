@@ -10,8 +10,9 @@ import {
   PXE,
   Point,
 } from '@aztec/aztec.js';
+
+import { deserializeUserWallet, serializeUserWallet } from '../app/infra/user_wallet.js';
 import { UserWallet } from '../app/context/current_wallet/UserWallet.js';
-import { deserializeUserWallet, serializeUserWallet } from '../app/context/current_wallet/serialization.js';
 
 const TEST_ADDRESS = AztecAddress.fromString('0x1eb060c038bf73cb4e070e44e88a319a8f75bcee2b0d326966b3594c88f9f160');
 const TEST_PUBLIC_KEY = new Point(
@@ -31,10 +32,11 @@ const NODE_INFO: NodeInfo = {} as NodeInfo;
 
 const TEST_ACCOUNT = new DefaultAccountInterface(TEST_WEB_AUTH_WITNESS_PROVIDER, TEST_COMPLETE_ADDRESS, NODE_INFO);
 
-describe('AccountWalletWithPrivateKey', () => {
+describe('UserWallet', () => {
   let pxe: PXE;
   let wallet: AccountWalletWithPrivateKey;
   let userWallet: UserWallet;
+
   beforeAll(async () => {
     pxe = {
       getNodeInfo: () => {
@@ -48,7 +50,7 @@ describe('AccountWalletWithPrivateKey', () => {
     };
   }, 60_000);
 
-  it('UserWallet roundtrip', async () => {
+  it('serialize roundtrip', async () => {
     const serialized = serializeUserWallet(userWallet);
     const deserialized = await deserializeUserWallet(serialized, pxe, TEST_WEB_AUTH_WITNESS_PROVIDER);
     expect(deserialized.wallet.getCompleteAddress()).toStrictEqual(wallet.getCompleteAddress());

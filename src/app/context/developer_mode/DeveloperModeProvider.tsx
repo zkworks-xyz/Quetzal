@@ -1,27 +1,13 @@
-import {
-  AccountManager,
-  AztecAddressLike,
-  ExtendedContractData,
-  INITIAL_SANDBOX_ENCRYPTION_KEYS,
-  INITIAL_SANDBOX_SALTS,
-  INITIAL_SANDBOX_SIGNING_KEYS,
-  PXE,
-  getSchnorrAccount,
-} from '@aztec/aztec.js';
+import { AztecAddressLike, ExtendedContractData } from '@aztec/aztec.js';
 import { TokenContract } from '@aztec/noir-contracts/types';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { PrimaryButton } from '../../components/button.js';
 import { InfoDialog } from '../../modals/InfoDialog.js';
-import { TOKEN_LIST, deployTestTokens } from '../../model/token_list.js';
+import { TOKEN_LIST } from '../../model/token_list.js';
 import { usePXE } from '../pxe/usePxe.js';
 import { DeveloperContext } from './DeveloperContext.js';
-
-function getSandboxAccounts(pxe: PXE): AccountManager[] {
-  return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>
-    getSchnorrAccount(pxe, encryptionKey, INITIAL_SANDBOX_SIGNING_KEYS[i], INITIAL_SANDBOX_SALTS[i]),
-  );
-}
+import { deployTestTokens, getSandboxAccounts } from '../../infra/developer.js';
 
 export function DeveloperModeProvider({ children }: { children: ReactNode }) {
   const { pxe } = usePXE();

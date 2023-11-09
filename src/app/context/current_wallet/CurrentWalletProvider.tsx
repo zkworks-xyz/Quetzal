@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { usePXE } from '../pxe/usePxe.js';
 import { CurrentWalletContext } from './CurrentWalletContext.js';
 import { UserWallet } from './UserWallet.js';
-import { deserializeUserWallet, serializeUserWallet } from './serialization.js';
+import { deserializeUserWallet, serializeUserWallet } from '../../infra/user_wallet.js';
 
 const LOCAL_STORAGE_KEY = 'quetzal.current_wallet';
 
