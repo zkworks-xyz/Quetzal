@@ -14,7 +14,7 @@ export interface TokenInfo {
   readonly logoURI?: string;
 }
 
-export const TOKEN_LIST = [
+export const TOKEN_LIST: TokenInfo[] = [
   {
     name: 'Ether',
     symbol: 'ETH',
@@ -35,6 +35,10 @@ export type TokenContractMap = Map<string, TokenContract>;
 
 export type BalanceMap = Map<string, bigint>;
 
-export function formatBalance(balance: bigint | undefined) {
+export function getTokenByAddress(aztecAddress: AztecAddress) : TokenInfo | undefined {
+  return TOKEN_LIST.find((token) => token.address.equals(aztecAddress));
+}
+
+export function formatBalance(balance: bigint | undefined) : string {
   return balance ? balance.toString() : '0';
 }
