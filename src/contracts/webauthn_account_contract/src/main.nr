@@ -37,7 +37,7 @@ contract WebAuthnAccount {
     }
 
     impl Storage {
-        fn init(context: Context) -> pub Self {
+        fn init(context: Context) -> Self {
             Storage {
                 // docs:start:storage_init
                 signing_public_key: ImmutableSingleton::new(context, 1, PublicKeyNoteMethods),

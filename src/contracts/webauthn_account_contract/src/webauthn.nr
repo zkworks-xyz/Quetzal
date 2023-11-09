@@ -3,7 +3,7 @@ use crate::utils::prefix_sha256_hash;
 
 global CLIENT_DATA_JSON_MAX_LEN = 255;
 
-fn validate_webauthn_signature<N>(
+pub fn validate_webauthn_signature<N>(
     authenticator_data: [u8; 37],
     client_data_json_len: u8,
     client_data_json: [u8; CLIENT_DATA_JSON_MAX_LEN],
