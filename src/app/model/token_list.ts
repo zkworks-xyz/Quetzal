@@ -1,9 +1,9 @@
 import { AztecAddress } from '@aztec/aztec.js';
 import { TokenContract } from '@aztec/noir-contracts/types';
 
-export const ETHER_CONTRACT_ADDRESS_AS_STRING = '0x2f45f498b7912c779dde8e3594622e36d7908088b09e99ab91caaafb40d1f9ef';
+export const ETHER_CONTRACT_ADDRESS_AS_STRING = '0x0ed3aaa22d69559ee368b32fbafb24b49b103c0a07bd834fd519c8157553ec1f';
 export const ETHER_CONTRACT_ADDRESS = AztecAddress.fromString(ETHER_CONTRACT_ADDRESS_AS_STRING);
-export const DAI_CONTRACT_ADDRESS_AS_STRING = '0x2c85abd98f07477ebef15793047d3eb9bee47f92731edb690068e73c6f5484ed';
+export const DAI_CONTRACT_ADDRESS_AS_STRING = '0x1c293ee87ce6d43af8ba5da8a2b4c40f076226b0bb87edb16e603d05cab6cfb7';
 export const DAI_CONTRACT_ADDRESS = AztecAddress.fromString(DAI_CONTRACT_ADDRESS_AS_STRING);
 
 export interface TokenInfo {

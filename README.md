@@ -80,10 +80,20 @@ In `package.json` update `install:noir` script, to look something like this:
 "install:noir": "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.17.0-aztec.2",
 ```
 
+List of versions is available at [Noir's GitHub](https://github.com/noir-lang/noir/releases). Note to pick version with aztec.x suffix.
+
 In `package.json` update `install:sandbox` script to look like something like this:
 ```json
 "install:sandbox": "docker pull aztecprotocol/aztec-sandbox:0.xx.x",
 ```
+
+List of versions is available at [Aztec's GitHub](https://github.com/AztecProtocol/aztec-packages/tags).
+
+In `package.json` update `start:sandbox` script, to look something like this:
+```json
+"start:sandbox": "SANDBOX_VERSION=0.xx.x /bin/bash -c \"$(curl -fsSL 'https://sandbox.aztec.network')\" ",
+```
+
 
 In `package.json` update following dependencies:
 ```json
@@ -92,6 +102,12 @@ In `package.json` update following dependencies:
     "@aztec/foundation": "^0.xx.x",
     "@aztec/noir-contracts": "^0.xx.x",
     "@aztec/types": "^0.xx.x",
+```
+
+In `Nargo.toml` update tags in dependencies, for example:
+
+```toml
+aztec = { git="https://github.com/AztecProtocol/aztec-packages/", tag="aztec-packages-v0.xx.x", directory="yarn-project/aztec-nr/aztec" }
 ```
 
 Update @aztec/cli to the latest version with following command:

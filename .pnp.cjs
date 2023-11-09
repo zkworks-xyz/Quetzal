@@ -26,11 +26,11 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
-          ["@aztec/aztec.js", "npm:0.11.1"],\
-          ["@aztec/circuits.js", "npm:0.11.1"],\
-          ["@aztec/foundation", "npm:0.11.1"],\
-          ["@aztec/noir-contracts", "npm:0.11.1"],\
-          ["@aztec/types", "npm:0.11.1"],\
+          ["@aztec/aztec.js", "npm:0.14.2"],\
+          ["@aztec/circuits.js", "npm:0.14.2"],\
+          ["@aztec/foundation", "npm:0.14.2"],\
+          ["@aztec/noir-contracts", "npm:0.14.2"],\
+          ["@aztec/types", "npm:0.14.2"],\
           ["@headlessui/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:1.7.17"],\
           ["@heroicons/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:2.0.18"],\
           ["@jest/globals", "npm:29.7.0"],\
@@ -123,14 +123,14 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@aztec/aztec.js", [\
-      ["npm:0.11.1", {\
-        "packageLocation": "./.yarn/cache/@aztec-aztec.js-npm-0.11.1-aab125e6de-2c30a28ed4.zip/node_modules/@aztec/aztec.js/",\
+      ["npm:0.14.2", {\
+        "packageLocation": "./.yarn/cache/@aztec-aztec.js-npm-0.14.2-25ab02de71-d67bed9643.zip/node_modules/@aztec/aztec.js/",\
         "packageDependencies": [\
-          ["@aztec/aztec.js", "npm:0.11.1"],\
-          ["@aztec/circuits.js", "npm:0.11.1"],\
-          ["@aztec/ethereum", "npm:0.11.1"],\
-          ["@aztec/foundation", "npm:0.11.1"],\
-          ["@aztec/types", "npm:0.11.1"],\
+          ["@aztec/aztec.js", "npm:0.14.2"],\
+          ["@aztec/circuits.js", "npm:0.14.2"],\
+          ["@aztec/ethereum", "npm:0.14.2"],\
+          ["@aztec/foundation", "npm:0.14.2"],\
+          ["@aztec/types", "npm:0.14.2"],\
           ["lodash.every", "npm:4.6.0"],\
           ["lodash.partition", "npm:4.6.0"],\
           ["lodash.zip", "npm:4.2.0"],\
@@ -140,11 +140,11 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@aztec/circuits.js", [\
-      ["npm:0.11.1", {\
-        "packageLocation": "./.yarn/cache/@aztec-circuits.js-npm-0.11.1-5e6d40a55c-9f1bb7461b.zip/node_modules/@aztec/circuits.js/",\
+      ["npm:0.14.2", {\
+        "packageLocation": "./.yarn/cache/@aztec-circuits.js-npm-0.14.2-2f882e865c-f9b0789e0e.zip/node_modules/@aztec/circuits.js/",\
         "packageDependencies": [\
-          ["@aztec/circuits.js", "npm:0.11.1"],\
-          ["@aztec/foundation", "npm:0.11.1"],\
+          ["@aztec/circuits.js", "npm:0.14.2"],\
+          ["@aztec/foundation", "npm:0.14.2"],\
           ["@msgpack/msgpack", "npm:3.0.0-beta2"],\
           ["@noble/curves", "npm:1.2.0"],\
           ["@types/lodash.camelcase", "npm:4.3.7"],\
@@ -163,24 +163,25 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@aztec/ethereum", [\
-      ["npm:0.11.1", {\
-        "packageLocation": "./.yarn/cache/@aztec-ethereum-npm-0.11.1-32dfc2c403-0228fbb622.zip/node_modules/@aztec/ethereum/",\
+      ["npm:0.14.2", {\
+        "packageLocation": "./.yarn/cache/@aztec-ethereum-npm-0.14.2-ded059a89a-d521bd185a.zip/node_modules/@aztec/ethereum/",\
         "packageDependencies": [\
-          ["@aztec/ethereum", "npm:0.11.1"],\
-          ["@aztec/foundation", "npm:0.11.1"],\
+          ["@aztec/ethereum", "npm:0.14.2"],\
+          ["@aztec/foundation", "npm:0.14.2"],\
           ["dotenv", "npm:16.3.1"],\
           ["tslib", "npm:2.6.2"],\
-          ["viem", "virtual:32dfc2c40325b5f369fe64a8691547c1d5aa94a1265a6eee04a2bac9997a24e11d94238629eb81f63098a025e3c711ae0ef0e581cf2fe493992b173b8dcfb5b3#npm:1.16.5"]\
+          ["viem", "virtual:ded059a89a81005c32c9f33bfd300f65f9569715076fab3526b157301fa2d6f019e2f07518e2187f5d8dfd80827676307b56730bf78f30e447b49cebbcfbf02d#npm:1.16.5"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@aztec/foundation", [\
-      ["npm:0.11.1", {\
-        "packageLocation": "./.yarn/cache/@aztec-foundation-npm-0.11.1-f981dc6d1c-0b67879eee.zip/node_modules/@aztec/foundation/",\
+      ["npm:0.14.2", {\
+        "packageLocation": "./.yarn/cache/@aztec-foundation-npm-0.14.2-5578210479-04d3dea393.zip/node_modules/@aztec/foundation/",\
         "packageDependencies": [\
-          ["@aztec/foundation", "npm:0.11.1"],\
+          ["@aztec/foundation", "npm:0.14.2"],\
           ["@koa/cors", "npm:4.0.0"],\
+          ["@noble/curves", "npm:1.2.0"],\
           ["debug", "virtual:d5d30253e736892b2acc3ec4a198697671c22d34e12c0973055339037f9300bc98d442a7cb35c6d56e46f9b5aba6a35023589bc2d530f400a05f3addf4b43d2e#npm:4.3.4"],\
           ["detect-node", "npm:2.1.0"],\
           ["hash.js", "npm:1.1.7"],\
@@ -193,18 +194,19 @@ const RAW_RUNTIME_STATE =
           ["lodash.clonedeepwith", "npm:4.5.0"],\
           ["memdown", "npm:6.1.1"],\
           ["pako", "npm:2.1.0"],\
-          ["sha3", "npm:2.1.4"]\
+          ["sha3", "npm:2.1.4"],\
+          ["zod", "npm:3.22.4"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@aztec/noir-contracts", [\
-      ["npm:0.11.1", {\
-        "packageLocation": "./.yarn/cache/@aztec-noir-contracts-npm-0.11.1-f2980ee493-1ac2675c42.zip/node_modules/@aztec/noir-contracts/",\
+      ["npm:0.14.2", {\
+        "packageLocation": "./.yarn/cache/@aztec-noir-contracts-npm-0.14.2-0222c95d05-833d70050d.zip/node_modules/@aztec/noir-contracts/",\
         "packageDependencies": [\
-          ["@aztec/noir-contracts", "npm:0.11.1"],\
-          ["@aztec/aztec.js", "npm:0.11.1"],\
-          ["@aztec/foundation", "npm:0.11.1"],\
+          ["@aztec/noir-contracts", "npm:0.14.2"],\
+          ["@aztec/aztec.js", "npm:0.14.2"],\
+          ["@aztec/foundation", "npm:0.14.2"],\
           ["lodash.omit", "npm:4.5.0"],\
           ["tslib", "npm:2.6.2"]\
         ],\
@@ -212,13 +214,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@aztec/types", [\
-      ["npm:0.11.1", {\
-        "packageLocation": "./.yarn/cache/@aztec-types-npm-0.11.1-22dbb69a0f-48c7195cba.zip/node_modules/@aztec/types/",\
+      ["npm:0.14.2", {\
+        "packageLocation": "./.yarn/cache/@aztec-types-npm-0.14.2-65de702aeb-186c1dc9ac.zip/node_modules/@aztec/types/",\
         "packageDependencies": [\
-          ["@aztec/types", "npm:0.11.1"],\
-          ["@aztec/circuits.js", "npm:0.11.1"],\
-          ["@aztec/ethereum", "npm:0.11.1"],\
-          ["@aztec/foundation", "npm:0.11.1"],\
+          ["@aztec/types", "npm:0.14.2"],\
+          ["@aztec/circuits.js", "npm:0.14.2"],\
+          ["@aztec/ethereum", "npm:0.14.2"],\
+          ["@aztec/foundation", "npm:0.14.2"],\
           ["browserify-cipher", "npm:1.0.1"],\
           ["lodash.clonedeep", "npm:4.5.0"],\
           ["lodash.isequal", "npm:4.5.0"],\
@@ -2955,10 +2957,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:0.9.8", {\
-        "packageLocation": "./.yarn/__virtual__/abitype-virtual-53f7492e70/0/cache/abitype-npm-0.9.8-ee830ee479-9094080483.zip/node_modules/abitype/",\
+      ["virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:0.9.8", {\
+        "packageLocation": "./.yarn/__virtual__/abitype-virtual-649d1bda34/0/cache/abitype-npm-0.9.8-ee830ee479-9094080483.zip/node_modules/abitype/",\
         "packageDependencies": [\
-          ["abitype", "virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:0.9.8"],\
+          ["abitype", "virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:0.9.8"],\
           ["@types/typescript", null],\
           ["@types/zod", null],\
           ["typescript", null],\
@@ -7280,12 +7282,12 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:1.0.3", {\
-        "packageLocation": "./.yarn/__virtual__/isows-virtual-a43121b882/0/cache/isows-npm-1.0.3-aa8c925c69-9cacd5cf59.zip/node_modules/isows/",\
+      ["virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:1.0.3", {\
+        "packageLocation": "./.yarn/__virtual__/isows-virtual-01801fbfbd/0/cache/isows-npm-1.0.3-aa8c925c69-9cacd5cf59.zip/node_modules/isows/",\
         "packageDependencies": [\
-          ["isows", "virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:1.0.3"],\
+          ["isows", "virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:1.0.3"],\
           ["@types/ws", null],\
-          ["ws", "virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:8.13.0"]\
+          ["ws", "virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:8.13.0"]\
         ],\
         "packagePeers": [\
           "@types/ws",\
@@ -11624,11 +11626,11 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["token", "workspace:."],\
-          ["@aztec/aztec.js", "npm:0.11.1"],\
-          ["@aztec/circuits.js", "npm:0.11.1"],\
-          ["@aztec/foundation", "npm:0.11.1"],\
-          ["@aztec/noir-contracts", "npm:0.11.1"],\
-          ["@aztec/types", "npm:0.11.1"],\
+          ["@aztec/aztec.js", "npm:0.14.2"],\
+          ["@aztec/circuits.js", "npm:0.14.2"],\
+          ["@aztec/foundation", "npm:0.14.2"],\
+          ["@aztec/noir-contracts", "npm:0.14.2"],\
+          ["@aztec/types", "npm:0.14.2"],\
           ["@headlessui/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:1.7.17"],\
           ["@heroicons/react", "virtual:0dfb89c90019c1003331a3f04a51a3c3725bdd250e95e1c4f80f968a9788b4feeb6157dc3d621ab66a7ecc6c7d7403115ca006405294495e5df25db45eb6a98a#npm:2.0.18"],\
           ["@jest/globals", "npm:29.7.0"],\
@@ -12317,20 +12319,20 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:32dfc2c40325b5f369fe64a8691547c1d5aa94a1265a6eee04a2bac9997a24e11d94238629eb81f63098a025e3c711ae0ef0e581cf2fe493992b173b8dcfb5b3#npm:1.16.5", {\
-        "packageLocation": "./.yarn/__virtual__/viem-virtual-2ea914e679/0/cache/viem-npm-1.16.5-cb598adbe8-54c41042be.zip/node_modules/viem/",\
+      ["virtual:ded059a89a81005c32c9f33bfd300f65f9569715076fab3526b157301fa2d6f019e2f07518e2187f5d8dfd80827676307b56730bf78f30e447b49cebbcfbf02d#npm:1.16.5", {\
+        "packageLocation": "./.yarn/__virtual__/viem-virtual-5d0b6f4b8a/0/cache/viem-npm-1.16.5-cb598adbe8-54c41042be.zip/node_modules/viem/",\
         "packageDependencies": [\
-          ["viem", "virtual:32dfc2c40325b5f369fe64a8691547c1d5aa94a1265a6eee04a2bac9997a24e11d94238629eb81f63098a025e3c711ae0ef0e581cf2fe493992b173b8dcfb5b3#npm:1.16.5"],\
+          ["viem", "virtual:ded059a89a81005c32c9f33bfd300f65f9569715076fab3526b157301fa2d6f019e2f07518e2187f5d8dfd80827676307b56730bf78f30e447b49cebbcfbf02d#npm:1.16.5"],\
           ["@adraffy/ens-normalize", "npm:1.9.4"],\
           ["@noble/curves", "npm:1.2.0"],\
           ["@noble/hashes", "npm:1.3.2"],\
           ["@scure/bip32", "npm:1.3.2"],\
           ["@scure/bip39", "npm:1.2.1"],\
           ["@types/typescript", null],\
-          ["abitype", "virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:0.9.8"],\
-          ["isows", "virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:1.0.3"],\
+          ["abitype", "virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:0.9.8"],\
+          ["isows", "virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:1.0.3"],\
           ["typescript", null],\
-          ["ws", "virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:8.13.0"]\
+          ["ws", "virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:8.13.0"]\
         ],\
         "packagePeers": [\
           "@types/typescript",\
@@ -12732,10 +12734,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:8.13.0", {\
-        "packageLocation": "./.yarn/__virtual__/ws-virtual-0bb1c235a6/0/cache/ws-npm-8.13.0-26ffa3016a-1769532b6f.zip/node_modules/ws/",\
+      ["virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:8.13.0", {\
+        "packageLocation": "./.yarn/__virtual__/ws-virtual-68d44f6632/0/cache/ws-npm-8.13.0-26ffa3016a-1769532b6f.zip/node_modules/ws/",\
         "packageDependencies": [\
-          ["ws", "virtual:2ea914e679e4c34d8770eabe82211551c9125524a2e0641eec142beea2f02e187f90f45af4cfb4718e2550ab443d4e85e74c234f58d8eaf51cb8e5307101a896#npm:8.13.0"],\
+          ["ws", "virtual:5d0b6f4b8af0bf6252bb6e9945cd2ef174ee7d7bafc8aa8cd6f974218a16a253c5ec8c440cee7d4a77af66c8d140a012f05d4e03c5966aca5d5f6cea6112a6bb#npm:8.13.0"],\
           ["@types/bufferutil", null],\
           ["@types/utf-8-validate", null],\
           ["bufferutil", null],\
@@ -12869,6 +12871,15 @@ const RAW_RUNTIME_STATE =
           ["tiny-case", "npm:1.0.3"],\
           ["toposort", "npm:2.0.2"],\
           ["type-fest", "npm:2.19.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["zod", [\
+      ["npm:3.22.4", {\
+        "packageLocation": "./.yarn/cache/zod-npm-3.22.4-2bccbc41b4-73622ca36a.zip/node_modules/zod/",\
+        "packageDependencies": [\
+          ["zod", "npm:3.22.4"]\
         ],\
         "linkType": "HARD"\
       }]\
