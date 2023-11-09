@@ -77,7 +77,7 @@ To upgrade environment execute the following steps.
 
 In `package.json` update `install:noir` script, to look something like this:
 ```json
-"install:noir": "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.17.0-aztec.2",
+"install:noir": "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash noirup -v 0.`xx.x-aztec.2",
 ```
 
 List of versions is available at [Noir's GitHub](https://github.com/noir-lang/noir/releases). Note to pick version with aztec.x suffix.
