@@ -1,4 +1,4 @@
-import { WebAuthnAccountContractArtifact } from '../../artifacts/WebAuthnAccount.js';
+import { WebAuthnAccountContractArtifact } from '../../../artifacts/WebAuthnAccount.js';
 import {
   AccountManager,
   AuthWitnessProvider,
@@ -11,8 +11,8 @@ import {
 } from '@aztec/aztec.js';
 
 import { AuthWitness } from '@aztec/types';
-import { WebAuthnPublicKey } from './WebAuthnPublicKey.js';
-import { WebAuthnSignature } from './WebAuthnSignature.js';
+import { SigningPublicKey } from '../../model/webauthn/SigningPublicKey.js';
+import { WebAuthnSignature } from '../../model/webauthn/WebAuthnSignature.js';
 
 export function getWebAuthnAccount(
   pxe: PXE,
@@ -24,7 +24,7 @@ export function getWebAuthnAccount(
 }
 
 export interface WebAuthnInterface {
-  getPublicKey(): Promise<WebAuthnPublicKey>;
+  getPublicKey(): Promise<SigningPublicKey>;
 
   sign(challenge: Uint8Array): Promise<WebAuthnSignature>;
 }

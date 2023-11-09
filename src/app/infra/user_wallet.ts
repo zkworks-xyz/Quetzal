@@ -9,8 +9,8 @@ import {
   PXE,
   Point,
 } from '@aztec/aztec.js';
-import { WebAuthnWitnessProvider } from '../account/webauthn_account_contract.js';
-import { WebauthnSigner } from '../account/webauthn_signer.js';
+import { WebAuthnWitnessProvider } from './aztec/webauthn_account_contract.js';
+import { WebauthnSigner } from './webauthn/webauthn_signer.js';
 import { UserWallet } from '../context/current_wallet/UserWallet.js';
 
 export function serializeUserWallet(userWallet: UserWallet): string {
