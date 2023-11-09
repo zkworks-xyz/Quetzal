@@ -1,7 +1,7 @@
 import { WebAuthnInterface } from '../app/account/webauthn_account_contract.js';
 import { secp256r1 } from '@noble/curves/p256';
 import { sha256 } from '@noble/hashes/sha256';
-import { base64encode, noPad, safeUrl, toNumberArray } from '../app/account/utils.js';
+import { base64encode, noPad, safeUrl, toNumberArray } from '../app/model/base64.js';
 import { WebAuthnPublicKey } from '../app/account/WebAuthnPublicKey.js';
 import { WebAuthnSignature } from '../app/account/WebAuthnSignature.js';
 
