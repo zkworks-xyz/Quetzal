@@ -11,7 +11,7 @@ import {
   Point,
 } from '@aztec/aztec.js';
 
-import { deserializeUserWallet, serializeUserWallet } from '../app/context/current_wallet/serialization.js';
+import { deserializeUserWallet, serializeUserWallet } from '../app/infra/user_wallet.js';
 import { UserWallet } from '../app/context/current_wallet/UserWallet.js';
 
 const TEST_ADDRESS = AztecAddress.fromString('0x1eb060c038bf73cb4e070e44e88a319a8f75bcee2b0d326966b3594c88f9f160');

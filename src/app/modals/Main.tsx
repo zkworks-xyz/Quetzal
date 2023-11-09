@@ -6,16 +6,10 @@ import { AlertType } from '../components/alert/AlertType.js';
 import { CloseButton, PrimaryButton, SmallButton } from '../components/button.js';
 import { UserWallet } from '../context/current_wallet/UserWallet.js';
 
-import {
-  BalanceMap,
-  TOKEN_LIST,
-  TokenContractMap,
-  fetchTokenBalances,
-  fetchTokenContracts,
-  formatBalance,
-} from '../model/token_list.js';
-import { SendTokens } from './SendTokens.js';
 import { useCurrentWallet } from '../context/current_wallet/useCurrentWallet.js';
+import { BalanceMap, TOKEN_LIST, TokenContractMap, formatBalance } from '../model/token_list.js';
+import { SendTokens } from './SendTokens.js';
+import { fetchTokenBalances, fetchTokenContracts } from '../infra/tokens.js';
 
 interface MainProps {
   account: UserWallet;
