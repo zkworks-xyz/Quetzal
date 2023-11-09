@@ -20,7 +20,6 @@ enum CurrentModal {
   SendTokens,
 }
 
-
 export function Main({ account }: MainProps) {
   const [modal, setModal] = useState<CurrentModal>(CurrentModal.Main);
   const [tokenContracts, setTokenContracts] = useState<TokenContractMap | null>(null);
@@ -102,11 +101,7 @@ export function Main({ account }: MainProps) {
             </div>
             <SmallButton
               action={() => {
-                setCurrentToken(
-                  tokenContracts!.get(
-                    tokenInfo.address.toString()
-                    )!
-                  );
+                setCurrentToken(tokenContracts!.get(tokenInfo.address.toString())!);
                 setModal(CurrentModal.SendTokens);
               }}
               classes="mx-0 self-center"

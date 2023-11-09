@@ -11,7 +11,7 @@ export const fetchTokenBalances = async (address: AztecAddress, tokenContracts: 
   return balances;
 };
 
-export const fetchTokenContracts = async (wallet: AccountWalletWithPrivateKey) : Promise<TokenContractMap> => {
+export const fetchTokenContracts = async (wallet: AccountWalletWithPrivateKey): Promise<TokenContractMap> => {
   const tokenContracts = new Map();
   for (const token of TOKEN_LIST) {
     tokenContracts.set(token.address.toString(), await TokenContract.at(token.address, wallet));

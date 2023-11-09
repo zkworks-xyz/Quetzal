@@ -35,10 +35,10 @@ export type TokenContractMap = Map<string, TokenContract>;
 
 export type BalanceMap = Map<string, bigint>;
 
-export function getTokenByAddress(aztecAddress: AztecAddress) : TokenInfo | undefined {
-  return TOKEN_LIST.find((token) => token.address.equals(aztecAddress));
+export function getTokenByAddress(aztecAddress: AztecAddress): TokenInfo | undefined {
+  return TOKEN_LIST.find(token => token.address.equals(aztecAddress));
 }
 
-export function formatBalance(balance: bigint | undefined) : string {
+export function formatBalance(balance: bigint | undefined): string {
   return balance ? balance.toString() : '0';
 }
