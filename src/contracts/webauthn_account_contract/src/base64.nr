@@ -3,7 +3,7 @@ use crate::utils::as_byte;
 
 global MAX_LEN = 255;
 
-fn base64_encode_url_safe_no_pad<N, M>(input: [u8; N], mut result: [u8; M]) -> [u8; M] {
+pub fn base64_encode_url_safe_no_pad<N, M>(input: [u8; N], mut result: [u8; M]) -> [u8; M] {
     assert(base64_calculate_length(input) == M);
 
     let mut max_result = [0; MAX_LEN];
@@ -39,9 +39,9 @@ fn base64_calculate_length<N>(input: [u8; N]) -> u32 {
 fn convert_chunk(input: [u8; 3]) -> [u8; 4] {
     let mut result = [0; 4];
     result[0] = (input[0] >> 2);
-    result[1] = ((input[0] << 6) >> 2) + (input[1] >> 4);
-    result[2] = ((input[1] << 4) >> 2) + (input[2] >> 6);
-    result[3] = (input[2] << 2) >> 2;
+    result[1] = (std::wrapping_shift_left(input[0], 6) >> 2) + (input[1] >> 4);
+    result[2] = (std::wrapping_shift_left(input[1], 4) >> 2) + (input[2] >> 6);
+    result[3] = std::wrapping_shift_left(input[2], 2) >> 2;
     for i in 0..4 {
         result[i] = convert_base64_number(result[i]);
     }

@@ -16,7 +16,7 @@ jobs:
         run: |
           curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash
           export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"
-          noirup -v 0.16.0-aztec.1
+          noirup -v 0.18.0-aztec.5
       - name: Run webauthn prove test
         run: |
           export PATH="$PATH:/home/runner/.nargo/bin:.nargo/bin/nargo"

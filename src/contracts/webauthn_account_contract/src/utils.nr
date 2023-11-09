@@ -1,6 +1,6 @@
 use dep::std;
 
-fn convert_field_to_array(f: Field) -> [u8; 32] {
+pub fn convert_field_to_array(f: Field) -> [u8; 32] {
     let mut res = [0; 32];
     let slice = f.to_be_bytes(32);
     for i in 0..32 {
@@ -9,7 +9,7 @@ fn convert_field_to_array(f: Field) -> [u8; 32] {
     res
 }
 
-fn convert_to_array_to_field(a: [u8; 32]) -> Field {
+pub fn convert_to_array_to_field(a: [u8; 32]) -> Field {
     let mut res: Field = 0;
     let mut multiplier = 1;
     for i in 0..32 {
@@ -50,7 +50,7 @@ fn prefix<N, M>(input: [u8; N], mut result: [u8; M]) -> [u8; M] {
     result
 }
 
-fn as_byte(s: str<1>) -> u8 {
+pub fn as_byte(s: str<1>) -> u8 {
     s.as_bytes()[0]
 }
 
