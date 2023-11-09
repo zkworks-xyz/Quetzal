@@ -39,9 +39,9 @@ fn base64_calculate_length<N>(input: [u8; N]) -> u32 {
 fn convert_chunk(input: [u8; 3]) -> [u8; 4] {
     let mut result = [0; 4];
     result[0] = (input[0] >> 2);
-    result[1] = ((input[0] << 6) >> 2) + (input[1] >> 4);
-    result[2] = ((input[1] << 4) >> 2) + (input[2] >> 6);
-    result[3] = (input[2] << 2) >> 2;
+    result[1] = (std::wrapping_shift_left(input[0], 6) >> 2) + (input[1] >> 4);
+    result[2] = (std::wrapping_shift_left(input[1], 4) >> 2) + (input[2] >> 6);
+    result[3] = std::wrapping_shift_left(input[2], 2) >> 2;
     for i in 0..4 {
         result[i] = convert_base64_number(result[i]);
     }
@@ -51,11 +51,11 @@ fn convert_chunk(input: [u8; 3]) -> [u8; 4] {
 fn convert_base64_number(n: u8) -> u8 {
     let mut result: u8 = 0;
     if n >= 0 & n <= 25 {
-        result = n + 65;
+        result = std::wrapping_add(n, 65);
     } else if n >= 26 & n <= 51 {
-        result = n + 71;
+        result = std::wrapping_add(n, 71);
     } else if n >= 52 & n <= 61 {
-        result = n - 4;
+        result = std::wrapping_sub(n, 4);
     } else if n == 62 {
         result = 45;
     } else if n == 63 {
