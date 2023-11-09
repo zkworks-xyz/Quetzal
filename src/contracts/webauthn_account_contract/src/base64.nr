@@ -51,11 +51,11 @@ fn convert_chunk(input: [u8; 3]) -> [u8; 4] {
 fn convert_base64_number(n: u8) -> u8 {
     let mut result: u8 = 0;
     if n >= 0 & n <= 25 {
-        result = std::wrapping_add(n, 65);
+        result = n + 65;
     } else if n >= 26 & n <= 51 {
-        result = std::wrapping_add(n, 71);
+        result = n + 71;
     } else if n >= 52 & n <= 61 {
-        result = std::wrapping_sub(n, 4);
+        result = n - 4;
     } else if n == 62 {
         result = 45;
     } else if n == 63 {
