@@ -135,3 +135,10 @@ And compile contracts with following command. It might take longer than usual.
 yarn compile
 ```
 
+Finally, update CI configuration. In file `.github/workflows/build.yml`, update `Install nargo` section:
+```yaml
+- name: Install nargo
+run: |
+    ...
+    noirup -v 0.xx.x-aztec.x
+```
