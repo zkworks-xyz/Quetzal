@@ -3,7 +3,7 @@ use crate::utils::as_byte;
 
 global MAX_LEN = 255;
 
-fn base64_encode_url_safe_no_pad<N, M>(input: [u8; N], mut result: [u8; M]) -> [u8; M] {
+pub fn base64_encode_url_safe_no_pad<N, M>(input: [u8; N], mut result: [u8; M]) -> [u8; M] {
     assert(base64_calculate_length(input) == M);
 
     let mut max_result = [0; MAX_LEN];
