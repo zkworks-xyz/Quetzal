@@ -1,7 +1,9 @@
-import { WebAuthnInterface, WebAuthnPublicKey, WebAuthnSignature } from '../app/account/webauthn_account_contract.js';
+import { WebAuthnInterface } from '../app/infra/aztec/webauthn_account_contract.js';
 import { secp256r1 } from '@noble/curves/p256';
 import { sha256 } from '@noble/hashes/sha256';
 import { base64encode, noPad, safeUrl, toNumberArray } from '../app/model/base64.js';
+import { SigningPublicKey } from '../app/model/webauthn/SigningPublicKey.js';
+import { WebAuthnSignature } from '../app/model/webauthn/WebAuthnSignature.js';
 
 export class WebAuthnInterfaceStub implements WebAuthnInterface {
   private secretKey = Uint8Array.from([
@@ -11,12 +13,12 @@ export class WebAuthnInterfaceStub implements WebAuthnInterface {
 
   constructor(readonly validSignature: boolean = true) {}
 
-  getPublicKey(): Promise<WebAuthnPublicKey> {
+  getPublicKey(): Promise<SigningPublicKey> {
     const pub = secp256r1.getPublicKey(this.secretKey, false);
     const x = pub.subarray(1, 33);
     const y = pub.subarray(33, 65);
 
-    return Promise.resolve(new WebAuthnPublicKey(x, y));
+    return Promise.resolve(new SigningPublicKey(x, y));
   }
 
   async sign(challenge: Uint8Array): Promise<WebAuthnSignature> {

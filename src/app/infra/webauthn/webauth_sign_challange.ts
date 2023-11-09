@@ -1,8 +1,12 @@
-import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from '../model/bigint.js';
+import { convertBigIntToUint8Array, convertUint8ArrayToBigInt } from '../../model/bigint.js';
 
 const SUPPORTED_CLIENT_DATA_JSON_LENGTHS = [114, 134, 243];
 
-export async function webAuthnSignChallenge(challenge: Uint8Array) {
+export async function webAuthnSignChallenge(challenge: Uint8Array): Promise<{
+  signatureRaw: Uint8Array;
+  clientDataJson: Uint8Array;
+  authenticatorData: Uint8Array;
+}> {
   const credentialRequestOptions = {
     publicKey: {
       timeout: 60000,

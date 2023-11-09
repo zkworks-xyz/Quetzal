@@ -1,4 +1,4 @@
-import { WebAuthnAccountContractArtifact } from '../../artifacts/WebAuthnAccount.js';
+import { WebAuthnAccountContractArtifact } from '../../../artifacts/WebAuthnAccount.js';
 import {
   AccountManager,
   AuthWitnessProvider,
@@ -11,8 +11,8 @@ import {
 } from '@aztec/aztec.js';
 
 import { AuthWitness } from '@aztec/types';
-
-const CLIENT_DATA_JSON_MAX_LEN = 255;
+import { SigningPublicKey } from '../../model/webauthn/SigningPublicKey.js';
+import { WebAuthnSignature } from '../../model/webauthn/WebAuthnSignature.js';
 
 export function getWebAuthnAccount(
   pxe: PXE,
@@ -23,33 +23,8 @@ export function getWebAuthnAccount(
   return new AccountManager(pxe, encryptionPrivateKey, new WebAuthnAccountContract(webAuthnInterface), saltOrAddress);
 }
 
-export class WebAuthnPublicKey {
-  constructor(
-    readonly x: Uint8Array,
-    readonly y: Uint8Array,
-  ) {}
-}
-
-export class WebAuthnSignature {
-  constructor(
-    readonly authenticatorData: Uint8Array,
-    readonly clientDataJson: Uint8Array,
-    readonly signatureRaw: Uint8Array,
-  ) {}
-
-  toArray(): number[] {
-    return [
-      ...this.signatureRaw,
-      ...this.authenticatorData,
-      this.clientDataJson.length,
-      ...this.clientDataJson,
-      ...new Uint8Array(CLIENT_DATA_JSON_MAX_LEN - this.clientDataJson.length),
-    ];
-  }
-}
-
 export interface WebAuthnInterface {
-  getPublicKey(): Promise<WebAuthnPublicKey>;
+  getPublicKey(): Promise<SigningPublicKey>;
 
   sign(challenge: Uint8Array): Promise<WebAuthnSignature>;
 }
