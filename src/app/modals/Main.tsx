@@ -78,7 +78,7 @@ export function Main({ account }: MainProps) {
       {isError && <Alert message="Error fetching balance" />}
       {isPending && <Alert message="Fetching balance" alertType={AlertType.info} />}
       <div className="flex flex-row-reverse">
-        <CloseButton action={clearCurrentWallet}/>
+        <CloseButton action={clearCurrentWallet} />
       </div>
 
       <div className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">Your address</div>

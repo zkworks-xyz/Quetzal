@@ -53,18 +53,19 @@ export function SmallButton({ label, action, classes = '' }: ButtonProps) {
   );
 }
 
-export function CloseButton({ action, classes = '' }: Omit<ButtonProps, "label">) {
+export function CloseButton({ action, classes = '' }: Omit<ButtonProps, 'label'>) {
   return (
     <button
-    type="button"
-    className={classNames(
-      'rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none',
-      'focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
-      classes
-    )}
-    onClick={() => action()}
-  >
-    <span className="sr-only">Close</span>
-    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-  </button>)
+      type="button"
+      className={classNames(
+        'rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none',
+        'focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2',
+        classes,
+      )}
+      onClick={() => action()}
+    >
+      <span className="sr-only">Close</span>
+      <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+    </button>
+  );
 }
