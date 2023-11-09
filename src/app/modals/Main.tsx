@@ -3,8 +3,9 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import { Alert } from '../components/alert/Alert.js';
 import { AlertType } from '../components/alert/AlertType.js';
-import { PrimaryButton, SmallButton } from '../components/button.js';
+import { CloseButton, PrimaryButton, SmallButton } from '../components/button.js';
 import { UserWallet } from '../context/current_wallet/UserWallet.js';
+
 import {
   BalanceMap,
   TOKEN_LIST,
@@ -76,7 +77,10 @@ export function Main({ account }: MainProps) {
     <section className="bg-white dark:bg-gray-900 max-w-2xl rounded-lg px-8 py-8 flex-auto flex-col">
       {isError && <Alert message="Error fetching balance" />}
       {isPending && <Alert message="Fetching balance" alertType={AlertType.info} />}
-      <SmallButton action={() => clearCurrentWallet()} label="Logout" classes="flex-left" />
+      <div className="flex flex-row-reverse">
+        <CloseButton action={clearCurrentWallet}/>
+      </div>
+
       <div className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">Your address</div>
       <div className="mt-1 text-gray-800 md:text-xl dark:text-white text-base text-left flex-col">
         {account.wallet.getAddress().toShortString()}
