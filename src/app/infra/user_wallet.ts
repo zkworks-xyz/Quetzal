@@ -10,7 +10,7 @@ import {
   Point,
 } from '@aztec/aztec.js';
 import { WebAuthnWitnessProvider } from './aztec/webauthn_account_contract.js';
-import { WebauthnSigner } from './webauthn/webauthn_signer.js';
+import { WebAuthnSigner } from './webauthn/webauthn_signer.js';
 import { UserWallet } from '../context/current_wallet/UserWallet.js';
 
 export function serializeUserWallet(userWallet: UserWallet): string {
@@ -37,7 +37,7 @@ export async function deserializeUserWallet(
 ): Promise<UserWallet> {
   const nodeInfo = await pxe.getNodeInfo();
   if (authWitnessProvider == null) {
-    authWitnessProvider = new WebAuthnWitnessProvider(new WebauthnSigner('shouldNotUse'));
+    authWitnessProvider = new WebAuthnWitnessProvider(new WebAuthnSigner('shouldNotUse'));
   }
 
   function reviver(key: string, value: any) {

@@ -2,7 +2,7 @@ import { AccountManager, AccountWalletWithPrivateKey, GrumpkinScalar } from '@az
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { getWebAuthnAccount } from '../infra/aztec/webauthn_account_contract.js';
-import { WebauthnSigner } from '../infra/webauthn/webauthn_signer.js';
+import { WebAuthnSigner } from '../infra/webauthn/webauthn_signer.js';
 import { useDeveloperMode } from '../context/developer_mode/useDeveloperMode.js';
 import { usePXE } from '../context/pxe/usePxe.js';
 import { UserWallet } from '../context/current_wallet/UserWallet.js';
@@ -24,7 +24,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
 
   const deployWallet = async () => {
     const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
-    const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebauthnSigner(name));
+    const webAuthnAccount1: AccountManager = getWebAuthnAccount(pxe, encryptionPrivateKey1, new WebAuthnSigner(name));
     return webAuthnAccount1.waitDeploy();
   };
 

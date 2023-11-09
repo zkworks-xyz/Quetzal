@@ -4,7 +4,7 @@ import { webAuthnSignChallenge } from './webauth_sign_challange.js';
 import { SigningPublicKey } from '../../model/webauthn/SigningPublicKey.js';
 import { WebAuthnSignature } from '../../model/webauthn/WebAuthnSignature.js';
 
-export class WebauthnSigner implements WebAuthnInterface {
+export class WebAuthnSigner implements WebAuthnInterface {
   constructor(readonly userName: string) {}
 
   private publicKey: SigningPublicKey | null = null;
