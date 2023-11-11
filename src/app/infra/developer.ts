@@ -11,6 +11,7 @@ import {
   waitForSandbox,
 } from '@aztec/aztec.js';
 import { TokenContract } from '@aztec/noir-contracts/types';
+import { TOKEN_LIST } from '../model/token_list.js';
 
 export function getSandboxAccounts(pxe: PXE): AccountManager[] {
   return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>
@@ -25,9 +26,17 @@ export const setupSandbox = async () => {
   return pxe;
 };
 
-export const deployTestTokens = async (adminWallet: AccountWalletWithPrivateKey) => {
+export function randomSalts() {
+  return TOKEN_LIST.map(_ => Fr.random());
+}
+
+export function deterministicSalts() {
+  return TOKEN_LIST.map((_, index) => new Fr(index));
+}
+
+export const deployTestTokens = async (adminWallet: AccountWalletWithPrivateKey, salts: Fr[]) => {
   const tokenContracts: TokenContract[] = [];
-  for (const salt of [0n, 1n]) {
+  for (const salt of salts) {
     const contract = await TokenContract.deploy(adminWallet, adminWallet.getAddress())
       .send({ contractAddressSalt: new Fr(salt) })
       .deployed();
