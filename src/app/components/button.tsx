@@ -42,7 +42,7 @@ export function SmallButton({ label, action, classes = '' }: ButtonProps) {
     <button
       onClick={action}
       className={classNames(
-        'px-3 py-1 ml-4 text-xs font-medium tracking-wide text-white capitalize transition-colors',
+        'px-3 py-1 text-xs font-medium tracking-wide text-white capitalize transition-colors',
         'duration-300 transform bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:ring',
         'focus:ring-blue-300 focus:ring-opacity-50',
         classes,

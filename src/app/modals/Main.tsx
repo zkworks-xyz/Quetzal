@@ -1,15 +1,15 @@
+import { TokenContract } from '@aztec/noir-contracts/types';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Alert } from '../components/alert/Alert.js';
 import { AlertType } from '../components/alert/AlertType.js';
-import { CloseButton, PrimaryButton, SmallButton } from '../components/button.js';
+import { CloseButton, SmallButton } from '../components/button.js';
 import { UserWallet } from '../context/current_wallet/UserWallet.js';
-
 import { useCurrentWallet } from '../context/current_wallet/useCurrentWallet.js';
-import { BalanceMap, TOKEN_LIST, TokenContractMap, formatBalance } from '../model/token_list.js';
-import { SendTokens } from './SendTokens.js';
 import { fetchTokenBalances, fetchTokenContracts } from '../infra/tokens.js';
+import { BalanceMap, TOKEN_LIST, TokenContractMap, formatBalance, getTokenByAddress } from '../model/token_list.js';
+import { SendTokens } from './SendTokens.js';
 
 interface MainProps {
   account: UserWallet;
@@ -23,6 +23,7 @@ enum CurrentModal {
 export function Main({ account }: MainProps) {
   const [modal, setModal] = useState<CurrentModal>(CurrentModal.Main);
   const [tokenContracts, setTokenContracts] = useState<TokenContractMap | null>(null);
+  const [currentToken, setCurrentToken] = useState<TokenContract | undefined>(undefined);
   const [balances, setBalances] = useState<BalanceMap>(
     () => new Map(TOKEN_LIST.map(token => [token.address.toString(), 0n])),
   );
@@ -59,8 +60,8 @@ export function Main({ account }: MainProps) {
   if (CurrentModal.SendTokens === modal) {
     return (
       <SendTokens
-        account={account}
-        tokenContract={tokenContracts!.values().next().value}
+        tokenContract={currentToken!}
+        tokenInfo={getTokenByAddress(currentToken!.address)!}
         onClose={() => setModal(CurrentModal.Main)}
         onSuccess={() => setModal(CurrentModal.Main)}
       />
@@ -76,10 +77,10 @@ export function Main({ account }: MainProps) {
       </div>
 
       <div className="mt-6 text-gray-500 dark:text-gray-400 text-base text-left">Your address</div>
-      <div className="mt-1 text-gray-800 md:text-xl dark:text-white text-base text-left flex-col">
+      <div className="items-center mt-1 text-gray-800 md:text-xl dark:text-white text-base text-left flex-row">
         {account.wallet.getAddress().toShortString()}
-        <SmallButton action={() => copy()} label="Copy" />
-        <SmallButton action={() => refetch()} label="Refresh" />
+        <SmallButton action={() => copy()} label="Copy" classes="ml-4 self-center" />
+        <SmallButton action={() => refetch()} label="Refresh" classes="ml-4 self-center" />
       </div>
       <p className="mt-16 text-gray-500 dark:text-gray-400 text-base text-left">Assets:</p>
       <div
@@ -88,20 +89,27 @@ export function Main({ account }: MainProps) {
           'dark:text-white flex flex-col',
         )}
       >
-        {TOKEN_LIST.map(token => (
-          <div className="flex items-center justify-between py-4" key={token.address.toString()}>
+        {TOKEN_LIST.map(tokenInfo => (
+          <div className="flex items-center justify-between py-4" key={tokenInfo.address.toString()}>
             <div className="flex-shrink-0">
-              <img className="max-w-full h-8" src={token.logoURI} alt={token.symbol} />
+              <img className="max-w-full h-8" src={tokenInfo.logoURI} alt={tokenInfo.symbol} />
             </div>
             <div className="flex-grow px-2">
               <p>
-                {formatBalance(balances.get(token.address.toString()))} {token.symbol}
+                {formatBalance(balances.get(tokenInfo.address.toString()))} {tokenInfo.symbol}
               </p>
             </div>
+            <SmallButton
+              action={() => {
+                setCurrentToken(tokenContracts!.get(tokenInfo.address.toString())!);
+                setModal(CurrentModal.SendTokens);
+              }}
+              classes="mx-0 self-center"
+              label="Send"
+            />
           </div>
         ))}
       </div>
-      <PrimaryButton action={() => setModal(CurrentModal.SendTokens)} classes="w-full mt-24" label="Send" />
     </section>
   );
 }

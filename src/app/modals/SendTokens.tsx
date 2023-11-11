@@ -1,21 +1,23 @@
-import { useState } from 'react';
-import { UserWallet } from '../context/current_wallet/UserWallet.js';
-import { InfoDialog } from './InfoDialog.js';
-import { TokenContract } from '@aztec/noir-contracts/types';
 import { AztecAddress } from '@aztec/aztec.js';
+import { TokenContract } from '@aztec/noir-contracts/types';
 import { useMutation } from '@tanstack/react-query';
-import { PrimaryButton, SecondaryButton } from '../components/button.js';
-import { TOKEN_LIST } from '../model/token_list.js';
+import { useState } from 'react';
 import { Input, Label } from '../components/Input.js';
+import { PrimaryButton, SecondaryButton } from '../components/button.js';
+import { useCurrentWallet } from '../context/current_wallet/useCurrentWallet.js';
+import { TokenInfo } from '../model/token_list.js';
+import { InfoDialog } from './InfoDialog.js';
 
 export interface SendTokensProps {
-  account: UserWallet;
   tokenContract: TokenContract;
+  tokenInfo: TokenInfo;
   onClose: () => void;
   onSuccess: () => void;
 }
 
-export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendTokensProps) {
+export function SendTokens({ tokenContract, tokenInfo, onClose, onSuccess }: SendTokensProps) {
+  const { currentWallet } = useCurrentWallet();
+  const { wallet } = currentWallet!;
   const [toAddress, setToAddress] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const sendTokens = async () => {
@@ -24,14 +26,14 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
       return;
     }
     const tx = tokenContract.methods
-      .transfer_public(account.wallet.getAddress(), AztecAddress.fromString(toAddress), BigInt(amount), 0)
+      .transfer_public(wallet.getAddress(), AztecAddress.fromString(toAddress), BigInt(amount), 0)
       .send();
     return tx.wait();
   };
 
   const mutation = useMutation({ mutationFn: sendTokens, onSuccess });
   if (mutation.isPending) {
-    const from = account.wallet.getAddress().toShortString();
+    const from = wallet.getAddress().toShortString();
     const to = AztecAddress.fromString(toAddress).toShortString();
     const message = `Sending tokens from ${from} to ${to} amount: ${amount}`;
     return <InfoDialog title="⏳ Sending tokens" message={message} />;
@@ -73,7 +75,7 @@ export function SendTokens({ account, tokenContract, onClose, onSuccess }: SendT
 
         <div className="sm:col-span-2">
           <div className="w-full mt-10 block font-medium leading-6 text-gray-500 dark:text-gray-400 text-left">
-            {TOKEN_LIST[0].symbol}
+            {tokenInfo.symbol}
           </div>
         </div>
       </div>
