@@ -11,7 +11,7 @@ import {
   waitForSandbox,
 } from '@aztec/aztec.js';
 import { TokenContract } from '@aztec/noir-contracts/types';
-import { TOKEN_LIST } from '../model/token_list.js';
+import { TOKEN_LIST } from '../model/token_info.js';
 
 export function getSandboxAccounts(pxe: PXE): AccountManager[] {
   return INITIAL_SANDBOX_ENCRYPTION_KEYS.map((encryptionKey, i) =>

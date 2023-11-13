@@ -1,21 +1,19 @@
 import { AztecAddress } from '@aztec/aztec.js';
-import { TokenContract } from '@aztec/noir-contracts/types';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Input, Label } from '../components/Input.js';
 import { PrimaryButton, SecondaryButton } from '../components/button.js';
 import { useCurrentWallet } from '../context/current_wallet/useCurrentWallet.js';
-import { TokenInfo } from '../model/token_list.js';
+import { Token } from '../model/token_aggregate.js';
 import { InfoDialog } from './InfoDialog.js';
 
 export interface SendTokensProps {
-  tokenContract: TokenContract;
-  tokenInfo: TokenInfo;
+  token: Token;
   onClose: () => void;
   onSuccess: () => void;
 }
 
-export function SendTokens({ tokenContract, tokenInfo, onClose, onSuccess }: SendTokensProps) {
+export function SendTokens({ token, onClose, onSuccess }: SendTokensProps) {
   const { currentWallet } = useCurrentWallet();
   const { wallet } = currentWallet!;
   const [toAddress, setToAddress] = useState<string>('');
@@ -25,8 +23,8 @@ export function SendTokens({ tokenContract, tokenInfo, onClose, onSuccess }: Sen
       alert('Amount should be a number');
       return;
     }
-    const tx = tokenContract.methods
-      .transfer_public(wallet.getAddress(), AztecAddress.fromString(toAddress), BigInt(amount), 0)
+    const tx = token
+      .contract!.methods.transfer_public(wallet.getAddress(), AztecAddress.fromString(toAddress), BigInt(amount), 0)
       .send();
     return tx.wait();
   };
@@ -75,7 +73,7 @@ export function SendTokens({ tokenContract, tokenInfo, onClose, onSuccess }: Sen
 
         <div className="sm:col-span-2">
           <div className="w-full mt-10 block font-medium leading-6 text-gray-500 dark:text-gray-400 text-left">
-            {tokenInfo.symbol}
+            {token.info.symbol}
           </div>
         </div>
       </div>
