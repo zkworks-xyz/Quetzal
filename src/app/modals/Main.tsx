@@ -1,4 +1,3 @@
-import { TokenContract } from '@aztec/noir-contracts/types';
 import { useQuery } from '@tanstack/react-query';
 import classNames from 'classnames';
 import { useState } from 'react';
@@ -7,8 +6,9 @@ import { AlertType } from '../components/alert/AlertType.js';
 import { CloseButton, SmallButton } from '../components/button.js';
 import { UserWallet } from '../context/current_wallet/UserWallet.js';
 import { useCurrentWallet } from '../context/current_wallet/useCurrentWallet.js';
-import { fetchTokenBalances, fetchTokenContracts } from '../infra/tokens.js';
-import { BalanceMap, TOKEN_LIST, TokenContractMap, formatBalance, getTokenByAddress } from '../model/token_list.js';
+import { TokensRepository } from '../infra/tokens_repository.js';
+import { Token, TokensAggregate } from '../model/token_aggregate.js';
+import { formatBalance } from '../model/token_info.js';
 import { SendTokens } from './SendTokens.js';
 
 interface MainProps {
@@ -22,17 +22,14 @@ enum CurrentModal {
 
 export function Main({ account }: MainProps) {
   const [modal, setModal] = useState<CurrentModal>(CurrentModal.Main);
-  const [tokenContracts, setTokenContracts] = useState<TokenContractMap | null>(null);
-  const [currentToken, setCurrentToken] = useState<TokenContract | undefined>(undefined);
-  const [balances, setBalances] = useState<BalanceMap>(
-    () => new Map(TOKEN_LIST.map(token => [token.address.toString(), 0n])),
-  );
-  const { clearCurrentWallet } = useCurrentWallet();
+  const [tokens, setTokens] = useState<TokensAggregate>(TokensRepository.getTokensAggregate());
+  const [currentToken, setCurrentToken] = useState<Token | undefined>(undefined);
+  const { clearCurrentWallet, currentWallet } = useCurrentWallet();
 
   const fetchContracts = async () => {
-    const tokenContracts = await fetchTokenContracts(account.wallet);
-    setTokenContracts(tokenContracts);
-    return tokenContracts;
+    const updatedTokens = await TokensRepository.enrichTokensWithContracts(tokens, currentWallet!.wallet);
+    setTokens(updatedTokens);
+    return updatedTokens;
   };
 
   useQuery({
@@ -41,15 +38,15 @@ export function Main({ account }: MainProps) {
   });
 
   const fetchBalances = async () => {
-    const balances = await fetchTokenBalances(account.wallet.getAddress(), tokenContracts!.values());
-    setBalances(balances);
-    return balances;
+    const updatedTokens = await TokensRepository.enrichTokensWithBalances(tokens, currentWallet!.wallet.getAddress());
+    setTokens(updatedTokens);
+    return updatedTokens;
   };
 
   const { isError, isPending, refetch } = useQuery({
     queryKey: ['balances'],
     queryFn: fetchBalances,
-    enabled: tokenContracts !== null && tokenContracts.size > 0,
+    enabled: tokens[0].contract !== undefined,
   });
 
   const copy = async () => {
@@ -60,8 +57,7 @@ export function Main({ account }: MainProps) {
   if (CurrentModal.SendTokens === modal) {
     return (
       <SendTokens
-        tokenContract={currentToken!}
-        tokenInfo={getTokenByAddress(currentToken!.address)!}
+        token={currentToken!}
         onClose={() => setModal(CurrentModal.Main)}
         onSuccess={() => setModal(CurrentModal.Main)}
       />
@@ -89,19 +85,19 @@ export function Main({ account }: MainProps) {
           'dark:text-white flex flex-col',
         )}
       >
-        {TOKEN_LIST.map(tokenInfo => (
-          <div className="flex items-center justify-between py-4" key={tokenInfo.address.toString()}>
+        {tokens.map(token => (
+          <div className="flex items-center justify-between py-4" key={token.info.address.toString()}>
             <div className="flex-shrink-0">
-              <img className="max-w-full h-8" src={tokenInfo.logoURI} alt={tokenInfo.symbol} />
+              <img className="max-w-full h-8" src={token.info.logoURI} alt={token.info.symbol} />
             </div>
             <div className="flex-grow px-2">
               <p>
-                {formatBalance(balances.get(tokenInfo.address.toString()))} {tokenInfo.symbol}
+                {formatBalance(token.balance)} {token.info.symbol}
               </p>
             </div>
             <SmallButton
               action={() => {
-                setCurrentToken(tokenContracts!.get(tokenInfo.address.toString())!);
+                setCurrentToken(token);
                 setModal(CurrentModal.SendTokens);
               }}
               classes="mx-0 self-center"

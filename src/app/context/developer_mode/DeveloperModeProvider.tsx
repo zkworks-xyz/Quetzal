@@ -4,10 +4,10 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { PrimaryButton } from '../../components/button.js';
 import { InfoDialog } from '../../modals/InfoDialog.js';
-import { TOKEN_LIST } from '../../model/token_list.js';
+import { TOKEN_LIST } from '../../model/token_info.js';
 import { usePXE } from '../pxe/usePxe.js';
 import { DeveloperContext } from './DeveloperContext.js';
-import { deployTestTokens, getSandboxAccounts } from '../../infra/developer.js';
+import { deployTestTokens, deterministicSalts, getSandboxAccounts } from '../../infra/developer.js';
 
 export function DeveloperModeProvider({ children }: { children: ReactNode }) {
   const { pxe } = usePXE();
@@ -26,7 +26,7 @@ export function DeveloperModeProvider({ children }: { children: ReactNode }) {
   });
 
   const deployExampleTokens = async () => {
-    return deployTestTokens(await adminAccount.getWallet());
+    return deployTestTokens(await adminAccount.getWallet(), deterministicSalts());
   };
 
   const mutation = useMutation({
