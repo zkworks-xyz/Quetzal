@@ -1,6 +1,7 @@
 import {
   AccountManager,
   AccountWalletWithPrivateKey,
+  AztecAddress,
   Fr,
   INITIAL_SANDBOX_ENCRYPTION_KEYS,
   INITIAL_SANDBOX_SALTS,
@@ -43,4 +44,15 @@ export const deployTestTokens = async (adminWallet: AccountWalletWithPrivateKey,
     tokenContracts.push(contract);
   }
   return tokenContracts;
+};
+
+const FAUCET_AMOUNT = 123n;
+
+export const mintTestTokens = async (address: AztecAddress, adminWallet: AccountWalletWithPrivateKey) => {
+  for (const [index, token] of TOKEN_LIST.entries()) {
+    const tokenContract = await TokenContract.at(token.address, adminWallet);
+    const amount = FAUCET_AMOUNT * BigInt(index + 1);
+    const tx = tokenContract.methods.mint_public(address, amount).send();
+    await tx.wait();
+  }
 };
