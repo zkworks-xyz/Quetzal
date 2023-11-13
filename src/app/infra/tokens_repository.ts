@@ -11,7 +11,7 @@ export class TokensRepository {
     return new Array(...iter);
   }
 
-  static async fetchContracts(tokens: TokensAggregate, wallet: AccountWalletWithPrivateKey) {
+  static async enrichTokensWithContracts(tokens: TokensAggregate, wallet: AccountWalletWithPrivateKey) {
     const result = [];
     for (const token of tokens) {
       result.push({
@@ -22,7 +22,7 @@ export class TokensRepository {
     return result;
   }
 
-  static async fetchBalances(tokens: TokensAggregate, address: AztecAddress) {
+  static async enrichTokensWithBalances(tokens: TokensAggregate, address: AztecAddress) {
     const result = [];
     for (const token of tokens) {
       const balance = await token.contract!.methods.balance_of_public(address).view();

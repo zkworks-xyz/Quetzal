@@ -17,8 +17,8 @@ describe('TokensRepository', () => {
 
   it('Fetch balances', async () => {
     let tokens = TokensRepository.getTokensAggregate();
-    tokens = await TokensRepository.fetchContracts(tokens, adminWallet);
-    tokens = await TokensRepository.fetchBalances(tokens, adminWallet.getAddress());
+    tokens = await TokensRepository.enrichTokensWithContracts(tokens, adminWallet);
+    tokens = await TokensRepository.enrichTokensWithBalances(tokens, adminWallet.getAddress());
     expect(tokens[0].balance).toBe(0n);
     expect(tokens[1].balance).toBe(0n);
   });

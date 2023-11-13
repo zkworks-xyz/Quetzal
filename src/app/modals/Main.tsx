@@ -27,7 +27,7 @@ export function Main({ account }: MainProps) {
   const { clearCurrentWallet, currentWallet } = useCurrentWallet();
 
   const fetchContracts = async () => {
-    const updatedTokens = await TokensRepository.fetchContracts(tokens, currentWallet!.wallet);
+    const updatedTokens = await TokensRepository.enrichTokensWithContracts(tokens, currentWallet!.wallet);
     setTokens(updatedTokens);
     return updatedTokens;
   };
@@ -38,7 +38,7 @@ export function Main({ account }: MainProps) {
   });
 
   const fetchBalances = async () => {
-    const updatedTokens = await TokensRepository.fetchBalances(tokens, currentWallet!.wallet.getAddress());
+    const updatedTokens = await TokensRepository.enrichTokensWithBalances(tokens, currentWallet!.wallet.getAddress());
     setTokens(updatedTokens);
     return updatedTokens;
   };
