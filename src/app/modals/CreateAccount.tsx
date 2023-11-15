@@ -14,13 +14,10 @@ export interface CreateAccountProps {
   onAccountCreated: (account: UserWallet) => void;
 }
 
-const FAUCET_AMOUNT = 1234n;
-
 export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   const [name, setName] = useState<string>('');
   const { pxe } = usePXE();
   const { faucet } = useDeveloperMode();
-  const amount: bigint = 1234n;
 
   const deployWallet = async () => {
     const encryptionPrivateKey1: GrumpkinScalar = GrumpkinScalar.random();
@@ -29,7 +26,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
   };
 
   const mintTokens = async (wallet: AccountWalletWithPrivateKey) => {
-    await faucet(wallet.getAddress(), FAUCET_AMOUNT);
+    await faucet(wallet.getAddress());
     onAccountCreated({ name, wallet });
   };
 
@@ -43,7 +40,7 @@ export function CreateAccount({ onAccountCreated }: CreateAccountProps) {
 
   if (mintMutation.isPending) {
     const to = mintMutation.variables.getAddress().toShortString();
-    const message = `Minting ${amount} tokens to ${to}`;
+    const message = `Minting test tokens to ${to}`;
     return <InfoDialog title="⏳ Minting tokens" message={message} />;
   } else if (mintMutation.isError) {
     return (
